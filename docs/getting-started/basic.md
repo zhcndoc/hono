@@ -1,10 +1,10 @@
-# Getting Started
+# 快速开始
 
-Using Hono is super easy. We can set up the project, write code, develop with a local server, and deploy quickly. The same code will work on any runtime, just with different entry points. Let's look at the basic usage of Hono.
+使用 Hono 非常简单。我们可以设置项目、编写代码、使用本地服务器开发并快速部署。相同的代码将在任何运行时上工作，只是入口点不同。让我们看看 Hono 的基本用法。
 
-## Starter
+## 起步模板
 
-Starter templates are available for each platform. Use the following "create-hono" command.
+每个平台都提供了起步模板。使用以下的 "create-hono" 命令。
 
 ::: code-group
 
@@ -30,8 +30,8 @@ deno init --npm hono@latest my-app
 
 :::
 
-Then you will be asked which template you would like to use.
-Let's select Cloudflare Workers for this example.
+随后会询问你想要使用哪个模板。
+本例中我们选择 Cloudflare Workers。
 
 ```
 ? Which template do you want to use?
@@ -46,7 +46,7 @@ Let's select Cloudflare Workers for this example.
     vercel
 ```
 
-The template will be pulled into `my-app`, so go to it and install the dependencies.
+模板将被拉取到 `my-app`，所以进入该目录并安装依赖。
 
 ::: code-group
 
@@ -72,7 +72,7 @@ bun i
 
 :::
 
-Once the package installation is complete, run the following command to start up a local server.
+包安装完成后，运行以下命令启动本地服务器。
 
 ::: code-group
 
@@ -96,12 +96,11 @@ bun run dev
 
 ## Hello World
 
-You can write code in TypeScript with the Cloudflare Workers development tool "Wrangler", Deno, Bun, or others without being aware of transpiling.
+你可以使用 Cloudflare Workers 开发工具 "Wrangler"、Deno、Bun 或其他工具编写 TypeScript 代码，而无需关心转译。
 
-Write your first application with Hono in `src/index.ts`. The example below is a starter Hono application.
+在 `src/index.ts` 中编写你的第一个 Hono 应用。下面的示例是一个 Hono 起步应用。
 
-The `import` and the final `export default` parts may vary from runtime to runtime,
-but all of the application code will run the same code everywhere.
+`import` 和最后的 `export default` 部分可能因运行时而异，但所有应用代码在任何地方都将运行相同的代码。
 
 ```ts
 import { Hono } from 'hono'
@@ -115,7 +114,7 @@ app.get('/', (c) => {
 export default app
 ```
 
-Start the development server and access `http://localhost:8787` with your browser.
+启动开发服务器并通过浏览器访问 `http://localhost:8787`。
 
 ::: code-group
 
@@ -137,9 +136,9 @@ bun run dev
 
 :::
 
-## Return JSON
+## 返回 JSON
 
-Returning JSON is also easy. The following is an example of handling a GET Request to `/api/hello` and returning an `application/json` Response.
+返回 JSON 也很容易。以下是处理对 `/api/hello` 的 GET 请求并返回 `application/json` 响应的示例。
 
 ```ts
 app.get('/api/hello', (c) => {
@@ -150,9 +149,9 @@ app.get('/api/hello', (c) => {
 })
 ```
 
-## Request and Response
+## 请求与响应
 
-Getting a path parameter, URL query value, and appending a Response header is written as follows.
+获取路径参数、URL 查询值以及添加响应头部的写法如下。
 
 ```ts
 app.get('/posts/:id', (c) => {
@@ -163,7 +162,7 @@ app.get('/posts/:id', (c) => {
 })
 ```
 
-We can easily handle POST, PUT, and DELETE not only GET.
+我们可以轻松处理 POST、PUT 和 DELETE，不仅是 GET。
 
 ```ts
 app.post('/posts', (c) => c.text('Created!', 201))
@@ -172,9 +171,9 @@ app.delete('/posts/:id', (c) =>
 )
 ```
 
-## Return HTML
+## 返回 HTML
 
-You can write HTML with [the html Helper](/docs/helpers/html) or using [JSX](/docs/guides/jsx) syntax. If you want to use JSX, rename the file to `src/index.tsx` and configure it (check with each runtime as it is different). Below is an example using JSX.
+你可以使用 [html 助手](/docs/helpers/html) 或使用 [JSX](/docs/guides/jsx) 语法编写 HTML。如果你想使用 JSX，将文件重命名为 `src/index.tsx` 并进行配置（因运行时不同请分别检查）。下面是使用 JSX 的示例。
 
 ```tsx
 const View = () => {
@@ -192,9 +191,9 @@ app.get('/page', (c) => {
 })
 ```
 
-## Return raw Response
+## 返回原始 Response
 
-You can also return the raw [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response).
+你也可以返回原始的 [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)。
 
 ```ts
 app.get('/', () => {
@@ -202,10 +201,10 @@ app.get('/', () => {
 })
 ```
 
-## Using Middleware
+## 使用中间件
 
-Middleware can do the hard work for you.
-For example, add in Basic Authentication.
+中间件可以为你处理繁琐的工作。
+例如，添加基本认证（Basic Authentication）。
 
 ```ts
 import { basicAuth } from 'hono/basic-auth'
@@ -225,14 +224,14 @@ app.get('/admin', (c) => {
 })
 ```
 
-There are useful built-in middleware including Bearer and authentication using JWT, CORS and ETag.
-Hono also provides third-party middleware using external libraries such as GraphQL Server and Firebase Auth.
-And, you can make your own middleware.
+这里有有用的内置中间件，包括 Bearer 和使用 JWT 的认证、CORS 和 ETag。
+Hono 还提供使用外部库的第三方中间件，例如 GraphQL Server 和 Firebase Auth。
+而且，你可以制作自己的中间件。
 
-## Adapter
+## 适配器
 
-There are Adapters for platform-dependent functions, e.g., handling static files or WebSocket.
-For example, to handle WebSocket in Cloudflare Workers, import `hono/cloudflare-workers`.
+针对平台依赖的功能也有适配器，例如处理静态文件或 WebSocket。
+例如，要在 Cloudflare Workers 中处理 WebSocket，导入 `hono/cloudflare-workers`。
 
 ```ts
 import { upgradeWebSocket } from 'hono/cloudflare-workers'
@@ -245,8 +244,8 @@ app.get(
 )
 ```
 
-## Next step
+## 下一步
 
-Most code will work on any platform, but there are guides for each.
-For instance, how to set up projects or how to deploy.
-Please see the page for the exact platform you want to use to create your application!
+大多数代码可以在任何平台上工作，但每个平台都有指南。
+例如，如何设置项目或如何部署。
+请查看你想要用于创建应用程序的确切平台页面！

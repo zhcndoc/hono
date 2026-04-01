@@ -1,21 +1,21 @@
-# CORS Middleware
+# CORS 中间件
 
-There are many use cases of Cloudflare Workers as Web APIs and calling them from external front-end application.
-For them we have to implement CORS, let's do this with middleware as well.
+Cloudflare Workers 作为 Web API 有很多用例，并且需要从外部前端应用程序调用它们。
+为此我们必须实现 CORS，让我们也用中间件来实现它。
 
-## Import
+## 导入
 
 ```ts
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 ```
 
-## Usage
+## 用法
 
 ```ts
 const app = new Hono()
 
-// CORS should be called before the route
+// CORS 应该在路由之前调用
 app.use('/api/*', cors())
 app.use(
   '/api2/*',
@@ -37,7 +37,7 @@ app.all('/api2/abc', (c) => {
 })
 ```
 
-Multiple origins:
+多个源：
 
 ```ts
 app.use(
@@ -47,11 +47,11 @@ app.use(
   })
 )
 
-// Or you can use "function"
+// 或者你可以使用“函数”
 app.use(
   '/api4/*',
   cors({
-    // `c` is a `Context` object
+    // `c` 是一个 `Context` 对象
     origin: (origin, c) => {
       return origin.endsWith('.example.com')
         ? origin
@@ -61,7 +61,7 @@ app.use(
 )
 ```
 
-Dynamic allowed methods based on origin:
+基于源的动态允许方法：
 
 ```ts
 app.use(
@@ -69,7 +69,7 @@ app.use(
   cors({
     origin: (origin) =>
       origin === 'https://example.com' ? origin : '*',
-    // `c` is a `Context` object
+    // `c` 是一个 `Context` 对象
     allowMethods: (origin, c) =>
       origin === 'https://example.com'
         ? ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE']
@@ -78,35 +78,35 @@ app.use(
 )
 ```
 
-## Options
+## 选项
 
-### <Badge type="info" text="optional" /> origin: `string` | `string[]` | `(origin:string, c:Context) => string`
+### <Badge type="info" text="可选" /> origin: `string` | `string[]` | `(origin:string, c:Context) => string`
 
-The value of "_Access-Control-Allow-Origin_" CORS header. You can also pass the callback function like `origin: (origin) => (origin.endsWith('.example.com') ? origin : 'http://example.com')`. The default is `*`.
+"_Access-Control-Allow-Origin_" CORS 头部的值。你也可以传递回调函数，例如 `origin: (origin) => (origin.endsWith('.example.com') ? origin : 'http://example.com')`。默认值是 `*`。
 
-### <Badge type="info" text="optional" /> allowMethods: `string[]` | `(origin:string, c:Context) => string[]`
+### <Badge type="info" text="可选" /> allowMethods: `string[]` | `(origin:string, c:Context) => string[]`
 
-The value of "_Access-Control-Allow-Methods_" CORS header. You can also pass a callback function to dynamically determine allowed methods based on the origin. The default is `['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH']`.
+"_Access-Control-Allow-Methods_" CORS 头部的值。你也可以传递回调函数来根据源动态确定允许的方法。默认值是 `['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH']`。
 
-### <Badge type="info" text="optional" /> allowHeaders: `string[]`
+### <Badge type="info" text="可选" /> allowHeaders: `string[]`
 
-The value of "_Access-Control-Allow-Headers_" CORS header. The default is `[]`.
+"_Access-Control-Allow-Headers_" CORS 头部的值。默认值是 `[]`。
 
-### <Badge type="info" text="optional" /> maxAge: `number`
+### <Badge type="info" text="可选" /> maxAge: `number`
 
-The value of "_Access-Control-Max-Age_" CORS header.
+"_Access-Control-Max-Age_" CORS 头部的值。
 
-### <Badge type="info" text="optional" /> credentials: `boolean`
+### <Badge type="info" text="可选" /> credentials: `boolean`
 
-The value of "_Access-Control-Allow-Credentials_" CORS header.
+"_Access-Control-Allow-Credentials_" CORS 头部的值。
 
-### <Badge type="info" text="optional" /> exposeHeaders: `string[]`
+### <Badge type="info" text="可选" /> exposeHeaders: `string[]`
 
-The value of "_Access-Control-Expose-Headers_" CORS header. The default is `[]`.
+"_Access-Control-Expose-Headers_" CORS 头部的值。默认值是 `[]`。
 
-## Environment-dependent CORS configuration
+## 依赖环境的 CORS 配置
 
-If you want to adjust CORS configuration according to the execution environment, such as development or production, injecting values from environment variables is convenient as it eliminates the need for the application to be aware of its own execution environment. See the example below for clarification.
+如果你想根据执行环境（如开发或生产）调整 CORS 配置，从环境变量注入值很方便，因为它消除了应用程序感知自身执行环境的需要。请参阅下面的示例以作说明。
 
 ```ts
 app.use('*', async (c, next) => {
@@ -117,9 +117,9 @@ app.use('*', async (c, next) => {
 })
 ```
 
-## Using with Vite
+## 与 Vite 一起使用
 
-When using Hono with Vite, you should disable Vite's built-in CORS feature by setting `server.cors` to `false` in your `vite.config.ts`. This prevents conflicts with Hono's CORS middleware.
+当与 Vite 一起使用 Hono 时，你应该在 `vite.config.ts` 中将 `server.cors` 设置为 `false` 以禁用 Vite 的内置 CORS 功能。这可以防止与 Hono 的 CORS 中间件发生冲突。
 
 ```ts
 // vite.config.ts
@@ -128,7 +128,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   server: {
-    cors: false, // disable Vite's built-in CORS setting
+    cors: false, // 禁用 Vite 的内置 CORS 设置
   },
   plugins: [cloudflare()],
 })

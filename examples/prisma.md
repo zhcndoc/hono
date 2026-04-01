@@ -1,30 +1,30 @@
-# Using Prisma on Cloudflare Workers
+# 在 Cloudflare Workers 上使用 Prisma
 
-[Prisma ORM](https://www.prisma.io/docs?utm_source=hono&utm_medium=website&utm_campaign=workers) provides a modern, robust toolkit for interacting with databases. When paired with Hono and Cloudflare Workers, it enables you to deploy high-performance, serverless applications at the edge.
+[Prisma ORM](https://www.prisma.io/docs?utm_source=hono&utm_medium=website&utm_campaign=workers) 提供了一套现代且稳定的数据库交互工具。与 Hono 和 Cloudflare Workers 结合后，你可以在边缘部署高性能的无服务器应用。
 
-In this guide, we’ll cover two distinct approaches for using Prisma ORM in Hono:
+在本指南中，我们会介绍两种在 Hono 中使用 Prisma ORM 的不同方式：
 
 - [**Prisma Postgres**](#using-prisma-postgres):
-  A managed, serverless PostgreSQL database integration with Prisma. This approach is good for a production-ready setup as Prisma Postgres has built-in connection pooling with zero-cold starts that mitigates [scaling issues in serverless and edge environments](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections?utm_source=hono&utm_medium=website&utm_campaign=workers#the-serverless-challenge).
+  这是 Prisma 提供的托管无服务器 PostgreSQL 数据库集成。由于 Prisma Postgres 内置连接池并且无冷启动，因此这类方案很适合生产环境，能够缓解 [无服务器和边缘环境中的扩展问题](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections?utm_source=hono&utm_medium=website&utm_campaign=workers#the-serverless-challenge)。
 
 - [**Driver adapters**](#using-prisma-driver-adapters):
-  An alternative that uses Prisma's flexible driver adapters, allowing you to connect to any database supported by Prisma ORM.
+  这是另一种使用 Prisma 灵活驱动适配器的方案，允许你连接到 Prisma ORM 支持的任何数据库。
 
-Both approaches have their own advantages, allowing you to choose the one that best fits your project's needs.
+这两种方式各有优势，你可以根据项目需求选择最合适的一种。
 
-## Using Prisma Postgres
+## 使用 Prisma Postgres
 
-[Prisma Postgres](https://www.prisma.io/postgres?utm_source=hono&utm_medium=website&utm_campaign=workers) is a managed, serverless PostgreSQL database built on unikernels. It supports features like connection pooling, caching, and query optimization recommendations. A generous free tier is available for initial development, testing, and hobby projects.
+[Prisma Postgres](https://www.prisma.io/postgres?utm_source=hono&utm_medium=website&utm_campaign=workers) 是一款基于 unikernel 构建的托管无服务器 PostgreSQL 数据库。它支持连接池、缓存以及查询优化建议等功能，并为初始开发、测试和个人项目提供了相当充足的免费额度。
 
-### 1. Install Prisma and required dependencies
+### 1. 安装 Prisma 和所需依赖
 
-Install Prisma in your Hono project:
+在你的 Hono 项目中安装 Prisma：
 
 ```bash
 npm i prisma --save-dev
 ```
 
-Install the [Prisma client extension](https://www.npmjs.com/package/@prisma/extension-accelerate) that's required for Prisma Postgres:
+安装 Prisma Postgres 所需的 [Prisma client extension](https://www.npmjs.com/package/@prisma/extension-accelerate)：
 
 ```sh
 npm i @prisma/extension-accelerate
@@ -36,7 +36,7 @@ Initialize Prisma with an instance of Prisma Postgres:
 npx prisma@latest init --db
 ```
 
-If you don't have a [Prisma Data Platform](https://console.prisma.io/?utm_source=hono&utm_medium=website&utm_campaign=workers) account yet, or if you are not logged in, the command will prompt you to log in using one of the available authentication providers. A browser window will open so you can log in or create an account. Return to the CLI after you have completed this step.
+如果你还没有 [Prisma Data Platform](https://console.prisma.io/?utm_source=hono&utm_medium=website&utm_campaign=workers) 账户，或者当前未登录，命令会提示你使用可用的认证方式登录。随后会打开浏览器窗口，供你登录或创建账户。完成这一步后回到 CLI。
 
 Once logged in (or if you were already logged in), the CLI will prompt you to select a project name and a database region.
 
@@ -88,7 +88,7 @@ Use [Prisma Migrate](https://www.prisma.io/docs/orm/prisma-migrate) to apply cha
 npx prisma migrate dev
 ```
 
-Create a function like this, which you can use in your project later:
+创建一个这样的函数，后续可以在项目中直接使用：
 
 ::: code-group
 
@@ -106,7 +106,7 @@ export const getPrisma = (database_url: string) => {
 
 :::
 
-Here is an example of how you can use this function in your project:
+下面是一个在项目中使用该函数的示例：
 
 ::: code-group
 
@@ -127,22 +127,22 @@ const app = new Hono<{
 }>()
 
 app.post('/', async (c) => {
-  // Now you can use it wherever you want
+  // 现在你可以在需要的地方使用它
   const prisma = getPrisma(c.env.DATABASE_URL)
 })
 ```
 
 :::
 
-If you want to **use your own database with Prisma ORM** and benefit from connection pooling and edge caching, you can enable Prisma Accelerate. Learn more about setting up [Prisma Accelerate](https://www.prisma.io/docs/accelerate/getting-started?utm_source=hono&utm_medium=website&utm_campaign=workers) for your project.
+如果你想**使用自己的数据库并同时享受连接池和边缘缓存**，可以启用 Prisma Accelerate。有关如何为项目配置 [Prisma Accelerate](https://www.prisma.io/docs/accelerate/getting-started?utm_source=hono&utm_medium=website&utm_campaign=workers) 的更多信息，请参阅相关文档。
 
-## Using Prisma Driver Adapters
+## 使用 Prisma 驱动适配器
 
-Prisma can be used with the D1 Database via `driverAdapters`. The prerequisites are to install Prisma and integrate Wrangler to bind with your Hono project. This is an example project since all documentation for Hono, Prisma, and D1 Cloudflare is separated and doesn't have exact, precise step-by-step instructions.
+你可以通过 `driverAdapters` 将 Prisma 与 D1 Database 一起使用。前提是安装 Prisma，并集成 Wrangler 以便绑定到你的 Hono 项目。由于 Hono、Prisma 和 Cloudflare D1 的文档彼此分散，这里只提供一个示例项目，而不是精确到每一步的完整说明。
 
-### Setup Prisma
+### 设置 Prisma
 
-Prisma and D1 are using a binding in Wrangler to secure a connection with an adapter.
+Prisma 和 D1 通过 Wrangler 中的绑定，借助适配器建立连接。
 
 ```bash
 npm install prisma --save-dev
@@ -151,7 +151,7 @@ npm install @prisma/client
 npm install @prisma/adapter-d1
 ```
 
-After this, Prisma will generate schema for your database; define a simple model in `prisma/schema.prisma`. Don't forget to change the adapter.
+完成后，Prisma 会为你的数据库生成 schema；请在 `prisma/schema.prisma` 中定义一个简单模型。别忘了更改适配器。
 
 ```ts [prisma/schema.prisma]
 generator client {
@@ -164,7 +164,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Create a simple model database
+// 创建一个简单的模型数据库
 model User {
   id    String @id  @default(uuid())
   email String  @unique
@@ -174,9 +174,9 @@ model User {
 
 ```
 
-### D1 Database
+### D1 数据库
 
-If you already have D1 database ready skip this. But if not, create one resources, which can be found in [here](https://developers.cloudflare.com/d1/get-started/).
+如果你已经准备好了 D1 数据库，可以跳过这一步。否则，请先创建一个资源，可参考[这里](https://developers.cloudflare.com/d1/get-started/)。
 
 ```bash
 npx wrangler d1 create __DATABASE_NAME__ // change it with yours
@@ -194,12 +194,12 @@ database_id = "DATABASE ID"
 
 ### Prisma Migrate
 
-This command makes to migrate Prisma and change to the D1 database, either local or remote.
+这个命令用于将 Prisma 迁移到 D1 数据库，无论是本地还是远程。
 
 ```bash
 npx wrangler d1 migrations create __DATABASE_NAME__ create_user_table # will generate migration folder and sql file
 
-// for generate sql statement
+// 生成 SQL 语句
 
 npx prisma migrate diff \
   --from-empty \
@@ -209,7 +209,7 @@ npx prisma migrate diff \
 
 ```
 
-Migrate the database model to D1.
+将数据库模型迁移到 D1。
 
 ```bash
 npx wrangler d1 migrations apply __DATABASE_NAME__ --local
@@ -218,19 +218,19 @@ npx prisma generate
 
 ```
 
-### Config Prisma Client
+### 配置 Prisma Client
 
-In order to query your database from the D1 database using Prisma, you need to add types with:
+要通过 Prisma 查询 D1 数据库，你需要添加类型：
 
 ```bash
 npx wrangler types
 ```
 
-will generate a `worker-configuration.d.ts` file.
+这会生成一个 `worker-configuration.d.ts` 文件。
 
-#### Prisma Clients
+#### Prisma 客户端
 
-For using Prisma globally make a file `lib/prismaClient.ts` with code like this.
+如果要全局使用 Prisma，可以创建一个 `lib/prismaClient.ts` 文件，内容如下。
 
 ::: code-group
 
@@ -251,7 +251,7 @@ export default prismaClients
 
 :::
 
-Binding Hono with wrangler environment values:
+使用 wrangler 环境变量绑定 Hono：
 
 ::: code-group
 
@@ -264,12 +264,12 @@ type Bindings = {
   DB: D1Database
 }
 
-const app = new Hono<{ Bindings: Bindings }>() // binding env value
+const app = new Hono<{ Bindings: Bindings }>() // 绑定环境变量
 ```
 
 :::
 
-Example of use in Hono route:
+在 Hono 路由中的使用示例：
 
 ::: code-group
 
@@ -295,11 +295,11 @@ export default app
 
 :::
 
-This will return all users in the `/` route, using Postman or Thunder Client to see the result.
+这会在 `/` 路由返回所有用户，你可以用 Postman 或 Thunder Client 查看结果。
 
-## Resources
+## 资源
 
-You can use the following resources to enhance your application further:
+你可以使用以下资源进一步增强应用：
 
-- Add [caching](https://www.prisma.io/docs/postgres/caching?utm_source=hono&utm_medium=website&utm_campaign=workers) to your queries.
-- Explore the [Prisma Postgres documentation](https://www.prisma.io/docs/postgres/getting-started?utm_source=hono&utm_medium=website&utm_campaign=workers).
+- 为查询添加 [缓存](https://www.prisma.io/docs/postgres/caching?utm_source=hono&utm_medium=website&utm_campaign=workers)。
+- 查看 [Prisma Postgres 文档](https://www.prisma.io/docs/postgres/getting-started?utm_source=hono&utm_medium=website&utm_campaign=workers)。

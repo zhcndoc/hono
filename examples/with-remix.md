@@ -1,12 +1,12 @@
 # Remix
 
-[Remix](https://remix.run/) is a Web Standards-based full-stack framework.
+[Remix](https://remix.run/) 是一个基于 Web 标准的全栈框架。
 
-Now, Remix and Hono can be used together through the fetch API.
+现在，Remix 和 Hono 可以通过 fetch API 一起使用。
 
 ## Remix + Hono
 
-You can use Remix as Hono middleware using [Remix + Hono](https://github.com/sergiodxa/remix-hono), like this:
+你可以像这样使用 [Remix + Hono](https://github.com/sergiodxa/remix-hono) 将 Remix 作为 Hono 中间件：
 
 ```ts
 import * as build from '@remix-run/dev/server-build'
@@ -15,7 +15,7 @@ import { remix } from 'remix-hono/handler'
 app.use('*', remix({ build, mode: process.env.NODE_ENV }))
 ```
 
-## See also
+## 另请参阅
 
 - [Remix](https://remix.run/)
 - [Remix Hono](https://github.com/sergiodxa/remix-hono)

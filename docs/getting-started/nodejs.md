@@ -1,24 +1,24 @@
 # Node.js
 
-[Node.js](https://nodejs.org/) is an open-source, cross-platform JavaScript runtime environment.
+[Node.js](https://nodejs.org/) 是一个开源、跨平台的 JavaScript 运行时环境。
 
-Hono was not designed for Node.js at first, but with a [Node.js Adapter](https://github.com/honojs/node-server), it can run on Node.js as well.
+Hono 最初并非为 Node.js 设计，但通过 [Node.js Adapter](https://github.com/honojs/node-server)，它也可以在 Node.js 上运行。
 
 ::: info
-It works on Node.js versions greater than 18.x. The specific required Node.js versions are as follows:
+它适用于大于 18.x 的 Node.js 版本。具体所需的 Node.js 版本如下：
 
 - 18.x => 18.14.1+
 - 19.x => 19.7.0+
 - 20.x => 20.0.0+
 
-Essentially, you can simply use the latest version of each major release.
+基本上，你可以简单地使用每个主要版本的最新版本。
 :::
 
-## 1. Setup
+## 1. 设置
 
-A starter for Node.js is available.
-Start your project with "create-hono" command.
-Select `nodejs` template for this example.
+提供了适用于 Node.js 的启动器。
+使用 "create-hono" 命令启动你的项目。
+本示例请选择 `nodejs` 模板。
 
 ::: code-group
 
@@ -43,7 +43,7 @@ deno init --npm hono my-app
 ```
 
 :::
-Move to `my-app` and install the dependencies.
+进入 `my-app` 并安装依赖。
 
 ::: code-group
 
@@ -69,9 +69,9 @@ bun i
 
 :::
 
-## 2. Hello World
+## 2. 你好世界
 
-Edit `src/index.ts`:
+编辑 `src/index.ts`：
 
 ```ts
 import { serve } from '@hono/node-server'
@@ -83,12 +83,12 @@ app.get('/', (c) => c.text('Hello Node.js!'))
 serve(app)
 ```
 
-If you want to gracefully shut down the server, write it like this:
+如果你想优雅地关闭服务器，可以这样写：
 
 ```ts
 const server = serve(app)
 
-// graceful shutdown
+// 优雅关闭
 process.on('SIGINT', () => {
   server.close()
   process.exit(0)
@@ -104,9 +104,9 @@ process.on('SIGTERM', () => {
 })
 ```
 
-## 3. Run
+## 3. 运行
 
-Run the development server locally. Then, access `http://localhost:3000` in your Web browser.
+在本地运行开发服务器。然后，在 Web 浏览器中访问 `http://localhost:3000`。
 
 ::: code-group
 
@@ -124,9 +124,9 @@ pnpm dev
 
 :::
 
-## Change port number
+## 更改端口号
 
-You can specify the port number with the `port` option.
+你可以使用 `port` 选项指定端口号。
 
 ```ts
 serve({
@@ -135,14 +135,14 @@ serve({
 })
 ```
 
-## Access the raw Node.js APIs
+## 访问原生 Node.js API
 
-You can access the Node.js APIs from `c.env.incoming` and `c.env.outgoing`.
+你可以通过 `c.env.incoming` 和 `c.env.outgoing` 访问 Node.js API。
 
 ```ts
 import { Hono } from 'hono'
 import { serve, type HttpBindings } from '@hono/node-server'
-// or `Http2Bindings` if you use HTTP2
+// 如果你使用 HTTP2，则使用 `Http2Bindings`
 
 type Bindings = HttpBindings & {
   /* ... */
@@ -159,9 +159,9 @@ app.get('/', (c) => {
 serve(app)
 ```
 
-## Serve static files
+## 提供静态文件
 
-You can use `serveStatic` to serve static files from the local file system. For example, suppose the directory structure is as follows:
+你可以使用 `serveStatic` 从本地文件系统提供静态文件。例如，假设目录结构如下：
 
 ```sh
 ./
@@ -172,7 +172,7 @@ You can use `serveStatic` to serve static files from the local file system. For 
     └── image.png
 ```
 
-If a request to the path `/static/*` comes in and you want to return a file under `./static`, you can write the following:
+如果有请求访问路径 `/static/*` 并且你想返回 `./static` 下的文件，你可以这样写：
 
 ```ts
 import { serveStatic } from '@hono/node-server/serve-static'
@@ -181,9 +181,9 @@ app.use('/static/*', serveStatic({ root: './' }))
 ```
 
 ::: warning
-The `root` option resolves paths relative to the current working directory (`process.cwd()`). This means the behavior depends on **where you run your Node.js process from**, not where your source file is located. If you start your server from a different directory, file resolution may fail.
+`root` 选项相对于当前工作目录（`process.cwd()`）解析路径。这意味着行为取决于**你从何处运行 Node.js 进程**，而不是源文件的位置。如果你从不同的目录启动服务器，文件解析可能会失败。
 
-For reliable path resolution that always points to the same directory as your source file, use `import.meta.url`:
+为了可靠的路径解析，始终指向与源文件相同的目录，请使用 `import.meta.url`：
 
 ```ts
 import { fileURLToPath } from 'node:url'
@@ -197,13 +197,13 @@ app.use(
 
 :::
 
-Use the `path` option to serve `favicon.ico` in the directory root:
+使用 `path` 选项提供目录根目录下的 `favicon.ico`：
 
 ```ts
 app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
 ```
 
-If a request to the path `/hello.txt` or `/image.png` comes in and you want to return a file named `./static/hello.txt` or `./static/image.png`, you can use the following:
+如果有请求访问路径 `/hello.txt` 或 `/image.png` 并且你想返回名为 `./static/hello.txt` 或 `./static/image.png` 的文件，你可以使用以下内容：
 
 ```ts
 app.use('*', serveStatic({ root: './static' }))
@@ -211,7 +211,7 @@ app.use('*', serveStatic({ root: './static' }))
 
 ### `rewriteRequestPath`
 
-If you want to map `http://localhost:3000/static/*` to `./statics`, you can use the `rewriteRequestPath` option:
+如果你想将 `http://localhost:3000/static/*` 映射到 `./statics`，你可以使用 `rewriteRequestPath` 选项：
 
 ```ts
 app.get(
@@ -226,9 +226,9 @@ app.get(
 
 ## http2
 
-You can run hono on a [Node.js http2 Server](https://nodejs.org/api/http2.html).
+你可以在 [Node.js http2 Server](https://nodejs.org/api/http2.html) 上运行 hono。
 
-### unencrypted http2
+### 未加密的 http2
 
 ```ts
 import { createServer } from 'node:http2'
@@ -239,7 +239,7 @@ const server = serve({
 })
 ```
 
-### encrypted http2
+### 加密的 http2
 
 ```ts
 import { createSecureServer } from 'node:http2'
@@ -255,7 +255,7 @@ const server = serve({
 })
 ```
 
-## Building & Deployment
+## 构建与部署
 
 ::: code-group
 
@@ -276,12 +276,12 @@ bun run build
 ```
 
 ::: info
-Apps with a front-end framework may need to use [Hono's Vite plugins](https://github.com/honojs/vite-plugins).
+带有前端框架的应用可能需要使用 [Hono 的 Vite 插件](https://github.com/honojs/vite-plugins)。
 :::
 
 ### Dockerfile
 
-Here is an example of a Node.js Dockerfile.
+这是一个 Node.js Dockerfile 示例。
 
 ```Dockerfile
 FROM node:22-alpine AS base

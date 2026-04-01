@@ -1,8 +1,8 @@
-# Accepts Helper
+# Accepts 辅助工具
 
-Accepts Helper helps to handle Accept headers in the Requests.
+Accepts 辅助工具帮助处理请求中的 Accept 头。
 
-## Import
+## 导入
 
 ```ts
 import { Hono } from 'hono'
@@ -11,7 +11,7 @@ import { accepts } from 'hono/accepts'
 
 ## `accepts()`
 
-The `accepts()` function looks at the Accept header, such as Accept-Encoding and Accept-Language, and returns the proper value.
+`accepts()` 函数查看 Accept 头，例如 Accept-Encoding 和 Accept-Language，并返回适当的值。
 
 ```ts
 import { accepts } from 'hono/accepts'
@@ -26,9 +26,9 @@ app.get('/', (c) => {
 })
 ```
 
-### `AcceptHeader` type
+### `AcceptHeader` 类型
 
-The definition of the `AcceptHeader` type is as follows.
+`AcceptHeader` 类型的定义如下。
 
 ```ts
 export type AcceptHeader =
@@ -41,20 +41,20 @@ export type AcceptHeader =
   | 'Accept-Ranges'
 ```
 
-## Options
+## 选项
 
-### <Badge type="danger" text="required" /> header: `AcceptHeader`
+### <Badge type="danger" text="必填" /> header: `AcceptHeader`
 
-The target accept header.
+目标 accept 头。
 
-### <Badge type="danger" text="required" /> supports: `string[]`
+### <Badge type="danger" text="必填" /> supports: `string[]`
 
-The header values which your application supports.
+您的应用程序支持的头值。
 
-### <Badge type="danger" text="required" /> default: `string`
+### <Badge type="danger" text="必填" /> default: `string`
 
-The default values.
+默认值。
 
-### <Badge type="info" text="optional" /> match: `(accepts: Accept[], config: acceptsConfig) => string`
+### <Badge type="info" text="可选" /> match: `(accepts: Accept[], config: acceptsConfig) => string`
 
-The custom match function.
+自定义匹配函数。

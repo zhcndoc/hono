@@ -1,6 +1,6 @@
-# File Upload
+# 文件上传
 
-You can upload a file with `multipart/form-data` content type. The uploaded file will be available in `c.req.parseBody()`.
+你可以使用 `multipart/form-data` 内容类型上传文件。上传后的文件会在 `c.req.parseBody()` 中可用。
 
 ```ts
 const app = new Hono()
@@ -11,6 +11,6 @@ app.post('/upload', async (c) => {
 })
 ```
 
-## See also
+## 另请参阅
 
 - [API - HonoRequest - parseBody](/docs/api/request#parsebody)

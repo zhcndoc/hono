@@ -1,9 +1,9 @@
 # WebSocket Helper
 
-WebSocket Helper is a helper for server-side WebSockets in Hono applications.
-Currently Cloudflare Workers / Pages, Deno, and Bun adapters are available.
+WebSocket Helper 是 Hono 应用中用于服务器端 WebSocket 的辅助工具。
+目前支持 Cloudflare Workers / Pages、Deno 和 Bun 适配器。
 
-## Import
+## 导入
 
 ::: code-group
 
@@ -31,11 +31,11 @@ export default {
 
 :::
 
-If you use Node.js, you can use [@hono/node-ws](https://github.com/honojs/middleware/tree/main/packages/node-ws).
+如果您使用 Node.js，可以使用 [@hono/node-ws](https://github.com/honojs/middleware/tree/main/packages/node-ws)。
 
 ## `upgradeWebSocket()`
 
-`upgradeWebSocket()` returns a handler for handling WebSocket.
+`upgradeWebSocket()` 返回一个用于处理 WebSocket 的处理程序。
 
 ```ts
 const app = new Hono()
@@ -56,24 +56,24 @@ app.get(
 )
 ```
 
-Available events:
+可用事件：
 
-- `onOpen` - Currently, Cloudflare Workers does not support it.
+- `onOpen` - 目前，Cloudflare Workers 不支持它。
 - `onMessage`
 - `onClose`
 - `onError`
 
 ::: warning
 
-If you use middleware that modifies headers (e.g., applying CORS) on a route that uses WebSocket Helper, you may encounter an error saying you can't modify immutable headers. This is because `upgradeWebSocket()` also changes headers internally.
+如果您在使用 WebSocket Helper 的路由上使用修改请求头（例如应用 CORS）的中间件，您可能会遇到无法修改不可变请求头的错误。这是因为 `upgradeWebSocket()` 内部也会更改请求头。
 
-Therefore, please be cautious if you are using WebSocket Helper and middleware at the same time.
+因此，如果您同时使用 WebSocket Helper 和中间件，请小心。
 
 :::
 
-## RPC-mode
+## RPC 模式
 
-Handlers defined with WebSocket Helper support RPC mode.
+使用 WebSocket Helper 定义的处理程序支持 RPC 模式。
 
 ```ts
 // server.ts
@@ -88,14 +88,14 @@ export type WebSocketApp = typeof wsApp
 
 // client.ts
 const client = hc<WebSocketApp>('http://localhost:8787')
-const socket = client.ws.$ws() // A WebSocket object for a client
+const socket = client.ws.$ws() // 客户端的 WebSocket 对象
 ```
 
-## Examples
+## 示例
 
-See the examples using WebSocket Helper.
+请参阅使用 WebSocket Helper 的示例。
 
-### Server and Client
+### 服务器端和客户端
 
 ```ts
 // server.ts
@@ -131,7 +131,7 @@ ws.addEventListener('open', () => {
 })
 ```
 
-### Bun with JSX
+### 使用 JSX 的 Bun
 
 ```tsx
 import { Hono } from 'hono'

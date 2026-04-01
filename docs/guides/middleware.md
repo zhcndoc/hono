@@ -1,43 +1,43 @@
-# Middleware
+# 中间件
 
-Middleware works before/after the endpoint `Handler`. We can get the `Request` before dispatching or manipulate the `Response` after dispatching.
+中间件在端点处理器（`Handler`）之前/之后工作。我们可以在 dispatch 之前获取 `Request`，或在 dispatch 之后操作 `Response`。
 
-## Definition of Middleware
+## 中间件的定义
 
-- Handler - should return `Response` object. Only one handler will be called.
-- Middleware - should `await next()` and return nothing to call the next Middleware, **or** return a `Response` to early-exit.
+- 处理器（Handler）- 应该返回 `Response` 对象。只会调用一个处理器。
+- 中间件（Middleware）- 应该 `await next()` 且不返回任何内容以调用下一个中间件，**或** 返回一个 `Response` 以提前退出。
 
-The user can register middleware using `app.use` or using `app.HTTP_METHOD` as well as the handlers. For this feature, it's easy to specify the path and the method.
+用户可以使用 `app.use` 注册中间件，也可以使用 `app.HTTP_METHOD` 以及处理器。对于这个功能，很容易指定路径和方法。
 
 ```ts
-// match any method, all routes
+// 匹配任何方法，所有路由
 app.use(logger())
 
-// specify path
+// 指定路径
 app.use('/posts/*', cors())
 
-// specify method and path
+// 指定方法和路径
 app.post('/posts/*', basicAuth())
 ```
 
-If the handler returns `Response`, it will be used for the end-user and will stop processing.
+如果处理器返回 `Response`，它将被用于最终用户并停止处理。
 
 ```ts
 app.post('/posts', (c) => c.text('Created!', 201))
 ```
 
-In this case, four middleware are processed before dispatching like this:
+在这种情况下，四个中间件在 dispatch 之前按如下方式处理：
 
 ```ts
 logger() -> cors() -> basicAuth() -> *handler*
 ```
 
-## Execution order
+## 执行顺序
 
-The order in which Middleware is executed is determined by the order in which it is registered.
-The process before the `next` of the first registered Middleware is executed first,
-and the process after the `next` is executed last.
-See below.
+中间件的执行顺序取决于其注册的顺序。
+第一个注册的中间件的 `next` 之前的过程最先执行，
+而 `next` 之后的过程最后执行。
+见下文。
 
 ```ts
 app.use(async (_, next) => {
@@ -62,7 +62,7 @@ app.get('/', (c) => {
 })
 ```
 
-Result is the following.
+结果如下。
 
 ```
 middleware 1 start
@@ -74,11 +74,11 @@ middleware 1 start
 middleware 1 end
 ```
 
-Note that if the handler or any middleware throws, hono will catch it and either pass it to [your app.onError() callback](/docs/api/hono#error-handling) or automatically convert it to a 500 response before returning it up the chain of middleware. This means that next() will never throw, so there is no need to wrap it in a try/catch/finally.
+请注意，如果处理器或任何中间件抛出错误，hono 将捕获它，要么将其传递给 [你的 app.onError() 回调](/docs/api/hono#error-handling)，要么在将其返回到中间件链之前自动将其转换为 500 响应。这意味着 next() 永远不会抛出，因此无需将其包裹在 try/catch/finally 中。
 
-## Built-in Middleware
+## 内置中间件
 
-Hono has built-in middleware.
+Hono 拥有内置中间件。
 
 ```ts
 import { Hono } from 'hono'
@@ -101,8 +101,8 @@ app.use(
 ```
 
 ::: warning
-In Deno, it is possible to use a different version of middleware than the Hono version, but this can lead to bugs.
-For example, this code is not working because the version is different.
+在 Deno 中，可以使用与 Hono 版本不同的中间件版本，但这可能导致错误。
+例如，此代码无法工作，因为版本不同。
 
 ```ts
 import { Hono } from 'jsr:@hono/hono@4.4.0'
@@ -120,18 +120,18 @@ app.get(
 
 :::
 
-## Custom Middleware
+## 自定义中间件
 
-You can write your own middleware directly inside `app.use()`:
+你可以直接在 `app.use()` 内部编写自己的中间件：
 
 ```ts
-// Custom logger
+// 自定义日志
 app.use(async (c, next) => {
   console.log(`[${c.req.method}] ${c.req.url}`)
   await next()
 })
 
-// Add a custom header
+// 添加自定义头
 app.use('/message/*', async (c, next) => {
   await next()
   c.header('x-message', 'This is middleware!')
@@ -140,9 +140,9 @@ app.use('/message/*', async (c, next) => {
 app.get('/message/hello', (c) => c.text('Hello Middleware!'))
 ```
 
-However, embedding middleware directly within `app.use()` can limit its reusability. Therefore, we can separate our middleware into different files.
+但是，直接将中间件嵌入 `app.use()` 内可能会限制其可重用性。因此，我们可以将中间件分离到不同的文件中。
 
-To ensure we don't lose type definitions for `context` and `next`, when separating middleware, we can use [`createMiddleware()`](/docs/helpers/factory#createmiddleware) from Hono's factory. This also allows us to type-safely [access data we've `set` in `Context`](https://hono.dev/docs/api/context#set-get) from downstream handlers.
+为了确保我们在分离中间件时不会丢失 `context` 和 `next` 的类型定义，我们可以使用 Hono 工厂中的 [`createMiddleware()`](/docs/helpers/factory#createmiddleware)。这也允许我们类型安全地 [访问我们在 `Context` 中 `set` 的数据](https://hono.dev/docs/api/context#set-get)。
 
 ```ts
 import { createMiddleware } from 'hono/factory'
@@ -154,7 +154,7 @@ const logger = createMiddleware(async (c, next) => {
 ```
 
 :::info
-Type generics can be used with `createMiddleware`:
+类型泛型可以与 `createMiddleware` 一起使用：
 
 ```ts
 createMiddleware<{Bindings: Bindings}>(async (c, next) =>
@@ -162,9 +162,9 @@ createMiddleware<{Bindings: Bindings}>(async (c, next) =>
 
 :::
 
-### Modify the Response After Next
+### 在 Next 之后修改响应
 
-Additionally, middleware can be designed to modify responses if necessary:
+此外，中间件可以设计为在必要时修改响应：
 
 ```ts
 const stripRes = createMiddleware(async (c, next) => {
@@ -174,9 +174,9 @@ const stripRes = createMiddleware(async (c, next) => {
 })
 ```
 
-## Context access inside Middleware arguments
+## 在中间件参数内部访问 Context
 
-To access the context inside middleware arguments, directly use the context parameter provided by `app.use`. See the example below for clarification.
+要在中间件参数内部访问 context，直接使用 `app.use` 提供的 context 参数。请参阅下面的示例以说明。
 
 ```ts
 import { cors } from 'hono/cors'
@@ -189,9 +189,9 @@ app.use('*', async (c, next) => {
 })
 ```
 
-### Extending the Context in Middleware
+### 在中间件中扩展 Context
 
-To extend the context inside middleware, use `c.set`. You can make this type-safe by passing a `{ Variables: { yourVariable: YourVariableType } }` generic argument to the `createMiddleware` function.
+要在中间件内部扩展 context，使用 `c.set`。你可以通过向 `createMiddleware` 函数传递 `{ Variables: { yourVariable: YourVariableType } }` 泛型参数来实现类型安全。
 
 ```ts
 import { createMiddleware } from 'hono/factory'
@@ -210,9 +210,9 @@ app.get('/echo', echoMiddleware, (c) => {
 })
 ```
 
-### Type Inference Across Chained Middleware
+### 跨链式中间件的类型推断
 
-When you chain multiple middleware using `.use()`, Hono automatically accumulates the `Variables` types. Route handlers that follow the middleware chain can access all variables from every preceding middleware in a type-safe way:
+当你使用 `.use()` 链式调用多个中间件时，Hono 会自动累积 `Variables` 类型。跟随中间件链的路由处理器可以类型安全地访问所有前面中间件中的变量：
 
 ```ts
 import { createMiddleware } from 'hono/factory'
@@ -239,18 +239,18 @@ const app = new Hono()
   .use(authMiddleware)
   .use(dbMiddleware)
   .get('/', (c) => {
-    // Both `user` and `db` are available and type-safe
+    // `user` 和 `db` 都可用且类型安全
     const user = c.var.user // { id: string; name: string }
     const db = c.var.db // { query: (sql: string) => Promise<unknown> }
     return c.json({ user })
   })
 ```
 
-This works because each `.use()` call returns a new Hono instance with the merged type, so the type grows as middleware is chained. This eliminates the need to manually declare a combined `Env` type upfront for most use cases.
+之所以有效，是因为每个 `.use()` 调用都会返回一个具有合并类型的新 Hono 实例，因此类型会随着中间件的链式调用而增长。这消除了大多数用例中需要手动预先声明组合 `Env` 类型的需求。
 
-## Third-party Middleware
+## 第三方中间件
 
-Built-in middleware does not depend on external modules, but third-party middleware can depend on third-party libraries. So with them, we may make a more complex application.
+内置中间件不依赖外部模块，但第三方中间件可以依赖第三方库。因此使用它们，我们可以构建更复杂的应用程序。
 
-We can explore a variety of [third-party middleware](https://hono.dev/docs/middleware/third-party).
-For example, we have GraphQL Server Middleware, Sentry Middleware, Firebase Auth Middleware, and others.
+我们可以探索各种 [第三方中间件](https://hono.dev/docs/middleware/third-party)。
+例如，我们有 GraphQL Server 中间件、Sentry 中间件、Firebase Auth 中间件等。

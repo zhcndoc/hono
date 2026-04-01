@@ -1,13 +1,13 @@
-# Frequently Asked Questions
+# 常见问题
 
-This guide is a collection of frequently asked questions (FAQ) about Hono and how to resolve them.
+本指南收集了关于 Hono 的常见问题 (FAQ) 及其解决方法。
 
-## Is there an official Renovate config for Hono?
+## Hono 有官方的 Renovate 配置吗？
 
-The Hono team does not currently maintain [Renovate](https://github.com/renovatebot/renovate) Configuration.
-Therefore, please use third-party renovate-config as follows.
+Hono 团队目前不维护 [Renovate](https://github.com/renovatebot/renovate) 配置。
+因此，请按如下方式使用第三方 renovate-config。
 
-In your `renovate.json` :
+在你的 `renovate.json` 中：
 
 ```json
 // renovate.json
@@ -19,4 +19,4 @@ In your `renovate.json` :
 }
 ```
 
-see [renovate-config-hono](https://github.com/shinGangan/renovate-config-hono) repository for more details.
+请参阅 [renovate-config-hono](https://github.com/shinGangan/renovate-config-hono) 仓库以获取更多详情。

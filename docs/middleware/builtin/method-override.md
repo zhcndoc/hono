@@ -1,21 +1,21 @@
-# Method Override Middleware
+# 方法覆盖中间件
 
-This middleware executes the handler of the specified method, which is different from the actual method of the request, depending on the value of the form, header, or query, and returns its response.
+此中间件根据表单、请求头或查询参数的值，执行指定方法（不同于请求的实际方法）的处理程序，并返回其响应。
 
-## Import
+## 导入
 
 ```ts
 import { Hono } from 'hono'
 import { methodOverride } from 'hono/method-override'
 ```
 
-## Usage
+## 用法
 
 ```ts
 const app = new Hono()
 
-// If no options are specified, the value of `_method` in the form,
-// e.g. DELETE, is used as the method.
+// 如果未指定选项，则使用表单中 `_method` 的值，
+// 例如 DELETE，作为方法。
 app.use('/posts', methodOverride({ app }))
 
 app.delete('/posts', (c) => {
@@ -23,11 +23,11 @@ app.delete('/posts', (c) => {
 })
 ```
 
-## For example
+## 示例
 
-Since HTML forms cannot send a DELETE method, you can put the value `DELETE` in the property named `_method` and send it. And the handler for `app.delete()` will be executed.
+由于 HTML 表单无法发送 DELETE 方法，您可以在名为 `_method` 的属性中放入值 `DELETE` 并发送。然后 `app.delete()` 的处理程序将被执行。
 
-The HTML form:
+HTML 表单：
 
 ```html
 <form action="/posts" method="POST">
@@ -36,7 +36,7 @@ The HTML form:
 </form>
 ```
 
-The application:
+应用程序：
 
 ```ts
 import { methodOverride } from 'hono/method-override'
@@ -49,7 +49,7 @@ app.delete('/posts', () => {
 })
 ```
 
-You can change the default values or use the header value and query value:
+您可以更改默认值或使用请求头值和查询参数值：
 
 ```ts
 app.use('/posts', methodOverride({ app, form: '_custom_name' }))
@@ -60,21 +60,21 @@ app.use(
 app.use('/posts', methodOverride({ app, query: '_method' }))
 ```
 
-## Options
+## 选项
 
-### <Badge type="danger" text="required" /> app: `Hono`
+### <Badge type="danger" text="必需" /> app: `Hono`
 
-The instance of `Hono` is used in your application.
+您的应用程序中使用的 `Hono` 实例。
 
-### <Badge type="info" text="optional" /> form: `string`
+### <Badge type="info" text="可选" /> form: `string`
 
-Form key with a value containing the method name.
-The default is `_method`.
+包含方法名的值的表单键。
+默认值为 `_method`。
 
-### <Badge type="info" text="optional" /> header: `boolean`
+### <Badge type="info" text="可选" /> header: `boolean`
 
-Header name with a value containing the method name.
+包含方法名的值的请求头名称。
 
-### <Badge type="info" text="optional" /> query: `boolean`
+### <Badge type="info" text="可选" /> query: `boolean`
 
-Query parameter key with a value containing the method name.
+包含方法名的值的查询参数键。

@@ -1,8 +1,8 @@
 # CBOR
 
-[CBOR](https://cbor.io/) is a binary format for serializing objects defined in [RFC 8949](https://www.rfc-editor.org/rfc/rfc8949.html). It is JSON-compatible and suitable for network communications that require efficient data exchange, as well as for use in resource-constrained environments such as IoT devices.
+[CBOR](https://cbor.io/) 是一种用于序列化对象的二进制格式，定义于 [RFC 8949](https://www.rfc-editor.org/rfc/rfc8949.html)。它兼容 JSON，适合需要高效数据交换的网络通信，也适合物联网设备等资源受限环境。
 
-Here's an example of using [cbor2](https://www.npmjs.com/package/cbor2) package to respond with CBOR:
+下面是使用 [cbor2](https://www.npmjs.com/package/cbor2) 包以 CBOR 格式响应的示例：
 
 ```ts
 import { Hono } from 'hono'
@@ -34,7 +34,7 @@ app.get('/', (c) => {
 export default app
 ```
 
-You can check the response using the following command.
+你可以使用以下命令查看响应。
 
 ```plaintext
 $ curl -s http://localhost:3000/ | hexdump -C
@@ -43,7 +43,7 @@ $ curl -s http://localhost:3000/ | hexdump -C
 00000015
 ```
 
-Additionally, you can verify that it decodes to a JSON object in the [CBOR playground](https://cbor.me/).
+另外，你还可以在 [CBOR playground](https://cbor.me/) 中验证它是否能解码为 JSON 对象。
 
 ```plaintext
 A1                           # map(1)
@@ -57,7 +57,7 @@ A1                           # map(1)
 { "message": "hello CBOR!" }
 ```
 
-## See also
+## 另请参阅
 
 - [CBOR — Concise Binary Object Representation | Overview](https://cbor.io/)
 - [CBOR playground](https://cbor.me/)

@@ -1,10 +1,10 @@
-# Context
+# 上下文
 
-The `Context` object is instantiated for each request and kept until the response is returned. You can put values in it, set headers and a status code you want to return, and access HonoRequest and Response objects.
+`Context` 对象为每个请求实例化，并保留直到响应返回。你可以将值放入其中，设置要返回的标头和状态码，并访问 HonoRequest 和 Response 对象。
 
 ## req
 
-`req` is an instance of HonoRequest. For more details, see [HonoRequest](/docs/api/request).
+`req` 是 HonoRequest 的实例。更多详情，请参阅 [HonoRequest](/docs/api/request)。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -21,14 +21,14 @@ app.get('/hello', (c) => {
 
 ## status()
 
-You can set an HTTP status code with `c.status()`. The default is `200`. You don't have to use `c.status()` if the code is `200`.
+你可以使用 `c.status()` 设置 HTTP 状态码。默认值为 `200`。如果代码是 `200`，则不必使用 `c.status()`。
 
 ```ts twoslash
 import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
 app.post('/posts', (c) => {
-  // Set HTTP status code
+  // 设置 HTTP 状态码
   c.status(201)
   return c.text('Your post is created!')
 })
@@ -36,14 +36,14 @@ app.post('/posts', (c) => {
 
 ## header()
 
-You can set HTTP Headers for the response.
+你可以为响应设置 HTTP 标头。
 
 ```ts twoslash
 import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
 app.get('/', (c) => {
-  // Set headers
+  // 设置标头
   c.header('X-Message', 'My custom message')
   return c.text('Hello!')
 })
@@ -51,10 +51,10 @@ app.get('/', (c) => {
 
 ## body()
 
-Return an HTTP response.
+返回 HTTP 响应。
 
 ::: info
-**Note**: When returning text or HTML, it is recommended to use `c.text()` or `c.html()`.
+**注意**：当返回文本或 HTML 时，建议使用 `c.text()` 或 `c.html()`。
 :::
 
 ```ts twoslash
@@ -63,12 +63,12 @@ const app = new Hono()
 // ---cut---
 app.get('/welcome', (c) => {
   c.header('Content-Type', 'text/plain')
-  // Return the response body
+  // 返回响应体
   return c.body('Thank you for coming')
 })
 ```
 
-You can also write the following.
+你也可以这样写。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -82,7 +82,7 @@ app.get('/welcome', (c) => {
 })
 ```
 
-The response is the same `Response` object as below.
+响应与下面的 `Response` 对象相同。
 
 ```ts twoslash
 new Response('Thank you for coming', {
@@ -96,7 +96,7 @@ new Response('Thank you for coming', {
 
 ## text()
 
-Render text as `Content-Type: text/plain`.
+将文本渲染为 `Content-Type: text/plain`。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -109,7 +109,7 @@ app.get('/say', (c) => {
 
 ## json()
 
-Render JSON as `Content-Type: application/json`.
+将 JSON 渲染为 `Content-Type: application/json`。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -122,7 +122,7 @@ app.get('/api', (c) => {
 
 ## html()
 
-Render HTML as `Content-Type: text/html`.
+将 HTML 渲染为 `Content-Type: text/html`。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -135,7 +135,7 @@ app.get('/', (c) => {
 
 ## notFound()
 
-Return a `Not Found` Response. You can customize it with [`app.notFound()`](/docs/api/hono#not-found).
+返回 `Not Found` 响应。你可以使用 [`app.notFound()`](/docs/api/hono#not-found) 自定义它。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -148,7 +148,7 @@ app.get('/notfound', (c) => {
 
 ## redirect()
 
-Redirect, default status code is `302`.
+重定向，默认状态码为 `302`。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -164,13 +164,13 @@ app.get('/redirect-permanently', (c) => {
 
 ## res
 
-You can access the [Response] object that will be returned.
+你可以访问将返回的 [Response] 对象。
 
 ```ts twoslash
 import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
-// Response object
+// Response 对象
 app.use('/', async (c, next) => {
   await next()
   c.res.headers.append('X-Debug', 'Debug message')
@@ -181,7 +181,7 @@ app.use('/', async (c, next) => {
 
 ## set() / get()
 
-Get and set arbitrary key-value pairs, with a lifetime of the current request. This allows passing specific values between middleware or from middleware to route handlers.
+获取和设置任意键值对，生命周期为当前请求。这允许在中间件之间或从中间件到路由处理器传递特定值。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -198,7 +198,7 @@ app.get('/', (c) => {
 })
 ```
 
-Pass the `Variables` as Generics to the constructor of `Hono` to make it type-safe.
+将 `Variables` 作为泛型传递给 `Hono` 的构造函数以使其类型安全。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -210,11 +210,11 @@ type Variables = {
 const app = new Hono<{ Variables: Variables }>()
 ```
 
-The value of `c.set` / `c.get` are retained only within the same request. They cannot be shared or persisted across different requests.
+`c.set` / `c.get` 的值仅在同一请求内保留。它们不能在不同请求之间共享或持久化。
 
 ## var
 
-You can also access the value of a variable with `c.var`.
+你也可以使用 `c.var` 访问变量的值。
 
 ```ts twoslash
 import type { Context } from 'hono'
@@ -223,8 +223,8 @@ declare const c: Context
 const result = c.var.client.oneMethod()
 ```
 
-If you want to create the middleware which provides a custom method,
-write like the following:
+如果你想创建一个提供自定义方法的中间件，
+请如下编写：
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -248,8 +248,8 @@ app.get('/echo', echoMiddleware, (c) => {
 })
 ```
 
-If you want to use the middleware in multiple handlers, you can use `app.use()`.
-Then, you have to pass the `Env` as Generics to the constructor of `Hono` to make it type-safe.
+如果你想在多个处理器中使用该中间件，可以使用 `app.use()`。
+然后，你必须将 `Env` 作为泛型传递给 `Hono` 的构造函数以使其类型安全。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -272,7 +272,7 @@ app.get('/echo', (c) => {
 
 ## render() / setRenderer()
 
-You can set a layout using `c.setRenderer()` within a custom middleware.
+你可以在自定义中间件中使用 `c.setRenderer()` 设置布局。
 
 ```tsx twoslash
 /** @jsx jsx */
@@ -294,7 +294,7 @@ app.use(async (c, next) => {
 })
 ```
 
-Then, you can utilize `c.render()` to create responses within this layout.
+然后，你可以利用 `c.render()` 在此布局内创建响应。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -305,7 +305,7 @@ app.get('/', (c) => {
 })
 ```
 
-The output of which will be:
+输出将为：
 
 ```html
 <html>
@@ -315,8 +315,8 @@ The output of which will be:
 </html>
 ```
 
-Additionally, this feature offers the flexibility to customize arguments.
-To ensure type safety, types can be defined as:
+此外，此功能提供了自定义参数的灵活性。
+为了确保类型安全，类型可以定义为：
 
 ```ts
 declare module 'hono' {
@@ -329,7 +329,7 @@ declare module 'hono' {
 }
 ```
 
-Here's an example of how you can use this:
+以下是如何使用此功能的示例：
 
 ```ts
 app.use('/pages/*', async (c, next) => {
@@ -364,7 +364,7 @@ app.get('/pages/my-hobbies', (c) => {
 
 ## executionCtx
 
-You can access Cloudflare Workers' specific [ExecutionContext](https://developers.cloudflare.com/workers/runtime-apis/context/).
+你可以访问 Cloudflare Workers 特定的 [ExecutionContext](https://developers.cloudflare.com/workers/runtime-apis/context/)。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -376,14 +376,14 @@ const app = new Hono<{
 declare const key: string
 declare const data: string
 // ---cut---
-// ExecutionContext object
+// ExecutionContext 对象
 app.get('/foo', async (c) => {
   c.executionCtx.waitUntil(c.env.KV.put(key, data))
   // ...
 })
 ```
 
-The `ExecutionContext` also has an [`exports`](https://developers.cloudflare.com/workers/runtime-apis/context/#exports) field. To get autocomplete with Wrangler's generated types, you can use module augmentation:
+`ExecutionContext` 还有一个 [`exports`](https://developers.cloudflare.com/workers/runtime-apis/context/#exports) 字段。要使用 Wrangler 生成的类型获得自动补全，你可以使用模块 augmentation：
 
 ```ts
 import 'hono'
@@ -397,7 +397,7 @@ declare module 'hono' {
 
 ## event
 
-You can access Cloudflare Workers' specific `FetchEvent`. This was used in "Service Worker" syntax. But, it is not recommended now.
+你可以访问 Cloudflare Workers 特定的 `FetchEvent`。这在 "Service Worker" 语法中使用过。但现在不推荐使用。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -405,14 +405,14 @@ declare const key: string
 declare const data: string
 type KVNamespace = any
 // ---cut---
-// Type definition to make type inference
+// 用于类型推断的类型定义
 type Bindings = {
   MY_KV: KVNamespace
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-// FetchEvent object (only set when using Service Worker syntax)
+// FetchEvent 对象（仅在使用 Service Worker 语法时设置）
 app.get('/foo', async (c) => {
   c.event.waitUntil(c.env.MY_KV.put(key, data))
   // ...
@@ -421,21 +421,21 @@ app.get('/foo', async (c) => {
 
 ## env
 
-In Cloudflare Workers Environment variables, secrets, KV namespaces, D1 database, R2 bucket etc. that are bound to a worker are known as bindings.
-Regardless of type, bindings are always available as global variables and can be accessed via the context `c.env.BINDING_KEY`.
+在 Cloudflare Workers 环境变量中，绑定到 worker 的 secrets、KV 命名空间、D1 数据库、R2 存储桶等被称为 bindings。
+无论类型如何，bindings 始终可作为全局变量使用，并可通过上下文 `c.env.BINDING_KEY` 访问。
 
 ```ts twoslash
 import { Hono } from 'hono'
 type KVNamespace = any
 // ---cut---
-// Type definition to make type inference
+// 用于类型推断的类型定义
 type Bindings = {
   MY_KV: KVNamespace
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-// Environment object for Cloudflare Workers
+// Cloudflare Workers 的环境对象
 app.get('/', async (c) => {
   c.env.MY_KV.get('my-key')
   // ...
@@ -444,8 +444,8 @@ app.get('/', async (c) => {
 
 ## error
 
-If the Handler throws an error, the error object is placed in `c.error`.
-You can access it in your middleware.
+如果 Handler 抛出错误，错误对象将放置在 `c.error` 中。
+你可以在中间件中访问它。
 
 ```ts twoslash
 import { Hono } from 'hono'
@@ -454,14 +454,14 @@ const app = new Hono()
 app.use(async (c, next) => {
   await next()
   if (c.error) {
-    // do something...
+    // 做一些事情...
   }
 })
 ```
 
 ## ContextVariableMap
 
-For instance, if you wish to add type definitions to variables when a specific middleware is used, you can extend `ContextVariableMap`. For example:
+例如，如果你希望在特定中间件使用时为变量添加类型定义，你可以扩展 `ContextVariableMap`。例如：
 
 ```ts
 declare module 'hono' {
@@ -471,25 +471,25 @@ declare module 'hono' {
 }
 ```
 
-You can then utilize this in your middleware:
+然后你可以在中间件中使用它：
 
 ```ts twoslash
 import { createMiddleware } from 'hono/factory'
 // ---cut---
 const mw = createMiddleware(async (c, next) => {
-  c.set('result', 'some values') // result is a string
+  c.set('result', 'some values') // result 是一个字符串
   await next()
 })
 ```
 
-In a handler, the variable is inferred as the proper type:
+在处理器中，变量被推断为正确的类型：
 
 ```ts twoslash
 import { Hono } from 'hono'
 const app = new Hono<{ Variables: { result: string } }>()
 // ---cut---
 app.get('/', (c) => {
-  const val = c.get('result') // val is a string
+  const val = c.get('result') // val 是一个字符串
   // ...
   return c.json({ result: val })
 })

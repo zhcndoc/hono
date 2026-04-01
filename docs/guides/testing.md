@@ -1,25 +1,25 @@
-# Testing
+# 测试
 
 [Vitest]: https://vitest.dev/
 
-Testing is important.
-In actuality, it is easy to test Hono's applications.
-The way to create a test environment differs from each runtime, but the basic steps are the same.
-In this section, let's test with Cloudflare Workers and [Vitest].
+测试很重要。
+实际上，测试 Hono 的应用程序很容易。
+创建测试环境的方式因运行时而异，但基本步骤是相同的。
+在本节中，让我们使用 Cloudflare Workers 和 [Vitest] 进行测试。
 
 ::: tip
-Cloudflare recommends using [Vitest] with [@cloudflare/vitest-pool-workers](https://www.npmjs.com/package/@cloudflare/vitest-pool-workers). For more details, please refer to [Vitest integration](https://developers.cloudflare.com/workers/testing/vitest-integration/) in the Cloudflare Workers docs.
+Cloudflare 推荐使用 [Vitest] 配合 [@cloudflare/vitest-pool-workers](https://www.npmjs.com/package/@cloudflare/vitest-pool-workers)。有关更多详细信息，请参阅 Cloudflare Workers 文档中的 [Vitest 集成](https://developers.cloudflare.com/workers/testing/vitest-integration/)。
 :::
 
-## Request and Response
+## 请求和响应
 
-All you need to do is create a Request and pass it to the Hono application to validate the Response. You can then use the useful `app.request` method.
+您所需要做的就是创建一个 Request 对象并将其传递给 Hono 应用程序以验证 Response 对象。然后您可以使用有用的 `app.request` 方法。
 
 ::: tip
-For a typed test client see the [testing helper](/docs/helpers/testing).
+对于类型化的测试客户端，请参阅 [测试助手](/docs/helpers/testing)。
 :::
 
-For example, consider an application that provides the following REST API.
+例如，考虑一个提供以下 REST API 的应用程序。
 
 ```ts
 app.get('/posts', (c) => {
@@ -39,7 +39,7 @@ app.post('/posts', (c) => {
 })
 ```
 
-Make a request to `GET /posts` and test the response.
+向 `GET /posts` 发出请求并测试响应。
 
 ```ts
 describe('Example', () => {
@@ -51,7 +51,7 @@ describe('Example', () => {
 })
 ```
 
-To make a request to `POST /posts`, do the following.
+要向 `POST /posts` 发出请求，请执行以下操作。
 
 ```ts
 test('POST /posts', async () => {
@@ -66,7 +66,7 @@ test('POST /posts', async () => {
 })
 ```
 
-To make a request to `POST /posts` with `JSON` data, do the following.
+要使用 `JSON` 数据向 `POST /posts` 发出请求，请执行以下操作。
 
 ```ts
 test('POST /posts', async () => {
@@ -83,7 +83,7 @@ test('POST /posts', async () => {
 })
 ```
 
-To make a request to `POST /posts` with `multipart/form-data` data, do the following.
+要使用 `multipart/form-data` 数据向 `POST /posts` 发出请求，请执行以下操作。
 
 ```ts
 test('POST /posts', async () => {
@@ -101,7 +101,7 @@ test('POST /posts', async () => {
 })
 ```
 
-You can also pass an instance of the Request class.
+您也可以传递 Request 类的实例。
 
 ```ts
 test('POST /posts', async () => {
@@ -117,18 +117,18 @@ test('POST /posts', async () => {
 })
 ```
 
-In this way, you can test it as like an End-to-End.
+通过这种方式，您可以像进行端到端测试一样对其进行测试。
 
-## Env
+## 环境变量
 
-To set `c.env` for testing, you can pass it as the 3rd parameter to `app.request`. This is useful for mocking values like [Cloudflare Workers Bindings](https://hono.dev/getting-started/cloudflare-workers#bindings):
+为了在测试中设置 `c.env`，您可以将其作为第 3 个参数传递给 `app.request`。这对于模拟 [Cloudflare Workers 绑定](https://hono.dev/getting-started/cloudflare-workers#bindings) 之类的值很有用：
 
 ```ts
 const MOCK_ENV = {
   API_HOST: 'example.com',
   DB: {
     prepare: () => {
-      /* mocked D1 */
+      /* 模拟的 D1 */
     },
   },
 }

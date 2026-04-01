@@ -1,8 +1,8 @@
-# Helpers
+# 辅助工具
 
-Helpers are available to assist in developing your application. Unlike middleware, they don't act as handlers, but rather provide useful functions.
+辅助工具可用于协助您开发应用程序。与中间件不同，它们不作为处理程序，而是提供有用的函数。
 
-For instance, here's how to use the [Cookie helper](/docs/helpers/cookie):
+例如，以下是使用 [Cookie 辅助工具](/docs/helpers/cookie) 的方法：
 
 ```ts
 import { getCookie, setCookie } from 'hono/cookie'
@@ -17,17 +17,17 @@ app.get('/cookie', (c) => {
 })
 ```
 
-## Available Helpers
+## 可用的辅助工具
 
 - [Accepts](/docs/helpers/accepts)
-- [Adapter](/docs/helpers/adapter)
+- [适配器](/docs/helpers/adapter)
 - [Cookie](/docs/helpers/cookie)
 - [css](/docs/helpers/css)
-- [Dev](/docs/helpers/dev)
-- [Factory](/docs/helpers/factory)
+- [开发](/docs/helpers/dev)
+- [工厂](/docs/helpers/factory)
 - [html](/docs/helpers/html)
 - [JWT](/docs/helpers/jwt)
 - [SSG](/docs/helpers/ssg)
-- [Streaming](/docs/helpers/streaming)
-- [Testing](/docs/helpers/testing)
+- [流式传输](/docs/helpers/streaming)
+- [测试](/docs/helpers/testing)
 - [WebSocket](/docs/helpers/websocket)

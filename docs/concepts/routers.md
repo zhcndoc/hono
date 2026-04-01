@@ -1,61 +1,61 @@
-# Routers
+# 路由
 
-The routers are the most important features for Hono.
+路由是 Hono 最重要的功能。
 
-Hono has five routers.
+Hono 有五种路由。
 
 ## RegExpRouter
 
-**RegExpRouter** is the fastest router in the JavaScript world.
+**RegExpRouter** 是 JavaScript 世界中最快的路由。
 
-Although this is called "RegExp", it is not an Express-like implementation using [path-to-regexp](https://github.com/pillarjs/path-to-regexp).
-They are using linear loops.
-Therefore, regular expression matching will be performed for all routes and the performance will be degraded as you have more routes.
+虽然它被称为 "RegExp"，但它并不是像 Express 那样使用 [path-to-regexp](https://github.com/pillarjs/path-to-regexp) 的实现。
+它们使用的是线性循环。
+因此，将对所有路由执行正则表达式匹配，并且随着路由数量的增加，性能将会下降。
 
 ![](/images/router-linear.jpg)
 
-Hono's RegExpRouter turns the route pattern into "one large regular expression".
-Then it can get the result with one-time matching.
+Hono 的 RegExpRouter 将路由模式转换为“一个大型正则表达式”。
+然后它可以通过一次匹配获得结果。
 
 ![](/images/router-regexp.jpg)
 
-This works faster than methods that use tree-based algorithms such as radix-tree in most cases.
+在大多数情况下，这比使用基于树的算法（如基数树）的方法更快。
 
-However, RegExpRouter doesn't support all routing patterns, so it's usually used in combination with one of the other routers below that support all routing patterns.
+但是，RegExpRouter 不支持所有路由模式，所以它通常与下面支持所有路由模式的其他路由之一结合使用。
 
 ## TrieRouter
 
-**TrieRouter** is the router using the Trie-tree algorithm.
-Like RegExpRouter, it does not use linear loops.
+**TrieRouter** 是使用 Trie 树算法的路由。
+像 RegExpRouter 一样，它不使用线性循环。
 
 ![](/images/router-tree.jpg)
 
-This router is not as fast as the RegExpRouter, but it is much faster than the Express router.
-TrieRouter supports all patterns.
+这个路由不如 RegExpRouter 快，但比 Express 路由快得多。
+TrieRouter 支持所有模式。
 
 ## SmartRouter
 
-**SmartRouter** is useful when you're using multiple routers. It selects the best router by inferring from the registered routers.
-Hono uses SmartRouter, RegExpRouter, and TrieRouter by default:
+当你使用多个路由时，**SmartRouter** 非常有用。它通过从注册的路由中推断来选择最佳路由。
+Hono 默认使用 SmartRouter、RegExpRouter 和 TrieRouter：
 
 ```ts
-// Inside the core of Hono.
+// 在 Hono 的核心内部。
 readonly defaultRouter: Router = new SmartRouter({
   routers: [new RegExpRouter(), new TrieRouter()],
 })
 ```
 
-When the application starts, SmartRouter detects the fastest router based on routing and continues to use it.
+当应用程序启动时，SmartRouter 会根据路由检测最快的路由并继续使用它。
 
 ## LinearRouter
 
-RegExpRouter is fast, but the route registration phase can be slightly slow.
-So, it's not suitable for an environment that initializes with every request.
+RegExpRouter 很快，但路由注册阶段可能会稍慢。
+因此，它不适合每次请求都初始化的环境。
 
-**LinearRouter** is optimized for "one shot" situations.
-Route registration is significantly faster than RegExpRouter because it adds the route without compiling strings, using a linear approach.
+**LinearRouter** 针对“一次性”情况进行了优化。
+路由注册比 RegExpRouter 快得多，因为它使用线性方法添加路由而不编译字符串。
 
-The following is one of the benchmark results, which includes the route registration phase.
+以下是基准测试结果之一，其中包括路由注册阶段。
 
 ```console
 • GET /user/lookup/username/hey
@@ -76,11 +76,11 @@ summary for GET /user/lookup/username/hey
 
 ## PatternRouter
 
-**PatternRouter** is the smallest router among Hono's routers.
+**PatternRouter** 是 Hono 路由中最小的路由。
 
-While Hono is already compact, if you need to make it even smaller for an environment with limited resources, use PatternRouter.
+虽然 Hono 已经非常紧凑，但如果你需要在资源有限的环境中使其更小，请使用 PatternRouter。
 
-An application using only PatternRouter is under 15KB in size.
+仅使用 PatternRouter 的应用程序大小低于 15KB。
 
 ```console
 $ npx wrangler deploy --minify ./src/index.ts

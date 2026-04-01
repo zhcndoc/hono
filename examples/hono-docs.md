@@ -1,10 +1,10 @@
 # Hono Docs
 
-> Auto-generate OpenAPI 3.0 spec and TypeScript type snapshots from Hono route type definitions
+> 根据 Hono 路由类型定义自动生成 OpenAPI 3.0 规范和 TypeScript 类型快照
 
-[Hono Docs](https://github.com/Rcmade/hono-docs) provides auto generated OpenApi Docs for Hono.
+[Hono Docs](https://github.com/Rcmade/hono-docs) 为 Hono 提供自动生成的 OpenAPI 文档。
 
-## **Create a config file** at the root of your project (`hono-docs.ts`)
+## **在项目根目录创建配置文件**（`hono-docs.ts`）
 
 ```ts
 import { defineConfig } from '@rcmade/hono-docs'
@@ -51,15 +51,15 @@ export default defineConfig({
 })
 ```
 
-### **Route Definitions & AppType**
+### **路由定义与 AppType**
 
-This library supports **only change routes** via a single AppType export in your routes file. You **must** export:
+这个库仅支持通过路由文件中的单个 AppType 导出来处理“变更路由”。你**必须**导出：
 
 ```ts
 export type AppType = typeof yourRoutesVariable
 ```
 
-**Example:**
+**示例：**
 
 ```ts
 // src/routes/userRoutes.ts
@@ -78,7 +78,7 @@ export type AppType = typeof userRoutes
 export default userRoutes
 ```
 
-Mount in your Hono app:
+挂载到你的 Hono 应用中：
 
 ```ts
 // src/routes/docs.ts
@@ -109,15 +109,15 @@ export type AppType = typeof docs
 export default docs
 ```
 
-Visiting `/api/docs` shows the UI; `/api/docs/open-api` serves the JSON.
+访问 `/api/docs` 会显示 UI；`/api/docs/open-api` 会提供 JSON。
 
-After you’ve **created** your **config**, generate the spec with:
+在你**创建好**配置后，可以用以下命令生成规范：
 
 ```bash
 npx @rcmade/hono-docs generate --config ./hono-docs.ts
 ```
 
-## CLI Usage
+## CLI 用法
 
 ```text
 Usage: @rcmade/hono-docs generate --config <your hono-docs.ts path (default root/hono-docs.ts)>
@@ -127,6 +127,6 @@ Options:
   -h, --help     Show help                                 [boolean]
 ```
 
-## Examples
+## 示例
 
-Check out [`examples/basic-app/`](https://github.com/rcmade/hono-docs/tree/main/examples/basic-app) for a minimal setup.
+查看 [`examples/basic-app/`](https://github.com/rcmade/hono-docs/tree/main/examples/basic-app) 以了解最小配置示例。

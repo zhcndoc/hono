@@ -1,33 +1,33 @@
-# Third-party Middleware
+# 第三方中间件
 
-Third-party middleware refers to middleware not bundled within the Hono package.
-Most of this middleware leverages external libraries.
+第三方中间件指的是未捆绑在 Hono 包内的中间件。
+这些中间件大多数利用外部库。
 
-### Authentication
+### 认证
 
 - [Auth.js(Next Auth)](https://github.com/honojs/middleware/tree/main/packages/auth-js)
 - [Casbin](https://github.com/honojs/middleware/tree/main/packages/casbin)
-- [Clerk Auth](https://github.com/honojs/middleware/tree/main/packages/clerk-auth)
+- [Clerk 认证](https://github.com/honojs/middleware/tree/main/packages/clerk-auth)
 - [Cloudflare Access](https://github.com/honojs/middleware/tree/main/packages/cloudflare-access)
-- [OAuth Providers](https://github.com/honojs/middleware/tree/main/packages/oauth-providers)
-- [OIDC Auth](https://github.com/honojs/middleware/tree/main/packages/oidc-auth)
-- [Firebase Auth](https://github.com/honojs/middleware/tree/main/packages/firebase-auth)
-- [Verify RSA JWT (JWKS)](https://github.com/wataruoguchi/verify-rsa-jwt-cloudflare-worker)
-- [Stytch Auth](https://github.com/honojs/middleware/tree/main/packages/stytch-auth)
+- [OAuth 提供商](https://github.com/honojs/middleware/tree/main/packages/oauth-providers)
+- [OIDC 认证](https://github.com/honojs/middleware/tree/main/packages/oidc-auth)
+- [Firebase 认证](https://github.com/honojs/middleware/tree/main/packages/firebase-auth)
+- [验证 RSA JWT (JWKS)](https://github.com/wataruoguchi/verify-rsa-jwt-cloudflare-worker)
+- [Stytch 认证](https://github.com/honojs/middleware/tree/main/packages/stytch-auth)
 
-### Validators
+### 验证器
 
-- [Ajv Validator](https://github.com/honojs/middleware/tree/main/packages/ajv-validator)
-- [ArkType Validator](https://github.com/honojs/middleware/tree/main/packages/arktype-validator)
-- [Class Validator](https://github.com/honojs/middleware/tree/main/packages/class-validator)
-- [Conform Validator](https://github.com/honojs/middleware/tree/main/packages/conform-validator)
-- [Effect Schema Validator](https://github.com/honojs/middleware/tree/main/packages/effect-validator)
-- [Standard Schema Validator](https://github.com/honojs/middleware/tree/main/packages/standard-validator)
-- [TypeBox Validator](https://github.com/honojs/middleware/tree/main/packages/typebox-validator)
-- [Typia Validator](https://github.com/honojs/middleware/tree/main/packages/typia-validator)
-- [unknownutil Validator](https://github.com/ryoppippi/hono-unknownutil-validator)
-- [Valibot Validator](https://github.com/honojs/middleware/tree/main/packages/valibot-validator)
-- [Zod Validator](https://github.com/honojs/middleware/tree/main/packages/zod-validator)
+- [Ajv 验证器](https://github.com/honojs/middleware/tree/main/packages/ajv-validator)
+- [ArkType 验证器](https://github.com/honojs/middleware/tree/main/packages/arktype-validator)
+- [Class 验证器](https://github.com/honojs/middleware/tree/main/packages/class-validator)
+- [Conform 验证器](https://github.com/honojs/middleware/tree/main/packages/conform-validator)
+- [Effect Schema 验证器](https://github.com/honojs/middleware/tree/main/packages/effect-validator)
+- [Standard Schema 验证器](https://github.com/honojs/middleware/tree/main/packages/standard-validator)
+- [TypeBox 验证器](https://github.com/honojs/middleware/tree/main/packages/typebox-validator)
+- [Typia 验证器](https://github.com/honojs/middleware/tree/main/packages/typia-validator)
+- [unknownutil 验证器](https://github.com/ryoppippi/hono-unknownutil-validator)
+- [Valibot 验证器](https://github.com/honojs/middleware/tree/main/packages/valibot-validator)
+- [Zod 验证器](https://github.com/honojs/middleware/tree/main/packages/zod-validator)
 
 ### OpenAPI
 
@@ -38,59 +38,59 @@ Most of this middleware leverages external libraries.
 - [Hono OpenAPI](https://github.com/rhinobase/hono-openapi)
 - [hono-zod-openapi](https://github.com/paolostyle/hono-zod-openapi)
 
-### Development
+### 开发
 
-- [ESLint Config](https://github.com/honojs/middleware/tree/main/packages/eslint-config)
-- [SSG Plugin Essential](https://github.com/honojs/middleware/tree/main/packages/ssg-plugins-essential)
+- [ESLint 配置](https://github.com/honojs/middleware/tree/main/packages/eslint-config)
+- [SSG 插件必备](https://github.com/honojs/middleware/tree/main/packages/ssg-plugins-essential)
 
-### Monitoring / Tracing
+### 监控 / 追踪
 
-- [Apitally (API monitoring & analytics)](https://docs.apitally.io/frameworks/hono)
+- [Apitally (API 监控与分析)](https://docs.apitally.io/frameworks/hono)
 - [Highlight.io](https://www.highlight.io/docs/getting-started/backend-sdk/js/hono)
-- [LogTape (Logging)](https://logtape.org/manual/integrations#hono)
+- [LogTape (日志记录)](https://logtape.org/manual/integrations#hono)
 - [OpenTelemetry](https://github.com/honojs/middleware/tree/main/packages/otel)
-- [Prometheus Metrics](https://github.com/honojs/middleware/tree/main/packages/prometheus)
+- [Prometheus 指标](https://github.com/honojs/middleware/tree/main/packages/prometheus)
 - [Sentry](https://github.com/honojs/middleware/tree/main/packages/sentry)
-- [Pino logger](https://github.com/maou-shonen/hono-pino)
+- [Pino 日志记录器](https://github.com/maou-shonen/hono-pino)
 
-### Server / Adapter
+### 服务器 / 适配器
 
-- [GraphQL Server](https://github.com/honojs/middleware/tree/main/packages/graphql-server)
-- [Node WebSocket Helper](https://github.com/honojs/middleware/tree/main/packages/node-ws)
-- [tRPC Server](https://github.com/honojs/middleware/tree/main/packages/trpc-server)
+- [GraphQL 服务器](https://github.com/honojs/middleware/tree/main/packages/graphql-server)
+- [Node WebSocket 助手](https://github.com/honojs/middleware/tree/main/packages/node-ws)
+- [tRPC 服务器](https://github.com/honojs/middleware/tree/main/packages/trpc-server)
 
-### Transpiler
+### 转译器
 
-- [Bun Transpiler](https://github.com/honojs/middleware/tree/main/packages/bun-transpiler)
-- [esbuild Transpiler](https://github.com/honojs/middleware/tree/main/packages/esbuild-transpiler)
+- [Bun 转译器](https://github.com/honojs/middleware/tree/main/packages/bun-transpiler)
+- [esbuild 转译器](https://github.com/honojs/middleware/tree/main/packages/esbuild-transpiler)
 
-### UI / Renderer
+### UI / 渲染器
 
 - [Qwik City](https://github.com/honojs/middleware/tree/main/packages/qwik-city)
-- [React Compatibility](https://github.com/honojs/middleware/tree/main/packages/react-compat)
-- [React Renderer](https://github.com/honojs/middleware/tree/main/packages/react-renderer)
+- [React 兼容性](https://github.com/honojs/middleware/tree/main/packages/react-compat)
+- [React 渲染器](https://github.com/honojs/middleware/tree/main/packages/react-renderer)
 
-### Queue / Job Processing
+### 队列 / 任务处理
 
-- [GlideMQ (Message Queue REST API + SSE)](https://github.com/avifenesh/glidemq-hono)
+- [GlideMQ (消息队列 REST API + SSE)](https://github.com/avifenesh/glidemq-hono)
 
-### Internationalization
+### 国际化
 
 - [Intlayer i18n](https://intlayer.org/doc/environment/hono)
 
-### Utilities
+### 工具
 
-- [Bun Compress](https://github.com/honojs/middleware/tree/main/packages/bun-compress)
+- [Bun 压缩](https://github.com/honojs/middleware/tree/main/packages/bun-compress)
 - [Cap Checkpoint](https://capjs.js.org/guide/middleware/hono.html)
-- [Event Emitter](https://github.com/honojs/middleware/tree/main/packages/event-emitter)
-- [Geo](https://github.com/ktkongtong/hono-geo-middleware/tree/main/packages/middleware)
-- [Hono Rate Limiter](https://github.com/rhinobase/hono-rate-limiter)
-- [Hono Problem Details (RFC 9457)](https://github.com/paveg/hono-problem-details)
-- [Hono Simple DI](https://github.com/maou-shonen/hono-simple-DI)
-- [Idempotency (Stripe-style idempotency keys)](https://github.com/paveg/hono-idempotency)
-- [jsonv-ts (Validator, OpenAPI, MCP)](https://github.com/dswbx/jsonv-ts)
+- [事件发射器](https://github.com/honojs/middleware/tree/main/packages/event-emitter)
+- [地理位置](https://github.com/ktkongtong/hono-geo-middleware/tree/main/packages/middleware)
+- [Hono 速率限制器](https://github.com/rhinobase/hono-rate-limiter)
+- [Hono 问题详情 (RFC 9457)](https://github.com/paveg/hono-problem-details)
+- [Hono 简单 DI](https://github.com/maou-shonen/hono-simple-DI)
+- [幂等性 (Stripe 风格幂等键)](https://github.com/paveg/hono-idempotency)
+- [jsonv-ts (验证器，OpenAPI, MCP)](https://github.com/dswbx/jsonv-ts)
 - [MCP](https://github.com/honojs/middleware/tree/main/packages/mcp)
-- [RONIN (Database)](https://github.com/ronin-co/hono-client)
-- [Session](https://github.com/honojs/middleware/tree/main/packages/session)
+- [RONIN (数据库)](https://github.com/ronin-co/hono-client)
+- [会话](https://github.com/honojs/middleware/tree/main/packages/session)
 - [tsyringe](https://github.com/honojs/middleware/tree/main/packages/tsyringe)
-- [User Agent based Blocker](https://github.com/honojs/middleware/tree/main/packages/ua-blocker)
+- [基于 User Agent 的拦截器](https://github.com/honojs/middleware/tree/main/packages/ua-blocker)

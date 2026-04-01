@@ -1,10 +1,10 @@
-# Cloudflare Testing
+# Cloudflare 测试
 
-You can implement the Cloudflare testing easily with `@cloudflare/vitest-pool-workers` for which some configuration has to be made priorly more on that can be found over in [Cloudflare Docs about testing](https://developers.cloudflare.com/workers/testing/vitest-integration/get-started/write-your-first-test/).
+你可以借助 `@cloudflare/vitest-pool-workers` 轻松实现 Cloudflare 测试，但需要先做一些配置。更多内容可以在 [Cloudflare 测试文档](https://developers.cloudflare.com/workers/testing/vitest-integration/get-started/write-your-first-test/) 中找到。
 
-Cloudflare Testing with vitest pool workers provide a `cloudflare:test` module at runtime which exposes the env passed in as the second argument during testing more on it in the [Cloudflare Test APIs section](https://developers.cloudflare.com/workers/testing/vitest-integration/test-apis/).
+使用 vitest pool workers 进行 Cloudflare 测试时，运行时会提供一个 `cloudflare:test` 模块，它会暴露测试时作为第二个参数传入的 env。更多内容可参见 [Cloudflare Test APIs 部分](https://developers.cloudflare.com/workers/testing/vitest-integration/test-apis/)。
 
-Below is an example of the configuration one can make:
+下面是可采用的配置示例：
 
 :::code-group
 
@@ -52,7 +52,7 @@ app.get('/hello', (c) => {
 export default app
 ```
 
-You can test the application with Cloudflare Bindings by passing in the `env` exposed from the module `cloudflare:test` to `app.request()`:
+你可以通过将 `cloudflare:test` 模块导出的 `env` 传给 `app.request()`，来使用 Cloudflare Bindings 测试应用：
 
 ```ts
 // src/index.test.ts
@@ -72,7 +72,7 @@ describe('Example', () => {
 })
 ```
 
-## See Also
+## 另请参阅
 
 `@cloudflare/vitest-pool-workers` [Github Repository examples](https://github.com/cloudflare/workers-sdk/tree/main/fixtures/vitest-pool-workers-examples)\
 [Migrate from old testing system](https://developers.cloudflare.com/workers/testing/vitest-integration/get-started/migrate-from-miniflare-2/)

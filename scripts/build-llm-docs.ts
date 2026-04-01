@@ -30,7 +30,7 @@ async function generateLLMDocs() {
 
   for await (const file of optionalFiles) {
     optionals.push(
-      `- [${capitalizeDelimiter(extractLabel(file)).replace(/-/, ' ')}](https://hono.dev/docs/${sliceExt(file)})`
+      `- [${capitalizeDelimiter(extractLabel(file)).replace(/-/, ' ')}](https://hono.zhcndoc.com/docs/${sliceExt(file)})`
     )
   }
 
@@ -43,8 +43,8 @@ async function generateLLMDocs() {
       '',
       '## Docs',
       '',
-      '- [Full Docs](https://hono.dev/llms-full.txt) Full documentation of Hono. (without examples)',
-      '- [Tiny Docs](https://hono.dev/llms-small.txt): Tiny documentation of Hono. (includes only desciption of core)',
+      '- [Full Docs](https://hono.zhcndoc.com/llms-full.txt) Full documentation of Hono. (without examples)',
+      '- [Tiny Docs](https://hono.zhcndoc.com/llms-small.txt): Tiny documentation of Hono. (includes only desciption of core)',
       '',
       '## Examples',
       '',

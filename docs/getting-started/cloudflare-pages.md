@@ -1,16 +1,16 @@
 # Cloudflare Pages
 
-[Cloudflare Pages](https://pages.cloudflare.com) is an edge platform for full-stack web applications.
-It serves static files and dynamic content provided by Cloudflare Workers.
+[Cloudflare Pages](https://pages.cloudflare.com) 是一个用于全栈 Web 应用的边缘平台。
+它提供由 Cloudflare Workers 支持的静态文件和动态内容。
 
-Hono fully supports Cloudflare Pages.
-It introduces a delightful developer experience. Vite's dev server is fast, and deploying with Wrangler is super quick.
+Hono 完全支持 Cloudflare Pages。
+它带来了愉快的开发者体验。Vite 的开发服务器很快，使用 Wrangler 部署超级快速。
 
-## 1. Setup
+## 1. 设置
 
-A starter for Cloudflare Pages is available.
-Start your project with "create-hono" command.
-Select `cloudflare-pages` template for this example.
+Cloudflare Pages 有一个入门模板可用。
+使用 "create-hono" 命令开始你的项目。
+本示例选择 `cloudflare-pages` 模板。
 
 ::: code-group
 
@@ -36,7 +36,7 @@ deno init --npm hono my-app
 
 :::
 
-Move into `my-app` and install the dependencies.
+进入 `my-app` 并安装依赖。
 
 ::: code-group
 
@@ -62,24 +62,24 @@ bun i
 
 :::
 
-Below is a basic directory structure.
+以下是基本的目录结构。
 
 ```text
 ./
 ├── package.json
 ├── public
-│   └── static // Put your static files.
-│       └── style.css // You can refer to it as `/static/style.css`.
+│   └── static // 放置你的静态文件。
+│       └── style.css // 你可以将其引用为 `/static/style.css`。
 ├── src
-│   ├── index.tsx // The entry point for server-side.
-│   └── renderer.tsx
+│   ├── index.tsx // 服务器端的入口点。
+│   └── renderer.tsx
 ├── tsconfig.json
 └── vite.config.ts
 ```
 
 ## 2. Hello World
 
-Edit `src/index.tsx` like the following:
+编辑 `src/index.tsx` 如下：
 
 ```tsx
 import { Hono } from 'hono'
@@ -96,9 +96,9 @@ app.get('/', (c) => {
 export default app
 ```
 
-## 3. Run
+## 3. 运行
 
-Run the development server locally. Then, access `http://localhost:5173` in your Web browser.
+在本地运行开发服务器。然后，在 Web 浏览器中访问 `http://localhost:5173`。
 
 ::: code-group
 
@@ -120,9 +120,9 @@ bun run dev
 
 :::
 
-## 4. Deploy
+## 4. 部署
 
-If you have a Cloudflare account, you can deploy to Cloudflare. In `package.json`, `$npm_execpath` needs to be changed to your package manager of choice.
+如果你拥有 Cloudflare 账户，你可以部署到 Cloudflare。在 `package.json` 中，`$npm_execpath` 需要更改为你选择的包管理器。
 
 ::: code-group
 
@@ -144,53 +144,53 @@ bun run deploy
 
 :::
 
-### Deploy via the Cloudflare dashboard with GitHub
+### 通过 Cloudflare 仪表板与 GitHub 部署
 
-1. Log in to the [Cloudflare dashboard](https://dash.cloudflare.com) and select your account.
-2. In Account Home, select Workers & Pages > Create application > Pages > Connect to Git.
-3. Authorize your GitHub account, and select the repository. In Set up builds and deployments, provide the following information:
+1. 登录 [Cloudflare 仪表板](https://dash.cloudflare.com) 并选择你的账户。
+2. 在账户主页中，选择 Workers & Pages > 创建应用 > Pages > 连接到 Git。
+3. 授权你的 GitHub 账户，并选择仓库。在设置构建和部署中，提供以下信息：
 
-| Configuration option | Value           |
+| 配置选项 | 值 |
 | -------------------- | --------------- |
-| Production branch    | `main`          |
-| Build command        | `npm run build` |
-| Build directory      | `dist`          |
+| 生产分支 | `main` |
+| 构建命令 | `npm run build` |
+| 构建目录 | `dist` |
 
-## Bindings
+## 绑定
 
-You can use Cloudflare Bindings like Variables, KV, D1, and others.
-In this section, let's use Variables and KV.
+你可以使用 Cloudflare 绑定，如变量、KV、D1 等。
+在本节中，让我们使用变量和 KV。
 
-### Create `wrangler.toml`
+### 创建 `wrangler.toml`
 
-First, create `wrangler.toml` for local Bindings:
+首先，为本地绑定创建 `wrangler.toml`：
 
 ```sh
 touch wrangler.toml
 ```
 
-Edit `wrangler.toml`. Specify Variable with the name `MY_NAME`.
+编辑 `wrangler.toml`。指定名为 `MY_NAME` 的变量。
 
 ```toml
 [vars]
 MY_NAME = "Hono"
 ```
 
-### Create KV
+### 创建 KV
 
-Next, make the KV. Run the following `wrangler` command:
+接下来，创建 KV。运行以下 `wrangler` 命令：
 
 ```sh
 wrangler kv namespace create MY_KV --preview
 ```
 
-Note down the `preview_id` as the following output:
+记下 `preview_id`，如下输出所示：
 
 ```
 { binding = "MY_KV", preview_id = "abcdef" }
 ```
 
-Specify `preview_id` with the name of Bindings, `MY_KV`:
+指定绑定的名称 `MY_KV` 的 `preview_id`：
 
 ```toml
 [[kv_namespaces]]
@@ -198,9 +198,9 @@ binding = "MY_KV"
 id = "abcdef"
 ```
 
-### Edit `vite.config.ts`
+### 编辑 `vite.config.ts`
 
-Edit the `vite.config.ts`:
+编辑 `vite.config.ts`：
 
 ```ts
 import devServer from '@hono/vite-dev-server'
@@ -212,16 +212,16 @@ export default defineConfig({
   plugins: [
     devServer({
       entry: 'src/index.tsx',
-      adapter, // Cloudflare Adapter
+      adapter, // Cloudflare 适配器
     }),
     build(),
   ],
 })
 ```
 
-### Use Bindings in your application
+### 在你的应用中使用绑定
 
-Use Variable and KV in your application. Set the types.
+在你的应用中使用变量和 KV。设置类型。
 
 ```ts
 type Bindings = {
@@ -232,7 +232,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 ```
 
-Use them:
+使用它们：
 
 ```tsx
 app.get('/', async (c) => {
@@ -242,15 +242,15 @@ app.get('/', async (c) => {
 })
 ```
 
-### In production
+### 在生产环境中
 
-For Cloudflare Pages, you will use `wrangler.toml` for local development, but for production, you will set up Bindings in the dashboard.
+对于 Cloudflare Pages，你将使用 `wrangler.toml` 进行本地开发，但对于生产环境，你将在仪表板中设置绑定。
 
-## Client-side
+## 客户端
 
-You can write client-side scripts and import them into your application using Vite's features.
-If `/src/client.ts` is the entry point for the client, simply write it in the script tag.
-Additionally, `import.meta.env.PROD` is useful for detecting whether it's running on a dev server or in the build phase.
+你可以编写客户端脚本并使用 Vite 的功能将它们导入到你的应用中。
+如果 `/src/client.ts` 是客户端的入口点，只需将其写在 script 标签中。
+此外，`import.meta.env.PROD` 对于检测是运行在开发服务器上还是构建阶段很有用。
 
 ```tsx
 app.get('/', (c) => {
@@ -271,7 +271,7 @@ app.get('/', (c) => {
 })
 ```
 
-In order to build the script properly, you can use the example config file `vite.config.ts` as shown below.
+为了正确构建脚本，你可以使用如下所示的示例配置文件 `vite.config.ts`。
 
 ```ts
 import pages from '@hono/vite-cloudflare-pages'
@@ -303,15 +303,15 @@ export default defineConfig(({ mode }) => {
 })
 ```
 
-You can run the following command to build the server and client script.
+你可以运行以下命令来构建服务器和客户端脚本。
 
 ```sh
 vite build --mode client && vite build
 ```
 
-## Cloudflare Pages Middleware
+## Cloudflare Pages 中间件
 
-Cloudflare Pages uses its own [middleware](https://developers.cloudflare.com/pages/functions/middleware/) system that is different from Hono's middleware. You can enable it by exporting `onRequest` in a file named `_middleware.ts` like this:
+Cloudflare Pages 使用其自己的 [中间件](https://developers.cloudflare.com/pages/functions/middleware/) 系统，这与 Hono 的中间件不同。你可以通过在名为 `_middleware.ts` 的文件中导出 `onRequest` 来启用它，如下所示：
 
 ```ts
 // functions/_middleware.ts
@@ -321,7 +321,7 @@ export async function onRequest(pagesContext) {
 }
 ```
 
-Using `handleMiddleware`, you can use Hono's middleware as Cloudflare Pages middleware.
+使用 `handleMiddleware`，你可以将 Hono 的中间件用作 Cloudflare Pages 中间件。
 
 ```ts
 // functions/_middleware.ts
@@ -333,7 +333,7 @@ export const onRequest = handleMiddleware(async (c, next) => {
 })
 ```
 
-You can also use built-in and 3rd party middleware for Hono. For example, to add Basic Authentication, you can use [Hono's Basic Authentication Middleware](/docs/middleware/builtin/basic-auth).
+你也可以使用 Hono 的内置和第三方中间件。例如，要添加基本认证，你可以使用 [Hono 的基本认证中间件](/docs/middleware/builtin/basic-auth)。
 
 ```ts
 // functions/_middleware.ts
@@ -348,7 +348,7 @@ export const onRequest = handleMiddleware(
 )
 ```
 
-If you want to apply multiple middleware, you can write it like this:
+如果你想应用多个中间件，你可以这样写：
 
 ```ts
 import { handleMiddleware } from 'hono/cloudflare-pages'
@@ -362,9 +362,9 @@ export const onRequest = [
 ]
 ```
 
-### Accessing `EventContext`
+### 访问 `EventContext`
 
-You can access [`EventContext`](https://developers.cloudflare.com/pages/functions/api-reference/#eventcontext) object via `c.env` in `handleMiddleware`.
+你可以通过 `handleMiddleware` 中的 `c.env` 访问 [`EventContext`](https://developers.cloudflare.com/pages/functions/api-reference/#eventcontext) 对象。
 
 ```ts
 // functions/_middleware.ts
@@ -378,7 +378,7 @@ export const onRequest = [
 ]
 ```
 
-Then, you can access the data value in via `c.env.eventContext` in the handler:
+然后，你可以在处理程序中通过 `c.env.eventContext` 访问数据值：
 
 ```ts
 // functions/api/[[route]].ts

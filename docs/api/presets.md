@@ -1,21 +1,21 @@
-# Presets
+# 预设
 
-Hono has several routers, each designed for a specific purpose.
-You can specify the router you want to use in the constructor of Hono.
+Hono 拥有多个路由器，每个路由器都为特定目的而设计。
+您可以在 Hono 的构造函数中指定想要使用的路由器。
 
-**Presets** are provided for common use cases, so you don't have to specify the router each time.
-The `Hono` class imported from all presets is the same, the only difference being the router.
-Therefore, you can use them interchangeably.
+**预设** 是为常见用例提供的，因此您不必每次都指定路由器。
+从所有预设中导入的 `Hono` 类是相同的，唯一区别在于路由器。
+因此，您可以互换使用它们。
 
 ## `hono`
 
-Usage:
+用法：
 
 ```ts twoslash
 import { Hono } from 'hono'
 ```
 
-Routers:
+路由器：
 
 ```ts
 this.router = new SmartRouter({
@@ -25,13 +25,13 @@ this.router = new SmartRouter({
 
 ## `hono/quick`
 
-Usage:
+用法：
 
 ```ts twoslash
 import { Hono } from 'hono/quick'
 ```
 
-Router:
+路由器：
 
 ```ts
 this.router = new SmartRouter({
@@ -41,22 +41,22 @@ this.router = new SmartRouter({
 
 ## `hono/tiny`
 
-Usage:
+用法：
 
 ```ts twoslash
 import { Hono } from 'hono/tiny'
 ```
 
-Router:
+路由器：
 
 ```ts
 this.router = new PatternRouter()
 ```
 
-## Which preset should I use?
+## 我应该使用哪个预设？
 
-| Preset       | Suitable platforms                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hono`       | This is highly recommended for most use cases. Although the registration phase may be slower than `hono/quick`, it exhibits high performance once booted. It's ideal for long-life servers built with **Deno**, **Bun**, or **Node.js**. It is also suitable for **Fastly Compute**, as route registration occurs during the app build phase on that platform. For environments such as **Cloudflare Workers**, **Deno Deploy**, where v8 isolates are utilized, this preset is suitable as well. Because the isolations persist for a certain amount of time after booting. |
-| `hono/quick` | This preset is designed for environments where the application is initialized for every request.                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `hono/tiny`  | This is the smallest router package and it's suitable for environments where resources are limited.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 预设         | 适合的平台                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `hono`       | 这是大多数用例的强烈推荐选项。虽然注册阶段可能比 `hono/quick` 慢，但一旦启动，它表现出高性能。它非常适合使用 **Deno**、**Bun** 或 **Node.js** 构建的长生命周期服务器。它也适用于 **Fastly Compute**，因为在该平台上路由注册发生在应用构建阶段。对于利用 v8 isolates 的环境，如 **Cloudflare Workers**、**Deno Deploy**，此预设也适用。因为隔离在启动后会持续一定时间。 |
+| `hono/quick` | 此预设专为每个请求都初始化应用程序的环境而设计。                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `hono/tiny`  | 这是最小的路由器包，适用于资源有限的环境。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |

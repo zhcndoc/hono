@@ -1,15 +1,15 @@
-# ETag Middleware
+# ETag 中间件
 
-Using this middleware, you can add ETag headers easily.
+使用此中间件，您可以轻松添加 ETag 头。
 
-## Import
+## 导入
 
 ```ts
 import { Hono } from 'hono'
 import { etag } from 'hono/etag'
 ```
 
-## Usage
+## 用法
 
 ```ts
 const app = new Hono()
@@ -20,11 +20,11 @@ app.get('/etag/abc', (c) => {
 })
 ```
 
-## The retained headers
+## 保留的响应头
 
-The 304 Response must include the headers that would have been sent in an equivalent 200 OK response. The default headers are Cache-Control, Content-Location, Date, ETag, Expires, and Vary.
+304 响应必须包含等同于 200 OK 响应中应发送的响应头。默认的响应头包括 Cache-Control、Content-Location、Date、ETag、Expires 和 Vary。
 
-If you want to add the header that is sent, you can use `retainedHeaders` option and `RETAINED_304_HEADERS` strings array variable that includes the default headers:
+如果您想添加发送的响应头，可以使用 `retainedHeaders` 选项和包含默认响应头的 `RETAINED_304_HEADERS` 字符串数组变量：
 
 ```ts
 import { etag, RETAINED_304_HEADERS } from 'hono/etag'
@@ -39,16 +39,16 @@ app.use(
 )
 ```
 
-## Options
+## 选项
 
-### <Badge type="info" text="optional" /> weak: `boolean`
+### <Badge type="info" text="可选" /> weak: `boolean`
 
-Define using or not using a [weak validation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#weak_validation). If `true` is set, then `w/` is added to the prefix of the value. The default is `false`.
+定义是否使用 [弱验证](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#weak_validation)。如果设置为 `true`，则会在值的前缀添加 `w/`。默认为 `false`。
 
-### <Badge type="info" text="optional" /> retainedHeaders: `string[]`
+### <Badge type="info" text="可选" /> retainedHeaders: `string[]`
 
-The headers that you want to retain in the 304 Response.
+您希望在 304 响应中保留的响应头。
 
-### <Badge type="info" text="optional" /> generateDigest: `(body: Uint8Array) => ArrayBuffer | Promise<ArrayBuffer>`
+### <Badge type="info" text="可选" /> generateDigest: `(body: Uint8Array) => ArrayBuffer | Promise<ArrayBuffer>`
 
-A custom digest generation function. By default, it uses `SHA-1`. This function is called with the response body as a `Uint8Array` and should return a hash as an `ArrayBuffer` or a Promise of one.
+一个自定义的摘要生成函数。默认情况下，它使用 `SHA-1`。此函数以 `Uint8Array` 形式的响应体作为调用参数，并应返回一个 `ArrayBuffer` 形式的哈希或其 Promise。

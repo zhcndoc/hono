@@ -1,26 +1,26 @@
-# Miscellaneous
+# 杂项
 
-## Contributing
+## 贡献
 
-Contributions Welcome! You can contribute in the following ways.
+欢迎贡献！您可以通过以下方式参与贡献。
 
-- Create an Issue - Propose a new feature. Report a bug.
-- Pull Request - Fix a bug and typo. Refactor the code.
-- Create third-party middleware - Instruct below.
-- Share - Share your thoughts on the Blog, X(Twitter), and others.
-- Make your application - Please try to use Hono.
+- 创建 Issue - 提出新功能。报告错误。
+- Pull Request - 修复错误和拼写错误。重构代码。
+- 创建第三方中间件 - 详见下方说明。
+- 分享 - 在博客、X(Twitter) 等平台分享您的想法。
+- 制作您的应用 - 请尝试使用 Hono。
 
-For more details, see [Contribution Guide](https://github.com/honojs/hono/blob/main/docs/CONTRIBUTING.md).
+更多详情，请参阅 [贡献指南](https://github.com/honojs/hono/blob/main/docs/CONTRIBUTING.md)。
 
-## Sponsoring
+## 赞助
 
-You can sponsor Hono authors via the GitHub sponsor program.
+您可以通过 GitHub 赞助计划赞助 Hono 作者。
 
-- [Sponsor @yusukebe on GitHub Sponsors](https://github.com/sponsors/yusukebe)
-- [Sponsor @usualoma on GitHub Sponsors](https://github.com/sponsors/usualoma)
+- [在 GitHub Sponsors 上赞助 @yusukebe](https://github.com/sponsors/yusukebe)
+- [在 GitHub Sponsors 上赞助 @usualoma](https://github.com/sponsors/usualoma)
 
-## Other Resources
+## 其他资源
 
-- GitHub repository: <a href="https://github.com/honojs">https://github.com/honojs</a>
-- npm registry: <a href="https://www.npmjs.com/package/hono">https://www.npmjs.com/package/hono</a>
-- JSR: <a href="https://jsr.io/@hono/hono">https://jsr.io/@hono/hono</a>
+- GitHub 仓库：<a href="https://github.com/honojs">https://github.com/honojs</a>
+- npm 注册表：<a href="https://www.npmjs.com/package/hono">https://www.npmjs.com/package/hono</a>
+- JSR：<a href="https://jsr.io/@hono/hono">https://jsr.io/@hono/hono</a>

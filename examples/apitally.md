@@ -1,18 +1,18 @@
-# Monitoring Hono APIs with Apitally
+# 使用 Apitally 监控 Hono API
 
-[Apitally](https://apitally.io/hono) is a simple API monitoring and analytics tool for REST APIs. It integrates with Hono via a lightweight middleware and provides clean, intuitive dashboards with metrics, logs, and alerts out of the box.
+[Apitally](https://apitally.io/hono) 是一个面向 REST API 的简单监控与分析工具。它通过轻量级中间件与 Hono 集成，并开箱即用地提供简洁直观的仪表盘，包含指标、日志和告警。
 
-With Apitally, you can:
+使用 Apitally，你可以：
 
-- Monitor API usage, performance, and errors
-- Track API adoption by individual consumers
-- Log and inspect API requests and responses
-- Capture application logs and traces, correlated with requests
-- Set up uptime monitoring and custom alerts
+- 监控 API 的使用量、性能和错误
+- 跟踪单个调用方的 API 使用情况
+- 记录并检查 API 请求和响应
+- 捕获与请求关联的应用日志和调用链
+- 配置可用性监控和自定义告警
 
-## Installation
+## 安装
 
-Install the [Apitally SDK](https://www.npmjs.com/package/apitally) in your project:
+在项目中安装 [Apitally SDK](https://www.npmjs.com/package/apitally)：
 
 ```bash
 # npm
@@ -28,9 +28,9 @@ pnpm add apitally
 bun add apitally
 ```
 
-## Setup
+## 设置
 
-First, create an app in the [Apitally dashboard](https://app.apitally.io) to get your client ID. Then add the middleware to your Hono application using the `useApitally` function:
+首先，在 [Apitally 控制台](https://app.apitally.io) 中创建一个应用以获取你的 client ID。然后使用 `useApitally` 函数把中间件添加到你的 Hono 应用中：
 
 ```ts
 import { Hono } from 'hono'
@@ -39,10 +39,10 @@ import { useApitally } from 'apitally/hono'
 const app = new Hono()
 
 useApitally(app, {
-  clientId: 'your-client-id', // Get this from the Apitally dashboard
+  clientId: 'your-client-id', // 从 Apitally 控制台获取
   env: 'dev', // or "prod", etc.
 
-  // Optional: Enable and configure request logging
+  // 可选：启用并配置请求日志
   requestLogging: {
     enabled: true,
     logRequestHeaders: true,
@@ -52,17 +52,17 @@ useApitally(app, {
   },
 })
 
-// Add your routes after the middleware
+// 在中间件之后添加路由
 app.get('/', (c) => c.text('Hello Hono!'))
 
 export default app
 ```
 
-Add the Apitally middleware before any other middleware to ensure it wraps the entire application stack.
+请将 Apitally 中间件放在其他所有中间件之前，以确保它包裹整个应用栈。
 
-## Identify consumers
+## 识别调用方
 
-To track API usage by individual consumers, use the `setConsumer` function to associate requests with consumer identifiers. This is typically done in a middleware after authentication. You can also provide an optional display name and consumer group.
+如果要按单个调用方跟踪 API 使用情况，可以使用 `setConsumer` 函数将请求与调用方标识关联起来。这通常会在认证后的中间件中完成。你还可以提供可选的显示名称和调用方分组。
 
 ```ts
 import { setConsumer } from 'apitally/hono'
@@ -80,11 +80,11 @@ app.use(async (c, next) => {
 })
 ```
 
-The Consumers dashboard in Apitally will now show all consumers and you can filter logs and metrics by consumer.
+现在，Apitally 的 Consumers 仪表盘会显示所有调用方，你可以按调用方筛选日志和指标。
 
-## See also
+## 另请参阅
 
 - [Apitally](https://apitally.io/hono) - Official website
 - [Apitally SDK](https://github.com/apitally/apitally-js) - GitHub repository
-- [Official setup guide](https://docs.apitally.io/setup-guides/hono)
-- [Official setup guide for Cloudflare Workers](https://docs.apitally.io/setup-guides/hono-cloudflare-workers)
+- [官方设置指南](https://docs.apitally.io/setup-guides/hono)
+- [Cloudflare Workers 官方设置指南](https://docs.apitally.io/setup-guides/hono-cloudflare-workers)

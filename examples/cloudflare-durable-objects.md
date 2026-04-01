@@ -1,30 +1,30 @@
 # Cloudflare Durable Objects
 
-Cloudflare Durable Objects cannot handle HTTP requests directly. Instead, they work through a two-step process:
+Cloudflare Durable Objects 不能直接处理 HTTP 请求，而是通过两步流程工作：
 
 1. A Worker receives HTTP fetch requests from clients
-2. The Worker makes RPC (Remote Procedure Call) invocations to the Durable Object
-3. The Durable Object processes the RPC and returns the result to the Worker
-4. The Worker sends the HTTP response back to the client
+2. Worker 向 Durable Object 发起 RPC（远程过程调用）
+3. Durable Object 处理 RPC 并将结果返回给 Worker
+4. Worker 再将 HTTP 响应发回客户端
 
-You can use Hono as the router in your Cloudflare Worker, calling RPCs (Remote Procedure Calls) to interact with [Durable Objects](https://developers.cloudflare.com/durable-objects/). This is the recommended approach as of Cloudflare Workers compatibility date `2024-04-03`.
+你可以在 Cloudflare Worker 中将 Hono 作为路由器，并通过 RPC（远程过程调用）与 [Durable Objects](https://developers.cloudflare.com/durable-objects/) 交互。这是 Cloudflare Workers 兼容日期 `2024-04-03` 之后推荐的做法。
 
-## Example: Counter Durable Object
+## 示例：Counter Durable Object
 
 ```ts
 import { DurableObject } from 'cloudflare:workers'
 import { Hono } from 'hono'
 
 export class Counter extends DurableObject {
-  // In-memory state
+  // 内存状态
   value = 0
 
   constructor(ctx: DurableObjectState, env: unknown) {
     super(ctx, env)
 
-    // `blockConcurrencyWhile()` ensures no requests are delivered until initialization completes.
+    // `blockConcurrencyWhile()` 可确保在初始化完成前不会接收请求。
     ctx.blockConcurrencyWhile(async () => {
-      // After initialization, future reads do not need to access storage.
+      // 初始化完成后，后续读取就不需要访问存储了。
       this.value = (await ctx.storage.get('value')) || 0
     })
   }
@@ -46,14 +46,14 @@ export class Counter extends DurableObject {
   }
 }
 
-// Create a new Hono app to handle incoming HTTP requests
+// 创建一个新的 Hono 应用来处理进入的 HTTP 请求
 type Bindings = {
   COUNTER: DurableObjectNamespace<Counter>
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-// Add routes to interact with the Durable Object
+// 添加与 Durable Object 交互的路由
 app.get('/counter', async (c) => {
   const env = c.env
   const id = env.COUNTER.idFromName('counter')
@@ -78,7 +78,7 @@ app.post('/counter/decrement', async (c) => {
   return c.text(value.toString())
 })
 
-// Export the Hono app as the Worker's fetch handler
+// 将 Hono 应用导出为 Worker 的 fetch 处理器
 export default app
 ```
 
@@ -110,4 +110,4 @@ export default app
 }
 ```
 
-Now you have a fully functional Hono application that interfaces with your Durable Object! The Hono router provides a clean API interface to interact with and expose your Durable Object's methods.
+现在你已经拥有了一个可以与 Durable Object 交互的完整 Hono 应用了！Hono 路由器提供了简洁的 API 接口，用于访问并暴露 Durable Object 的方法。

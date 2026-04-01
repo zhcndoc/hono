@@ -1,8 +1,8 @@
-# Error handling in Validator
+# Validator 中的错误处理
 
-By using a validator, you can handle invalid input more easily. This example shows you can utilize the callback result for implementing custom error handling.
+借助验证器，你可以更轻松地处理无效输入。这个示例展示了如何利用回调结果来实现自定义错误处理。
 
-Although this snippet employs [Zod Validator](https://github.com/honojs/middleware/blob/main/packages/zod-validator), you can apply a similar approach with any supported validator library.
+尽管这个示例使用的是 [Zod Validator](https://github.com/honojs/middleware/blob/main/packages/zod-validator)，但你可以在任何受支持的验证器库中采用类似的方法。
 
 ```ts
 import * as z from 'zod'
@@ -30,7 +30,7 @@ app.post(
 )
 ```
 
-## See also
+## 另请参阅
 
 - [Zod Validator](https://github.com/honojs/middleware/blob/main/packages/zod-validator)
 - [Valibot Validator](https://github.com/honojs/middleware/tree/main/packages/valibot-validator)

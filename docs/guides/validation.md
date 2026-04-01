@@ -1,22 +1,22 @@
-# Validation
+# 验证
 
-Hono provides only a very thin Validator.
-However, it can be powerful when combined with a third-party Validator.
-In addition, the RPC feature allows you to share API specifications with your clients through types.
+Hono 仅提供了一个非常轻量的验证器。
+但是，当与第三方验证器结合使用时，它会变得非常强大。
+此外，RPC 功能允许你通过类型与客户端共享 API 规范。
 
-## Manual validator
+## 手动验证器
 
-First, introduce a way to validate incoming values without using the third-party Validator.
+首先，介绍一种不使用第三方验证器来验证传入值的方法。
 
-Import `validator` from `hono/validator`.
+从 `hono/validator` 导入 `validator`。
 
 ```ts
 import { validator } from 'hono/validator'
 ```
 
-To validate form data, specify `form` as the first argument and a callback as the second argument.
-In the callback, validates the value and return the validated values at the end.
-The `validator` can be used as middleware.
+要验证表单数据，将 `form` 指定为第一个参数，回调函数作为第二个参数。
+在回调中，验证值并在最后返回验证后的值。
+`validator` 可以作为中间件使用。
 
 ```ts
 app.post(
@@ -33,12 +33,12 @@ app.post(
   //...
 ```
 
-Within the handler, you can get the validated value with `c.req.valid('form')`.
+在处理程序中，你可以使用 `c.req.valid('form')` 获取验证后的值。
 
 ```ts
 , (c) => {
   const { body } = c.req.valid('form')
-  // ... do something
+  // ... 执行某些操作
   return c.json(
     {
       message: 'Created!',
@@ -48,22 +48,21 @@ Within the handler, you can get the validated value with `c.req.valid('form')`.
 }
 ```
 
-Validation targets include `json`, `query`, `header`, `param` and `cookie` in addition to `form`.
+除了 `form` 之外，验证目标还包括 `json`、`query`、`header`、`param` 和 `cookie`。
 
 ::: warning
-When you validate `json` or `form`, the request _must_ contain a matching `content-type` header (e.g. `Content-Type: application/json` for `json`). Otherwise, the request body will not be parsed and you will receive an empty object (`{}`) as value in the callback.
+当你验证 `json` 或 `form` 时，请求 _必须_ 包含匹配的 `content-type` 请求头（例如，对于 `json` 为 `Content-Type: application/json`）。否则，请求体将无法被解析，你在回调中接收到的值将是一个空对象（`{}`）。
 
-It is important to set the `content-type` header when testing using
-[`app.request()`](../api/request.md).
+在使用 [`app.request()`](../api/request.md) 进行测试时，设置 `content-type` 请求头很重要。
 
-Given an application like this.
+给定这样一个应用。
 
 ```ts
 const app = new Hono()
 app.post(
   '/testing',
   validator('json', (value, c) => {
-    // pass-through validator
+    // 直通验证器
     return value
   }),
   (c) => {
@@ -73,10 +72,10 @@ app.post(
 )
 ```
 
-Your tests can be written like this.
+你的测试可以这样写。
 
 ```ts
-// ❌ this will not work
+// ❌ 这将不起作用
 const res = await app.request('/testing', {
   method: 'POST',
   body: JSON.stringify({ key: 'value' }),
@@ -84,7 +83,7 @@ const res = await app.request('/testing', {
 const data = await res.json()
 console.log(data) // {}
 
-// ✅ this will work
+// ✅ 这将起作用
 const res = await app.request('/testing', {
   method: 'POST',
   body: JSON.stringify({ key: 'value' }),
@@ -97,17 +96,17 @@ console.log(data) // { key: 'value' }
 :::
 
 ::: warning
-When you validate `header`, you need to use **lowercase** name as the key.
+当你验证 `header` 时，你需要使用 **小写** 名称作为键。
 
-If you want to validate the `Idempotency-Key` header, you need to use `idempotency-key` as the key.
+如果你想验证 `Idempotency-Key` 请求头，你需要使用 `idempotency-key` 作为键。
 
 ```ts
-// ❌ this will not work
+// ❌ 这将不起作用
 app.post(
   '/api',
   validator('header', (value, c) => {
-    // idempotencyKey is always undefined
-    // so this middleware always return 400 as not expected
+    // idempotencyKey 始终为 undefined
+    // 所以此中间件总是返回 400，不符合预期
     const idempotencyKey = value['Idempotency-Key']
 
     if (idempotencyKey == undefined || idempotencyKey === '') {
@@ -123,11 +122,11 @@ app.post(
   }
 )
 
-// ✅ this will work
+// ✅ 这将起作用
 app.post(
   '/api',
   validator('header', (value, c) => {
-    // can retrieve the value of the header as expected
+    // 可以按预期获取请求头的值
     const idempotencyKey = value['idempotency-key']
 
     if (idempotencyKey == undefined || idempotencyKey === '') {
@@ -146,9 +145,9 @@ app.post(
 
 :::
 
-## Multiple validators
+## 多个验证器
 
-You can also include multiple validators to validate different parts of request:
+你还可以包含多个验证器来验证请求的不同部分：
 
 ```ts
 app.post(
@@ -161,12 +160,12 @@ app.post(
   }
 ```
 
-## With Zod
+## 使用 Zod
 
-You can use [Zod](https://zod.dev), one of third-party validators.
-We recommend using a third-party validator.
+你可以使用 [Zod](https://zod.dev)，它是第三方验证器之一。
+我们推荐使用第三方验证器。
 
-Install from the Npm registry.
+从 Npm 注册表安装。
 
 ::: code-group
 
@@ -188,13 +187,13 @@ bun add zod
 
 :::
 
-Import `z` from `zod`.
+从 `zod` 导入 `z`。
 
 ```ts
 import * as z from 'zod'
 ```
 
-Write your schema.
+编写你的模式。
 
 ```ts
 const schema = z.object({
@@ -202,7 +201,7 @@ const schema = z.object({
 })
 ```
 
-You can use the schema in the callback function for validation and return the validated value.
+你可以在回调函数中使用模式进行验证并返回验证后的值。
 
 ```ts
 const route = app.post(
@@ -216,7 +215,7 @@ const route = app.post(
   }),
   (c) => {
     const { body } = c.req.valid('form')
-    // ... do something
+    // ... 执行某些操作
     return c.json(
       {
         message: 'Created!',
@@ -227,9 +226,9 @@ const route = app.post(
 )
 ```
 
-## Zod Validator Middleware
+## Zod 验证器中间件
 
-You can use the [Zod Validator Middleware](https://github.com/honojs/middleware/tree/main/packages/zod-validator) to make it even easier.
+你可以使用 [Zod 验证器中间件](https://github.com/honojs/middleware/tree/main/packages/zod-validator) 使其更加简单。
 
 ::: code-group
 
@@ -251,13 +250,13 @@ bun add @hono/zod-validator
 
 :::
 
-And import `zValidator`.
+然后导入 `zValidator`。
 
 ```ts
 import { zValidator } from '@hono/zod-validator'
 ```
 
-And write as follows.
+并按如下方式编写。
 
 ```ts
 const route = app.post(
@@ -270,16 +269,16 @@ const route = app.post(
   ),
   (c) => {
     const validated = c.req.valid('form')
-    // ... use your validated data
+    // ... 使用你验证后的数据
   }
 )
 ```
 
-## Standard Schema Validator Middleware
+## 标准模式验证器中间件
 
-[Standard Schema](https://standardschema.dev/) is a specification that provides a common interface for TypeScript validation libraries. It was created by the maintainers of Zod, Valibot, and ArkType to allow ecosystem tools to work with any validation library without needing custom adapters.
+[Standard Schema](https://standardschema.dev/) 是一个规范，为 TypeScript 验证库提供通用接口。它由 Zod、Valibot 和 ArkType 的维护者创建，允许生态系统工具与任何验证库一起工作，而无需自定义适配器。
 
-The [Standard Schema Validator Middleware](https://github.com/honojs/middleware/tree/main/packages/standard-validator) lets you use any Standard Schema-compatible validation library with Hono, giving you the flexibility to choose your preferred validator while maintaining consistent type safety.
+[Standard Schema 验证器中间件](https://github.com/honojs/middleware/tree/main/packages/standard-validator) 允许你在 Hono 中使用任何兼容 Standard Schema 的验证库，让你在保持一致的类型安全性的同时，灵活选择首选的验证器。
 
 ::: code-group
 
@@ -301,15 +300,15 @@ bun add @hono/standard-validator
 
 :::
 
-Import `sValidator` from the package:
+从包中导入 `sValidator`：
 
 ```ts
 import { sValidator } from '@hono/standard-validator'
 ```
 
-### With Zod
+### 使用 Zod
 
-You can use Zod with the Standard Schema validator:
+你可以将 Zod 与 Standard Schema 验证器一起使用：
 
 ::: code-group
 
@@ -349,9 +348,9 @@ app.post('/author', sValidator('json', schema), (c) => {
 })
 ```
 
-### With Valibot
+### 使用 Valibot
 
-[Valibot](https://valibot.dev/) is a lightweight alternative to Zod with a modular design:
+[Valibot](https://valibot.dev/) 是 Zod 的轻量级替代品，具有模块化设计：
 
 ::: code-group
 
@@ -391,9 +390,9 @@ app.post('/author', sValidator('json', schema), (c) => {
 })
 ```
 
-### With ArkType
+### 使用 ArkType
 
-[ArkType](https://arktype.io/) offers TypeScript-native syntax for runtime validation:
+[ArkType](https://arktype.io/) 为运行时验证提供 TypeScript 原生语法：
 
 ::: code-group
 

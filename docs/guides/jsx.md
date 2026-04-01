@@ -1,14 +1,14 @@
 # JSX
 
-You can write HTML with JSX syntax with `hono/jsx`.
+你可以使用 `hono/jsx` 通过 JSX 语法编写 HTML。
 
-Although `hono/jsx` works on the client, you will probably use it most often when rendering content on the server side. Here are some things related to JSX that are common to both server and client.
+虽然 `hono/jsx` 可以在客户端工作，但你可能最常在服务器端渲染内容时使用它。以下是一些与 JSX 相关的事情，它们在服务器端和客户端是通用的。
 
-## Settings
+## 设置
 
-To use JSX, modify the `tsconfig.json`:
+要使用 JSX，修改 `tsconfig.json`：
 
-`tsconfig.json`:
+`tsconfig.json`：
 
 ```json
 {
@@ -19,14 +19,14 @@ To use JSX, modify the `tsconfig.json`:
 }
 ```
 
-Alternatively, use the pragma directives:
+或者，使用 pragma 指令：
 
 ```ts
 /** @jsx jsx */
 /** @jsxImportSource hono/jsx */
 ```
 
-For Deno, you have to modify the `deno.json` instead of the `tsconfig.json`:
+对于 Deno，你必须修改 `deno.json` 而不是 `tsconfig.json`：
 
 ```json
 {
@@ -37,13 +37,13 @@ For Deno, you have to modify the `deno.json` instead of the `tsconfig.json`:
 }
 ```
 
-## Usage
+## 用法
 
 :::info
-If you are coming straight from the [Quick Start](/docs/#quick-start), the main file has a `.ts` extension - you need to change it to `.tsx` - otherwise you will not be able to run the application at all. You should additionally modify the `package.json` (or `deno.json` if you are using Deno) to reflect that change (e.g. instead of having `bun run --hot src/index.ts` in dev script, you should have `bun run --hot src/index.tsx`).
+如果你是直接从 [快速开始](/docs/#quick-start) 过来的，主文件的扩展名是 `.ts` - 你需要将其改为 `.tsx` - 否则你将根本无法运行应用程序。你还应该修改 `package.json`（如果你使用 Deno 则是 `deno.json`）以反映该更改（例如，在开发脚本中不是 `bun run --hot src/index.ts`，而应该是 `bun run --hot src/index.tsx`）。
 :::
 
-`index.tsx`:
+`index.tsx`：
 
 ```tsx
 import { Hono } from 'hono'
@@ -82,9 +82,9 @@ app.get('/', (c) => {
 export default app
 ```
 
-## Metadata hoisting
+## 元数据提升
 
-You can write document metadata tags such as `<title>`, `<link>`, and `<meta>` directly inside your components. These tags will be automatically hoisted to the `<head>` section of the document. This is especially useful when the `<head>` element is rendered far from the component that determines the appropriate metadata.
+你可以直接在组件内部编写文档元数据标签，例如 `<title>`、`<link>` 和 `<meta>`。这些标签将自动提升到文档的 `<head>` 部分。当 `<head>` 元素渲染位置远离确定适当元数据的组件时，这尤其有用。
 
 ```tsx
 import { Hono } from 'hono'
@@ -117,12 +117,12 @@ export default app
 ```
 
 :::info
-When hoisting occurs, existing elements are not removed. Elements appearing later are added to the end. For example, if you have `<title>Default</title>` in your `<head>` and a component renders `<title>Page Title</title>`, both titles will appear in the head.
+当发生提升时，现有元素不会被移除。后面出现的元素会被添加到末尾。例如，如果你的 `<head>` 中有 `<title>Default</title>` 并且组件渲染了 `<title>Page Title</title>`，两个标题都会出现在 head 中。
 :::
 
 ## Fragment
 
-Use Fragment to group multiple elements without adding extra nodes:
+使用 Fragment 将多个元素分组而不添加额外的节点：
 
 ```tsx
 import { Fragment } from 'hono/jsx'
@@ -136,7 +136,7 @@ const List = () => (
 )
 ```
 
-Or you can write it with `<></>` if it sets up properly.
+或者如果设置得当，你可以用 `<></>` 来编写。
 
 ```tsx
 const List = () => (
@@ -150,7 +150,7 @@ const List = () => (
 
 ## `PropsWithChildren`
 
-You can use `PropsWithChildren` to correctly infer a child element in a function component.
+你可以使用 `PropsWithChildren` 在函数组件中正确推断子元素。
 
 ```tsx
 import { PropsWithChildren } from 'hono/jsx'
@@ -170,9 +170,9 @@ function Component({ title, children }: PropsWithChildren<Post>) {
 }
 ```
 
-## Inserting Raw HTML
+## 插入原始 HTML
 
-To directly insert HTML, use `dangerouslySetInnerHTML`:
+要直接插入 HTML，使用 `dangerouslySetInnerHTML`：
 
 ```tsx
 app.get('/foo', (c) => {
@@ -181,9 +181,9 @@ app.get('/foo', (c) => {
 })
 ```
 
-## Memoization
+## 记忆化
 
-Optimize your components by memoizing computed strings using `memo`:
+通过使用 `memo` 记忆计算后的字符串来优化你的组件：
 
 ```tsx
 import { memo } from 'hono/jsx'
@@ -201,7 +201,7 @@ const Layout = (
 
 ## Context
 
-By using `useContext`, you can share data globally across any level of the Component tree without passing values through props.
+通过使用 `useContext`，你可以在组件树的任何层级全局共享数据，而无需通过 props 传递值。
 
 ```tsx
 import type { FC } from 'hono/jsx'
@@ -246,14 +246,14 @@ app.get('/', (c) => {
 })
 ```
 
-## Async Component
+## 异步组件
 
-`hono/jsx` supports an Async Component, so you can use `async`/`await` in your component.
-If you render it with `c.html()`, it will await automatically.
+`hono/jsx` 支持异步组件，因此你可以在组件中使用 `async`/`await`。
+如果你使用 `c.html()` 渲染它，它将自动等待。
 
 ```tsx
 const AsyncComponent = async () => {
-  await new Promise((r) => setTimeout(r, 1000)) // sleep 1s
+  await new Promise((r) => setTimeout(r, 1000)) // 睡眠 1 秒
   return <div>Done!</div>
 }
 
@@ -268,11 +268,11 @@ app.get('/', (c) => {
 })
 ```
 
-## Suspense <Badge style="vertical-align: middle;" type="warning" text="Experimental" />
+## Suspense <Badge style="vertical-align: middle;" type="warning" text="实验性" />
 
-The React-like `Suspense` feature is available.
-If you wrap the async component with `Suspense`, the content in the fallback will be rendered first, and once the Promise is resolved, the awaited content will be displayed.
-You can use it with `renderToReadableStream()`.
+类似 React 的 `Suspense` 功能可用。
+如果你用 `Suspense` 包装异步组件，fallback 中的内容将首先渲染，一旦 Promise 解决，等待的内容将显示。
+你可以配合 `renderToReadableStream()` 使用它。
 
 ```tsx
 import { renderToReadableStream, Suspense } from 'hono/jsx/streaming'
@@ -298,11 +298,11 @@ app.get('/', (c) => {
 })
 ```
 
-## ErrorBoundary <Badge style="vertical-align: middle;" type="warning" text="Experimental" />
+## ErrorBoundary <Badge style="vertical-align: middle;" type="warning" text="实验性" />
 
-You can catch errors in child components using `ErrorBoundary`.
+你可以使用 `ErrorBoundary` 捕获子组件中的错误。
 
-In the example below, it will show the content specified in `fallback` if an error occurs.
+在下面的示例中，如果发生错误，它将显示 `fallback` 中指定的内容。
 
 ```tsx
 function SyncComponent() {
@@ -323,7 +323,7 @@ app.get('/sync', async (c) => {
 })
 ```
 
-`ErrorBoundary` can also be used with async components and `Suspense`.
+`ErrorBoundary` 也可以与异步组件和 `Suspense` 一起使用。
 
 ```tsx
 async function AsyncComponent() {
@@ -347,9 +347,9 @@ app.get('/with-suspense', async (c) => {
 })
 ```
 
-## StreamingContext <Badge style="vertical-align: middle;" type="warning" text="Experimental" />
+## StreamingContext <Badge style="vertical-align: middle;" type="warning" text="实验性" />
 
-You can use `StreamingContext` to provide configuration for streaming components like `Suspense` and `ErrorBoundary`. This is useful for adding nonce values to script tags generated by these components for Content Security Policy (CSP).
+你可以使用 `StreamingContext` 为 `Suspense` 和 `ErrorBoundary` 等流式组件提供配置。这对于为这些组件生成的脚本标签添加 nonce 值以用于内容安全策略 (CSP) 很有用。
 
 ```tsx
 import { Suspense, StreamingContext } from 'hono/jsx/streaming'
@@ -382,12 +382,12 @@ app.get('/', (c) => {
 })
 ```
 
-The `scriptNonce` value will be automatically added to any `<script>` tags generated by `Suspense` and `ErrorBoundary` components.
+`scriptNonce` 值将自动添加到由 `Suspense` 和 `ErrorBoundary` 组件生成的任何 `<script>` 标签中。
 
-## Integration with html Middleware
+## 与 html 中间件集成
 
-Combine the JSX and HTML middlewares for powerful templating.
-For in-depth details, consult the [HTML middleware documentation](/docs/helpers/html).
+结合 JSX 和 HTML 中间件以实现强大的模板功能。
+有关深入详情，请参阅 [HTML 中间件文档](/docs/helpers/html)。
 
 ```tsx
 import { Hono } from 'hono'
@@ -431,13 +431,13 @@ app.get('/:name', (c) => {
 export default app
 ```
 
-## With JSX Renderer Middleware
+## 使用 JSX 渲染器中间件
 
-The [JSX Renderer Middleware](/docs/middleware/builtin/jsx-renderer) allows you to create HTML pages more easily with the JSX.
+[JSX 渲染器中间件](/docs/middleware/builtin/jsx-renderer) 允许你更轻松地使用 JSX 创建 HTML 页面。
 
-## Override type definitions
+## 覆盖类型定义
 
-You can override the type definition to add your custom elements and attributes.
+你可以覆盖类型定义以添加自定义元素和属性。
 
 ```ts
 declare module 'hono/jsx' {

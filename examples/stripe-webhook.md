@@ -1,39 +1,39 @@
 # Stripe Webhook
 
-This introduces how to create an API with Hono to receive Stripe Webhook events.
+本文介绍如何使用 Hono 创建一个接收 Stripe Webhook 事件的 API。
 
-## Preparation
+## 准备
 
-Please install the official Stripe SDK at first:
+请先安装官方的 Stripe SDK：
 
 ```bash
 npm install stripe
 ```
 
-And put the following values on the `.dev.vars` file to insert the Stripe API keys:
+然后在 `.dev.vars` 文件中填写以下值，以配置 Stripe API 密钥：
 
 ```
 STRIPE_API_KEY=sk_test_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
 ```
 
-You can learn about the Stripe API keys by the following documents:
+你可以通过以下文档了解 Stripe API 密钥：
 
 - Secret Key: https://docs.stripe.com/keys
 - Webhook secret: https://docs.stripe.com/webhooks
 
-## How to protect the API for Stripe Webhook events
+## 如何保护用于接收 Stripe Webhook 事件的 API
 
-The API that processes webhook events is publicly accessible. Therefore, a mechanism is needed to protect it from attacks such as malicious third parties spoofing Stripe's webhook event objects and sending requests. In Stripe's case, you can protect the API by issuing a webhook secret and verifying each request.
+处理 webhook 事件的 API 是公开可访问的。因此，需要一种机制来防止恶意第三方伪造 Stripe 的 webhook 事件对象并发送请求。对于 Stripe，你可以通过分发 webhook secret 并校验每个请求来保护 API。
 
-Learn more: https://docs.stripe.com/webhooks?lang=node#verify-official-libraries
+了解更多： https://docs.stripe.com/webhooks?lang=node#verify-official-libraries
 
-## Implementing the Webhook API by hosting environment or framework
+## 按托管环境或框架实现 Webhook API
 
-To perform signature verification with Stripe, the raw request body is needed.
-When using a framework, you need to ensure that the original body is not modified. If any changes are made to the raw request body, the verification will fail.
+为了与 Stripe 做签名校验，需要原始请求体。
+在使用框架时，你需要确保原始请求体没有被修改。如果原始请求体发生了任何变化，校验就会失败。
 
-In the case of Hono, we can get the raw request body by the `context.req.text()` method. So we can create the webhook API like the following example:
+在 Hono 中，我们可以通过 `context.req.text()` 方法获取原始请求体。因此可以像下面这样创建 webhook API：
 
 ```ts
 import Stripe from 'stripe'
@@ -78,7 +78,7 @@ app.post('/webhook', async (context) => {
 export default app
 ```
 
-## See also
+## 另请参阅
 
 - Details on Stripe Webhooks:
   https://docs.stripe.com/webhooks

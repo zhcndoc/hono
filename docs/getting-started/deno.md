@@ -1,33 +1,33 @@
 # Deno
 
-[Deno](https://deno.com/) is a JavaScript runtime built on V8. It's not Node.js.
-Hono also works on Deno.
+[Deno](https://deno.com/) 是一个基于 V8 构建的 JavaScript 运行时。它不是 Node.js。
+Hono 也可以在 Deno 上运行。
 
-You can use Hono, write the code with TypeScript, run the application with the `deno` command, and deploy it to "Deno Deploy".
+你可以使用 Hono，用 TypeScript 编写代码，使用 `deno` 命令运行应用程序，并将其部署到 "Deno Deploy"。
 
-## 1. Install Deno
+## 1. 安装 Deno
 
-First, install `deno` command.
-Please refer to [the official document](https://docs.deno.com/runtime/getting_started/installation/).
+首先，安装 `deno` 命令。
+请参考 [官方文档](https://docs.deno.com/runtime/getting_started/installation/)。
 
-## 2. Setup
+## 2. 设置
 
-A starter for Deno is available.
-Start your project with the [`deno init`](https://docs.deno.com/runtime/reference/cli/init/) command.
+Deno 有一个入门模板可用。
+使用 [`deno init`](https://docs.deno.com/runtime/reference/cli/init/) 命令开始你的项目。
 
 ```sh
 deno init --npm hono --template=deno my-app
 ```
 
-Move into `my-app`. For Deno, you don't have to install Hono explicitly.
+进入 `my-app`。对于 Deno，你不需要显式安装 Hono。
 
 ```sh
 cd my-app
 ```
 
-## 3. Hello World
+## 3. 你好世界
 
-Edit `main.ts`:
+编辑 `main.ts`：
 
 ```ts [main.ts]
 import { Hono } from 'hono'
@@ -39,26 +39,26 @@ app.get('/', (c) => c.text('Hello Deno!'))
 Deno.serve(app.fetch)
 ```
 
-## 4. Run
+## 4. 运行
 
-Run the development server locally. Then, access `http://localhost:8000` in your Web browser.
+在本地运行开发服务器。然后，在 Web 浏览器中访问 `http://localhost:8000`。
 
 ```sh
 deno task start
 ```
 
-## Change port number
+## 更改端口号
 
-You can specify the port number by updating the arguments of `Deno.serve` in `main.ts`:
+你可以通过更新 `main.ts` 中 `Deno.serve` 的参数来指定端口号：
 
 ```ts
 Deno.serve(app.fetch) // [!code --]
 Deno.serve({ port: 8787 }, app.fetch) // [!code ++]
 ```
 
-## Serve static files
+## 提供静态文件
 
-To serve static files, use `serveStatic` imported from `hono/deno`.
+要提供静态文件，请使用从 `hono/deno` 导入的 `serveStatic`。
 
 ```ts
 import { Hono } from 'hono'
@@ -74,7 +74,7 @@ app.get('*', serveStatic({ path: './static/fallback.txt' }))
 Deno.serve(app.fetch)
 ```
 
-For the above code, it will work well with the following directory structure.
+对于上述代码，配合以下目录结构可以正常工作。
 
 ```
 ./
@@ -91,7 +91,7 @@ For the above code, it will work well with the following directory structure.
 
 ### `rewriteRequestPath`
 
-If you want to map `http://localhost:8000/static/*` to `./statics`, you can use the `rewriteRequestPath` option:
+如果你想将 `http://localhost:8000/static/*` 映射到 `./statics`，可以使用 `rewriteRequestPath` 选项：
 
 ```ts
 app.get(
@@ -106,7 +106,7 @@ app.get(
 
 ### `mimes`
 
-You can add MIME types with `mimes`:
+你可以使用 `mimes` 添加 MIME 类型：
 
 ```ts
 app.get(
@@ -122,7 +122,7 @@ app.get(
 
 ### `onFound`
 
-You can specify handling when the requested file is found with `onFound`:
+你可以使用 `onFound` 指定当请求的文件被找到时的处理：
 
 ```ts
 app.get(
@@ -138,7 +138,7 @@ app.get(
 
 ### `onNotFound`
 
-You can specify handling when the requested file is not found with `onNotFound`:
+你可以使用 `onNotFound` 指定当请求的文件未找到时的处理：
 
 ```ts
 app.get(
@@ -153,7 +153,7 @@ app.get(
 
 ### `precompressed`
 
-The `precompressed` option checks if files with extensions like `.br` or `.gz` are available and serves them based on the `Accept-Encoding` header. It prioritizes Brotli, then Zstd, and Gzip. If none are available, it serves the original file.
+`precompressed` 选项检查是否存在扩展名为 `.br` 或 `.gz` 的文件，并根据 `Accept-Encoding` 头提供它们。它优先使用 Brotli，然后是 Zstd 和 Gzip。如果都不可用，则提供原始文件。
 
 ```ts
 app.get(
@@ -166,15 +166,15 @@ app.get(
 
 ## Deno Deploy
 
-Deno Deploy is a serverless platform for running JavaScript and TypeScript applications in the cloud.
-It provides a management plane for deploying and running applications through integrations like GitHub deployment.
+Deno Deploy 是一个用于在云端运行 JavaScript 和 TypeScript 应用程序的无服务器平台。
+它提供了一个管理平面，支持通过 GitHub 部署等集成来部署和运行应用程序。
 
-Hono also works on Deno Deploy. Please refer to [the official document](https://docs.deno.com/deploy/manual/).
+Hono 也可以在 Deno Deploy 上运行。请参考 [官方文档](https://docs.deno.com/deploy/manual/)。
 
-## Testing
+## 测试
 
-Testing the application on Deno is easy.
-You can write with `Deno.test` and use `assert` or `assertEquals` from [@std/assert](https://jsr.io/@std/assert).
+在 Deno 上测试应用程序很简单。
+你可以使用 `Deno.test` 编写测试，并使用 [@std/assert](https://jsr.io/@std/assert) 中的 `assert` 或 `assertEquals`。
 
 ```sh
 deno add jsr:@std/assert
@@ -193,15 +193,15 @@ Deno.test('Hello World', async () => {
 })
 ```
 
-Then run the command:
+然后运行命令：
 
 ```sh
 deno test hello.ts
 ```
 
-## npm and JSR
+## npm 和 JSR
 
-Hono is available on both [npm](https://www.npmjs.com/package/hono) and [JSR](https://jsr.io/@hono/hono) (the JavaScript Registry). You can use either `npm:hono` or `jsr:@hono/hono` in your `deno.json`:
+Hono 在 [npm](https://www.npmjs.com/package/hono) 和 [JSR](https://jsr.io/@hono/hono)（JavaScript Registry）上均可用。你可以在 `deno.json` 中使用 `npm:hono` 或 `jsr:@hono/hono`：
 
 ```json
 {
@@ -212,7 +212,7 @@ Hono is available on both [npm](https://www.npmjs.com/package/hono) and [JSR](ht
 }
 ```
 
-To use middleware you need to use the [Deno directory](https://docs.deno.com/runtime/fundamentals/configuration/#custom-path-mappings) syntax in the import.
+要使用中间件，你需要在导入中使用 [Deno 目录](https://docs.deno.com/runtime/fundamentals/configuration/#custom-path-mappings) 语法。
 
 ```json
 {
@@ -222,7 +222,7 @@ To use middleware you need to use the [Deno directory](https://docs.deno.com/run
 }
 ```
 
-When using third-party middleware, you may need to use Hono from the same registry as the middleware for proper TypeScript type inference. For example, if using the middleware from npm, you should also use Hono from npm:
+使用第三方中间件时，为了正确的 TypeScript 类型推断，你可能需要使用与中间件相同注册表的 Hono。例如，如果使用来自 npm 的中间件，你也应该使用来自 npm 的 Hono：
 
 ```json
 {
@@ -234,7 +234,7 @@ When using third-party middleware, you may need to use Hono from the same regist
 }
 ```
 
-We also provide many third-party middleware packages on [JSR](https://jsr.io/@hono). When using the middleware on JSR, use Hono from JSR:
+我们在 [JSR](https://jsr.io/@hono) 上也提供了许多第三方中间件包。当使用 JSR 上的中间件时，请使用来自 JSR 的 Hono：
 
 ```json
 {

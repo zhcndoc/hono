@@ -1,12 +1,10 @@
-# Stytch Auth with Hono
+# 使用 Hono 集成 Stytch Auth
 
-This example shows how to set up a full-stack application with Stytch Frontend SDKs and Hono backend on Cloudflare
-Workers with `vite` and `react`.
+这个示例展示了如何在 Cloudflare Workers 上，使用 `vite` 和 `react` 搭建一个由 Stytch 前端 SDK 和 Hono 后端组成的全栈应用。
 
-A complete example application using these principles can be
-found [here](https://github.com/honojs/examples/tree/main/stytch-auth).
+基于这些原则的完整示例应用可以在[这里](https://github.com/honojs/examples/tree/main/stytch-auth)找到。
 
-## Installation
+## 安装
 
 ::: code-group
 
@@ -44,16 +42,15 @@ bun add @stytch/react @stytch/vanilla-js
 
 :::
 
-## Setup
+## 设置
 
-1. Create a [Stytch](https://stytch.com/?utm_source=hono&utm_medium=website&utm_campaign=workers) account and select
-   **Consumer Authentication**.
-2. Enable the **Frontend SDK** in [Configuration](https://stytch.com/dashboard/sdk-configuration).
-3. Get your credentials from [Project Settings](https://stytch.com/dashboard).
+1. 创建一个 [Stytch](https://stytch.com/?utm_source=hono&utm_medium=website&utm_campaign=workers) 账号，并选择 **Consumer Authentication**。
+2. 在 [Configuration](https://stytch.com/dashboard/sdk-configuration) 中启用 **Frontend SDK**。
+3. 从 [Project Settings](https://stytch.com/dashboard) 获取你的凭据。
 
-## Environment Variables
+## 环境变量
 
-Backend Workers env vars go in `.dev.vars`. Frontend Vite env vars go in `.env.local`.
+后端 Workers 环境变量放在 `.dev.vars` 中。前端 Vite 环境变量放在 `.env.local` 中。
 
 ::: code-group
 
@@ -68,7 +65,7 @@ VITE_STYTCH_PUBLIC_TOKEN=public-token-live-xxx
 
 :::
 
-## Frontend
+## 前端
 
 1. Wrap your application with the `<StytchProvider />` component and pass it an instance of the Stytch UI Client.
 2. Use the `<StytchLogin />` component to log the user in. See
@@ -152,7 +149,7 @@ export default Dashboard
 
 :::
 
-## Backend
+## 后端
 
 1. Wrap protected endpoints with a `Consumer.authenticateSessionLocal()` middleware to authenticate the Stytch session
    JWT.
@@ -192,16 +189,14 @@ app.get('/api/remote', Consumer.authenticateSessionRemote(), (c) => {
 export default app
 ```
 
-## Next Steps
+## 下一步
 
-Additional documentation and resources:
+更多文档与资源：
 
 - Check out the [Stytch Auth Hono Example App](https://github.com/honojs/examples/tree/main/stytch-auth).
-- Getting Started guide for the [Stytch JS SDK](https://stytch.com/docs/sdks/installation).
+- [Stytch JS SDK](https://stytch.com/docs/sdks/installation) 的入门指南。
 - Complete documentation for the [@hono/stytch-auth package](https://www.npmjs.com/package/@hono/stytch-auth).
 
-Interested in Enterprise B2B features like Organization Management, RBAC, and SSO? See
-the [Stytch B2B Authentication](https://stytch.com/docs/getting-started/b2b-vs-consumer-auth) product line.
+想了解组织管理、RBAC 和 SSO 这类企业级 B2B 功能？请查看 [Stytch B2B Authentication](https://stytch.com/docs/getting-started/b2b-vs-consumer-auth) 产品线。
 
-Join the discussion, ask questions, and suggest new features in
-the [Stytch Slack Community](https://stytch.com/docs/resources/support/overview).
+欢迎加入 [Stytch Slack Community](https://stytch.com/docs/resources/support/overview) 参与讨论、提问并提出新功能建议。

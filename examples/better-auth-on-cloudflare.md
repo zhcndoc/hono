@@ -1,8 +1,8 @@
-# Better Auth on Cloudflare
+# Cloudflare 上的 Better Auth
 
-A TypeScript-based lightweight authentication service optimized for Cloudflare Workers
+一个为 Cloudflare Workers 优化的、基于 TypeScript 的轻量级认证服务。
 
-## Stack Summary
+## 技术栈概览
 
 **🔥 [Hono](https://hono.dev)**  
 A fast, lightweight web framework built on web standards.
@@ -14,11 +14,11 @@ A comprehensive authentication framework for TypeScript.
 A lightweight, high-performance ORM for TypeScript, built with DX in mind.
 
 **🐘 [Postgres with Neon](https://neon.tech)**  
-A serverless Postgres optimized for the cloud.
+一个面向云端优化的无服务器 Postgres。
 
-## Preparation
+## 准备
 
-### 1. Installation
+### 1. 安装
 
 ::: code-group
 
@@ -88,22 +88,22 @@ bun add @neondatabase/serverless
 
 :::
 
-### 2. Environment Variables
+### 2. 环境变量
 
-Set the following environment variables to connect your application to Better Auth and Neon.
+设置以下环境变量，以便让应用连接到 Better Auth 和 Neon。
 
-Refer to official guides:
+请参考官方指南：
 
 - [Better Auth – Guide](https://www.better-auth.com/docs/installation#set-environment-variables)
 - [Neon – Guide](https://neon.tech/docs/connect/connect-from-any-app)
 
-**Required Files:**
+**所需文件：**
 
 ::: code-group
 
 ```Plain Text[.dev.vars]
-# Used by Wrangler in local development
-# In production, these should be set as Cloudflare Worker Secrets.
+# Wrangler 在本地开发时使用
+# 在生产环境中，这些值应设置为 Cloudflare Worker Secrets。
 
 BETTER_AUTH_URL=
 BETTER_AUTH_SECRET=
@@ -111,7 +111,7 @@ DATABASE_URL=
 ```
 
 ```Plain Text[.env]
-# Used for local development and CLI tools such as:
+# 用于本地开发和以下 CLI 工具：
 #
 # - Drizzle CLI
 # - Better Auth CLI
@@ -125,7 +125,7 @@ DATABASE_URL=
 
 ### 3. Wrangler
 
-After setting your environment variables, run the following script to generate types for your Cloudflare Workers configuration:
+设置好环境变量后，运行以下脚本为 Cloudflare Workers 配置生成类型：
 
 ::: code-group
 
@@ -156,7 +156,7 @@ bun run cf-typegen
 
 :::
 
-Then, make sure your tsconfig.json includes the generated types.
+然后，确保你的 tsconfig.json 已包含生成的类型。
 
 ```json[tsconfig.json]
 {
@@ -168,7 +168,7 @@ Then, make sure your tsconfig.json includes the generated types.
 
 ### 4. Drizzle
 
-To use the Drizzle Kit CLI, add the following Drizzle configuration file to the root of your project.
+要使用 Drizzle Kit CLI，请在项目根目录添加以下 Drizzle 配置文件。
 
 ```ts[drizzle.config.ts]
 import { defineConfig } from 'drizzle-kit';
@@ -183,14 +183,14 @@ export default defineConfig({
 });
 ```
 
-## Application
+## 应用实现
 
-### 1. Better Auth Instance
+### 1. Better Auth 实例
 
-Create a Better Auth instance using Cloudflare Workers bindings.
+使用 Cloudflare Workers bindings 创建 Better Auth 实例。
 
-There are many available configuration options, far more than can be covered in this example.
-Please refer to the official documentation and configure it according to your project’s needs:
+可用的配置选项很多，远超这个示例所能涵盖的范围。
+请参考官方文档，并根据你的项目需求进行配置：
 
 (Docs: [Better Auth - Options](https://www.better-auth.com/docs/reference/options))
 
@@ -250,7 +250,7 @@ export const betterAuthOptions: BetterAuthOptions = {
 
 ### 2. Better Auth Schema
 
-To create the required tables for Better Auth, first add the following file to the root directory:
+要为 Better Auth 创建所需的表，请先在项目根目录添加以下文件：
 
 ```ts[better-auth.config.ts]
 /**
@@ -299,10 +299,10 @@ bunx @better-auth/cli@latest generate --config ./better-auth.config.ts --output 
 
 :::
 
-### 3. Apply Schema to Database
+### 3. 将 Schema 应用到数据库
 
-After generating the schema file, run the following commands to create and apply the database migration:
-Check your wrangler config to read the `process.env` correctly for the `wrangler dev` to work later. You need [`node_compatibility`](https://developers.cloudflare.com/workers/wrangler/configuration/#hyperdrive) setup.
+生成 schema 文件后，运行以下命令以创建并应用数据库迁移：
+同时检查你的 wrangler 配置，确保 `process.env` 能正确读取，这样后续 `wrangler dev` 才能正常工作。你还需要配置 [`node_compatibility`](https://developers.cloudflare.com/workers/wrangler/configuration/#hyperdrive)。
 
 ::: code-group
 
@@ -328,9 +328,9 @@ bunx drizzle-kit migrate
 
 :::
 
-### 4. Mount the handler
+### 4. 挂载处理器
 
-Mount the Better Auth handler to a Hono endpoint, ensuring that the mount path matches the `basePath` setting in your Better Auth instance.
+将 Better Auth 处理器挂载到 Hono 端点，并确保挂载路径与 Better Auth 实例中的 `basePath` 设置一致。
 
 ```ts[src/index.ts]
 import { Hono } from 'hono';
@@ -345,15 +345,15 @@ app.on(['GET', 'POST'], '/api/*', (c) => {
 export default app;
 ```
 
-## Advanced
+## 高级用法
 
-This example is assembled based on the official documentation of Hono, Better Auth, and Drizzle. However, it goes beyond simple integration and offers the following benefits:
+这个示例基于 Hono、Better Auth 和 Drizzle 的官方文档整理而成。不过，它不仅仅是简单集成，还提供以下好处：
 
-- Efficient development through integration of Cloudflare CLI, Better Auth CLI, and Drizzle CLI.
-- Seamless transition between development and production environments.
-- Apply changes consistently using a script.
+- 通过整合 Cloudflare CLI、Better Auth CLI 和 Drizzle CLI 提升开发效率。
+- 在开发与生产环境之间平滑切换。
+- 通过脚本一致地应用变更。
 
-You can extend this setup with custom scripts tailored to your workflow. For example:
+你可以根据自己的工作流，用自定义脚本扩展这套配置。例如：
 
 ```json[package.json]
 {
@@ -366,18 +366,18 @@ You can extend this setup with custom scripts tailored to your workflow. For exa
 }
 ```
 
-> NOTE:  
-> Refer to the official CLI documentation for each tool for advanced usage and the most up-to-date options:
+> 注意：  
+> 关于高级用法和最新选项，请参考每个工具的官方 CLI 文档：
 >
 > - [Cloudflare CLI](https://developers.cloudflare.com/workers/wrangler/)
 > - [Better Auth CLI](https://www.better-auth.com/docs/concepts/cli)
 > - [Drizzle ORM CLI](https://orm.drizzle.team/docs/kit-overview)
 
-## In Closing
+## 结语
 
-You now have a lightweight, fast, and comprehensive authentication service running on Cloudflare Workers. By leveraging Service Bindings, this setup allows you to build microservice-based architectures with minimal latency.
+现在，你已经拥有了一个运行在 Cloudflare Workers 上的轻量、快速且完整的认证服务。借助 Service Bindings，这套配置可以让你以极低延迟构建基于微服务的架构。
 
-This guide demonstrates only a **basic example**, so for advanced use cases like OAuth or rate limiting, refer to the official documentation and tailor the configuration to your service’s needs.
+本指南只演示了一个**基础示例**，因此对于 OAuth、限流等高级场景，请参考官方文档并按你的服务需求定制配置。
 
-You can find the full example source code here:  
+完整示例源码请见：  
 [GitHub Repository](https://github.com/bytaesu/cloudflare-auth-worker)

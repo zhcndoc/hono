@@ -1,16 +1,16 @@
 # Scalar
 
-[Scalar](https://guides.scalar.com/scalar/scalar-api-references/integrations/hono) provides an easy way to render a beautiful API reference based on an OpenAPI/Swagger document with Hono.
+[Scalar](https://guides.scalar.com/scalar/scalar-api-references/integrations/hono) 提供了一种简单方式，帮助你基于 OpenAPI/Swagger 文档在 Hono 中渲染精美的 API 参考页。
 
-## Installation
+## 安装
 
 ```bash
 npm install @scalar/hono-api-reference
 ```
 
-## Usage
+## 用法
 
-Set up [Zod OpenAPI Hono](/examples/zod-openapi) or [Hono OpenAPI](/examples/hono-openapi) and pass the configured URL to the `Scalar` middleware:
+先配置 [Zod OpenAPI Hono](/examples/zod-openapi) 或 [Hono OpenAPI](/examples/hono-openapi)，然后把配置好的 URL 传给 `Scalar` 中间件：
 
 ```ts
 import { Hono } from 'hono'
@@ -38,9 +38,9 @@ app.get(
 export default app
 ```
 
-### Themes
+### 主题
 
-The middleware comes with a custom theme for Hono. You can use one of [the other predefined themes](https://github.com/scalar/scalar/blob/main/packages/themes/src/index.ts#L15) (`alternate`, `default`, `moon`, `purple`, `solarized`) or overwrite it with `none`. All themes come with a light and dark color scheme.
+该中间件为 Hono 提供了自定义主题。你可以使用[其他预定义主题](https://github.com/scalar/scalar/blob/main/packages/themes/src/index.ts#L15) 之一（`alternate`、`default`、`moon`、`purple`、`solarized`），或者将其覆盖为 `none`。所有主题都同时提供浅色和深色配色方案。
 
 ```ts
 import { Scalar } from '@scalar/hono-api-reference'
@@ -55,9 +55,9 @@ app.get(
 )
 ```
 
-### Custom page title
+### 自定义页面标题
 
-There's one additional option to set the page title:
+还有一个额外选项可以设置页面标题：
 
 ```ts
 import { Scalar } from '@scalar/hono-api-reference'
@@ -72,13 +72,13 @@ app.get(
 )
 ```
 
-### Custom CDN
+### 自定义 CDN
 
-You can use a custom CDN, default is `https://cdn.jsdelivr.net/npm/@scalar/api-reference`.
+你可以使用自定义 CDN，默认值为 `https://cdn.jsdelivr.net/npm/@scalar/api-reference`。
 
-You can also pin the CDN to a specific version by specifying it in the CDN string like `https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.25.28`.
+你也可以通过在 CDN 字符串中指定版本来固定到某个特定版本，例如 `https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.25.28`。
 
-You can find all available CDN versions [here](https://www.jsdelivr.com/package/npm/@scalar/api-reference?tab=files).
+你可以在[这里](https://www.jsdelivr.com/package/npm/@scalar/api-reference?tab=files)找到所有可用的 CDN 版本。
 
 ```ts
 import { Scalar } from '@scalar/hono-api-reference'
@@ -94,15 +94,15 @@ app.get(
 )
 ```
 
-### Markdown for LLMs
+### 面向 LLM 的 Markdown
 
-If you want to create a Markdown version of the API reference (for LLMs), install `@scalar/openapi-to-markdown`:
+如果你想为 API 参考生成一个 Markdown 版本（供 LLM 使用），请安装 `@scalar/openapi-to-markdown`：
 
 ```bash
 npm install @scalar/openapi-to-markdown
 ```
 
-And add an additional route for it:
+并为它添加一个额外路由：
 
 ```ts
 import { Hono } from 'hono'
@@ -110,14 +110,14 @@ import { createMarkdownFromOpenApi } from '@scalar/openapi-to-markdown'
 
 const app = new Hono()
 
-// Generate Markdown from your OpenAPI document
+// 从 OpenAPI 文档生成 Markdown
 const markdown = await createMarkdownFromOpenApi(content)
 
 /**
- * Register a route to serve the Markdown for LLMs
+ * 注册一个用于向 LLM 提供 Markdown 的路由
  *
- * Q: Why /llms.txt?
- * A: It's a proposal to standardise on using an /llms.txt file.
+ * 问：为什么是 /llms.txt？
+ * 答：这是一个提议，用于统一使用 /llms.txt 文件。
  *
  * @see https://llmstxt.org/
  */
@@ -126,7 +126,7 @@ app.get('/llms.txt', (c) => c.text(markdown))
 export default app
 ```
 
-Or, if you are using Zod OpenAPI Hono:
+或者，如果你正在使用 Zod OpenAPI Hono：
 
 ```ts
 // Get the OpenAPI document

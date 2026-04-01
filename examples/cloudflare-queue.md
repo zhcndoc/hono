@@ -1,6 +1,6 @@
-# Cloudflare Queues
+# Cloudflare 队列
 
-Using Hono with [Cloudflare Queues](https://developers.cloudflare.com/queues/).
+将 Hono 与 [Cloudflare Queues](https://developers.cloudflare.com/queues/) 一起使用。
 
 :::code-group
 
@@ -61,7 +61,7 @@ name = "my-worker"
 
 :::
 
-## See also
+## 另请参阅
 
 - [Cloudflare Queues](https://developers.cloudflare.com/queues/)
 - [Cloudflare Queues with R2 Example](https://developers.cloudflare.com/queues/examples/send-errors-to-r2/)

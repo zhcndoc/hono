@@ -1,30 +1,30 @@
 # Hono OpenAPI
 
-[hono-openapi](https://github.com/rhinobase/hono-openapi) is a _middleware_ which enables automatic OpenAPI documentation generation for your Hono API by integrating with validation libraries like Zod, Valibot, ArkType, and TypeBox and all libs supporting [Standard Schema](https://standardschema.dev/).
+[hono-openapi](https://github.com/rhinobase/hono-openapi) 是一个 _中间件_，它通过集成 Zod、Valibot、ArkType、TypeBox 以及所有支持 [Standard Schema](https://standardschema.dev/) 的库，为你的 Hono API 自动生成 OpenAPI 文档。
 
-## 🛠️ Installation
+## 🛠️ 安装
 
-Install the package along with your preferred validation library and its dependencies:
+将该包与您偏好的验证库及其依赖一起安装：
 
 ```bash
 npm install hono-openapi @hono/standard-validator
 ```
 
-In this guide, we will use `valibot`
+在本指南中，我们将使用 `valibot`
 
 ```bash
 npm install valibot @valibot/to-json-schema
 ```
 
-You can learn more about the installation here - <https://honohub.dev/docs/openapi#installation>
+你可以在这里了解更多安装信息 - <https://honohub.dev/docs/openapi#installation>
 
 ---
 
-## 🚀 Getting Started
+## 🚀 快速开始
 
-### 1. Define Your Schemas
+### 1. 定义你的 Schema
 
-Define your request and response schemas using your preferred validation library. Here's an example using Valibot:
+使用你偏好的验证库定义请求和响应的 schema。下面以 Valibot 为例：
 
 ```ts
 import * as v from 'valibot'
@@ -38,9 +38,9 @@ const responseSchema = v.string()
 
 ---
 
-### 2. Create Routes
+### 2. 创建路由
 
-Use `describeRoute` for route documentation and validation:
+使用 `describeRoute` 为路由添加文档和校验：
 
 ```ts
 import { Hono } from 'hono'
@@ -69,15 +69,15 @@ app.get(
 )
 ```
 
-> **Note:**  
-> When using `validator()` from `hono-openapi`, any validation added for `query`, `json`, `param` or `form` is automatically included in the OpenAPI request schema.  
-> There’s no need to manually define request parameters inside `describeRoute()`.
+> **注意：**  
+> 当使用 `hono-openapi` 中的 `validator()` 时，添加到 `query`、`json`、`param` 或 `form` 的任何校验都会自动包含在 OpenAPI 请求 schema 中。  
+> 无需在 `describeRoute()` 中手动定义请求参数。
 
 ---
 
-### 3. Generate OpenAPI Spec
+### 3. 生成 OpenAPI 规范
 
-Add an endpoint for your OpenAPI document:
+为你的 OpenAPI 文档添加一个端点：
 
 ```ts
 import { openAPIRouteHandler } from 'hono-openapi'
@@ -101,4 +101,4 @@ app.get(
 
 ---
 
-Wanna explore more, check out our docs - <https://honohub.dev/docs/openapi>
+想了解更多，请查看文档 - <https://honohub.dev/docs/openapi>

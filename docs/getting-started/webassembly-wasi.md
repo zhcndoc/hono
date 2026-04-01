@@ -1,23 +1,23 @@
 # WebAssembly (w/ WASI)
 
-[WebAssembly][wasm-core] is a secure, sandboxed, portable runtime that runs inside and outside web browsers.
+[WebAssembly][wasm-core] 是一个安全、沙箱化、可移植的运行时，可在网页浏览器内部和外部运行。
 
-In practice:
+在实践中：
 
-- Languages (like JavaScript) _compile to_ WebAssembly (`.wasm` files)
-- WebAssembly runtimes (like [`wasmtime`][wasmtime] or [`jco`][jco]) enable _running_ WebAssembly binaries
+- 语言（如 JavaScript）_编译为_ WebAssembly（`.wasm` 文件）
+- WebAssembly 运行时（如 [`wasmtime`][wasmtime] 或 [`jco`][jco]）支持_运行_ WebAssembly 二进制文件
 
-While core WebAssembly has _no_ access to things like the local filesystem or sockets, the [WebAssembly System Interface][wasi]
-steps in to enable defining a platform under WebAssebly workloads.
+虽然核心 WebAssembly _无法_ 访问本地文件系统或套接字等内容，但 [WebAssembly 系统接口][wasi]
+介入以支持在 WebAssembly 工作负载下定义平台。
 
-This means that _with_ WASI, WebAssembly can operate on files, sockets, and much more.
+这意味着_借助_ WASI，WebAssembly 可以操作文件、套接字以及更多内容。
 
 ::: info
-Want to peek at the WASI interface yourself? check out [`wasi:http`][wasi-http]
+想亲自看看 WASI 接口吗？查看 [`wasi:http`][wasi-http]
 :::
 
-Support for WebAssembly w/ WASI in JS is powered by [StarlingMonkey][sm], and thanks to the focus on Web standards in
-both StarlingMonkey and Hono, **Hono works \*out of the box with WASI-enabled WebAssembly ecosystems.**
+JS 中对 WebAssembly w/ WASI 的支持由 [StarlingMonkey][sm] 驱动，得益于
+StarlingMonkey 和 Hono 都对 Web 标准的关注，**Hono 可以*\*开箱即用\*地支持启用 WASI 的 WebAssembly 生态系统。**
 
 [sm]: https://github.com/bytecodealliance/StarlingMonkey
 [wasm-core]: https://webassembly.org/
@@ -25,21 +25,21 @@ both StarlingMonkey and Hono, **Hono works \*out of the box with WASI-enabled We
 [bca]: https://bytecodealliance.org/
 [wasi-http]: https://github.com/WebAssembly/wasi-http
 
-## 1. Setup
+## 1. 设置
 
-The WebAssembly JS ecosystem provides tooling to make it easy to get started building WASI-enabled WebAssembly components:
+WebAssembly JS 生态系统提供了工具，使开始构建启用 WASI 的 WebAssembly 组件变得容易：
 
-- [StarlingMonkey][sm] is a fork of [SpiderMonkey][spidermonkey] that compiles to WebAssembly and enables components
-- [`componentize-js`][componentize-js] turns JavaScript ES modules into WebAssembly components
-- [`jco`][jco] is a multi-tool that builds components, generates types, and runs components in environments like Node.js or the browser
+- [StarlingMonkey][sm] 是 [SpiderMonkey][spidermonkey] 的一个分支，可编译为 WebAssembly 并启用组件
+- [`componentize-js`][componentize-js] 将 JavaScript ES 模块转换为 WebAssembly 组件
+- [`jco`][jco] 是一个多用途工具，可构建组件、生成类型并在 Node.js 或浏览器等环境中运行组件
 
 ::: info
-WebAssembly has an open ecosystem and is open source, with core projects stewarded primarily by the [Bytecode Alliance][bca] and its members.
+WebAssembly 拥有一个开放的生态系统且是开源的，核心项目主要由 [Bytecode Alliance][bca] 及其成员管理。
 
-New features, issues, pull requests and other types of contributions are always welcome.
+新功能、问题、拉取请求和其他类型的贡献总是受欢迎的。
 :::
 
-While a starter for Hono on WebAssembly is not yet available, you can start a WebAssembly Hono project just like any other:
+虽然 Hono 在 WebAssembly 上的 starter 尚不可用，但你可以像其他任何项目一样启动一个 WebAssembly Hono 项目：
 
 ::: code-group
 
@@ -59,7 +59,7 @@ npm init
 yarn add hono
 yarn add -D @bytecodealliance/jco @bytecodealliance/componentize-js @bytecodealliance/jco-std
 yarn add -D rolldown
-G```
+````
 
 ```sh [pnpm]
 mkdir my-app
@@ -81,10 +81,10 @@ bun add -D @bytecodealliance/jco @bytecodealliance/componentize-js @bytecodealli
 :::
 
 ::: info
-To ensure your project uses ES modules, ensure `type` is set to `"module"` in `package.json`
+为确保你的项目使用 ES 模块，请确保 `package.json` 中的 `type` 设置为 `"module"`
 :::
 
-After entering the `my-app` folder, install dependencies, and initialize TypeScript:
+进入 `my-app` 文件夹后，安装依赖项并初始化 TypeScript：
 
 ::: code-group
 
@@ -109,14 +109,14 @@ bun i
 
 :::
 
-Once you have a basic TypeScript configuration file (`tsconfig.json`), please ensure it has the following configuration:
+一旦你有了基本的 TypeScript 配置文件（`tsconfig.json`），请确保它具有以下配置：
 
-- `compilerOptions.module` set to `"nodenext"`
+- `compilerOptions.module` 设置为 `"nodenext"`
 
-Since `componentize-js` (and `jco` which re-uses it) supports only single JS files,
-bundling is necessary, so [`rolldown`][rolldown] can be used to create a single file bundle.
+由于 `componentize-js`（以及重用它的 `jco`）仅支持单个 JS 文件，
+因此需要进行捆绑，所以可以使用 [`rolldown`][rolldown] 来创建单个文件捆绑包。
 
-A Rolldown configuration (`rolldown.config.mjs`) like the following can be used:
+可以使用如下所示的 Rolldown 配置（`rolldown.config.mjs`）：
 
 ```js
 import { defineConfig } from 'rolldown'
@@ -132,7 +132,7 @@ export default defineConfig({
 ```
 
 ::: info
-Feel free to use any other bundlers that you're more comfortable with (`rolldown`, `esbuild`, `rollup`, etc)
+随意使用任何其他你更熟悉的捆绑器（`rolldown`、`esbuild`、`rollup` 等）
 :::
 
 [jco]: https://github.com/bytecodealliance/jco
@@ -140,13 +140,13 @@ Feel free to use any other bundlers that you're more comfortable with (`rolldown
 [rolldown]: https://rolldown.rs
 [spidermonkey]: https://spidermonkey.dev/
 
-## 2. Set up WIT interface & dependencies
+## 2. 设置 WIT 接口和依赖
 
-[WebAssembly Inteface Types (WIT)][wit] is an Interface Definition Language ("IDL") that governs what functionality a WebAssembly component uses ("imports"), and what it provides ("exports").
+[WebAssembly 接口类型 (WIT)][wit] 是一种接口定义语言（"IDL"），它管理 WebAssembly 组件使用的功能（"imports"）以及它提供的功能（"exports"）。
 
-Amongst the standardized WIT interfaces, [`wasi:http`][wasi-http] is for dealing with HTTP requests (whether it's receiving them or sending them out), and since we intend to make a web server, our component must declare the use of `wasi:http/incoming-handler` in it's [WIT world][wit-world]:
+在标准化的 WIT 接口中，[`wasi:http`][wasi-http] 用于处理 HTTP 请求（无论是接收还是发送），由于我们打算制作一个 Web 服务器，我们的组件必须在其 [WIT 世界][wit-world] 中声明使用 `wasi:http/incoming-handler`：
 
-First, let's set up the component's WIT world in a file called `wit/component.wit`:
+首先，让我们在名为 `wit/component.wit` 的文件中设置组件的 WIT 世界：
 
 ```txt
 package example:hono;
@@ -156,30 +156,30 @@ world component {
 }
 ```
 
-Put simply, the WIT file above means that our component "providers" the functionality of "receiving"/"handling incoming" HTTP requests.
+简单来说，上面的 WIT 文件意味着我们的组件“提供”“接收”/“处理传入”HTTP 请求的功能。
 
-The `wasi:http/incoming-handler` interface relies on upstream standardized WIT interfaces (specifications on how requests are structured, etc).
+`wasi:http/incoming-handler` 接口依赖于上游标准化的 WIT 接口（关于请求结构等的规范）。
 
-To pull those third party (Bytecode Alliance maintained) WIT interaces, one tool we can use is [`wkg`][wkg]:
+为了拉取那些第三方（由 Bytecode Alliance 维护）的 WIT 接口，我们可以使用的一个工具是 [`wkg`][wkg]：
 
 ```sh
 wkg wit fetch
 ```
 
-Once `wkg` has finished running, you should find your `wit` folder populated with a new `deps` folder alongside `component.wit`:
+`wkg` 运行完成后，你应该会发现你的 `wit` 文件夹中除了 `component.wit` 外，还填充了一个新的 `deps` 文件夹：
 
 ```
 wit
 ├── component.wit
 └── deps
     ├── wasi-cli-0.2.6
-    │   └── package.wit
+    │   └── package.wit
     ├── wasi-clocks-0.2.6
-    │   └── package.wit
+    │   └── package.wit
     ├── wasi-http-0.2.6
-    │   └── package.wit
+    │   └── package.wit
     ├── wasi-io-0.2.6
-    │   └── package.wit
+    │   └── package.wit
     └── wasi-random-0.2.6
         └── package.wit
 ```
@@ -190,9 +190,9 @@ wit
 
 ## 3. Hello Wasm
 
-To build a HTTP server in WebAssembly, we can make use of the [`jco-std`][jco-std] project, which contains helpers that make the experience very similar to the standard Hono experience.
+为了在 WebAssembly 中构建 HTTP 服务器，我们可以利用 [`jco-std`][jco-std] 项目，其中包含的辅助工具使体验与标准 Hono 体验非常相似。
 
-Let's fulfill our `component` world with a basic Hono application as a WebAssembly component in a file called `src/component.ts`:
+让我们在名为 `src/component.ts` 的文件中用一个基本的 Hono 应用程序作为 WebAssembly 组件来实现我们的 `component` 世界：
 
 ```ts
 import { Hono } from 'hono'
@@ -206,15 +206,15 @@ app.get('/hello', (c) => {
 
 fire(app)
 
-// Although we've called `fire()` with wasi HTTP configured for use above,
-// we still need to actually export the `wasi:http/incoming-handler` interface object,
-// as jco and componentize-js will be looking for the ES module export that matches the WASI interface.
+// 虽然我们在上面配置了 wasi HTTP 并调用了 `fire()`，
+// 我们仍然需要实际导出 `wasi:http/incoming-handler` 接口对象，
+// 因为 jco 和 componentize-js 将寻找匹配 WASI 接口的 ES 模块导出。
 export { incomingHandler } from '@bytecodealliance/jco-std/wasi/0.2.6/http/adapters/hono/server'
 ```
 
-## 4. Build
+## 4. 构建
 
-Since we're using Rolldown (and it's configured to handle TypeScript compilation), we can use it to build and bundle:
+由于我们使用的是 Rolldown（并且已配置为处理 TypeScript 编译），我们可以使用它来构建和捆绑：
 
 ::: code-group
 
@@ -237,12 +237,12 @@ bun build --target=bun --outfile=dist/component.js ./src/component.ts
 :::
 
 ::: info
-The bundling step is necessary because WebAssembly JS ecosystem tooling only currently supports a single JS file, and we'd like to include Hono along with related libraries.
+捆绑步骤是必要的，因为 WebAssembly JS 生态系统工具目前仅支持单个 JS 文件，而我们希望包含 Hono 以及相关库。
 
-For components with simpler requirements, bundlers are not necessary.
+对于需求更简单的组件，捆绑器不是必须的。
 :::
 
-To build your WebAssembly component, use `jco` (and indirectly `componentize-js`):
+要构建你的 WebAssembly 组件，请使用 `jco`（并间接使用 `componentize-js`）：
 
 ::: code-group
 
@@ -264,17 +264,17 @@ bun run jco componentize -w wit -o dist/component.wasm dist/component.js
 
 :::
 
-## 3. Run
+## 3. 运行
 
-To run your Hono WebAssembly HTTP server, you can use any WASI-enabled WebAssembly runtime:
+要运行你的 Hono WebAssembly HTTP 服务器，你可以使用任何启用 WASI 的 WebAssembly 运行时：
 
 - [`wasmtime`][wasmtime]
-- `jco` (runs in Node.js)
+- `jco`（在 Node.js 中运行）
 
-In this guide, we'll use `jco serve` since it's already installed.
+在本指南中，我们将使用 `jco serve`，因为它已经安装好了。
 
 ::: warning
-`jco serve` is meant for development, and is not recommended for production use.
+`jco serve` 旨在用于开发，不建议用于生产环境。
 :::
 
 [wasmtime]: https://wasmtime.dev
@@ -299,45 +299,45 @@ bun run jco serve dist/component.wasm
 
 :::
 
-You should see output like the following:
+你应该看到如下输出：
 
 ```
 $ npx jco serve dist/component.wasm
 Server listening @ localhost:8000...
 ```
 
-Sending a request to `localhost:8000/hello` will produce the JSON output you've specified in your Hono application.
+向 `localhost:8000/hello` 发送请求将产生你在 Hono 应用程序中指定的 JSON 输出。
 
-You should see output like the following:
+你应该看到如下输出：
 
 ```json
 { "message": "Hello from WebAssembly!" }
 ```
 
 ::: info
-`jco serve` works by converting the WebAssembly component into a basic WebAssembly coremodule, so that it can be run in runtimes like Node.js and the browser.
+`jco serve` 的工作原理是将 WebAssembly 组件转换为基本的 WebAssembly 核心模块，以便它可以在 Node.js 和浏览器等运行时中运行。
 
-This process is normally run via `jco transpile`, and is the way we can use JS engines like Node.js and the browser (which may use V8 or other Javascript engines) as WebAssembly Component runtimes.
+此过程通常通过 `jco transpile` 运行，这也是我们可以使用 JS 引擎（如 Node.js 和浏览器（可能使用 V8 或其他 Javascript 引擎））作为 WebAssembly 组件运行时的方式。
 
-How `jco transpile` is outside the scope of this guide, you can read more about it in [the Jco book][jco-book]
+`jco transpile` 的工作原理不在本指南范围内，你可以在 [Jco book][jco-book] 中阅读更多相关内容
 :::
 
-## More information
+## 更多信息
 
-To learn more about WASI, WebAssembly components and more, see the following resources:
+要了解有关 WASI、WebAssembly 组件等的更多信息，请参阅以下资源：
 
 - [BytecodeAlliance Component Model book][cm-book]
-- [`jco` codebase][jco]
-  - [`jco` example components][jco-example-components] (in particular the [Hono example][jco-example-component-hono])
+- [`jco` 代码库][jco]
+  - [`jco` 示例组件][jco-example-components]（特别是 [Hono 示例][jco-example-component-hono]）
 - [Jco book][jco-book]
-- [`componentize-js` codebase][componentize-js]
-- [StarlingMonkey codebase][sm]
+- [`componentize-js` 代码库][componentize-js]
+- [StarlingMonkey 代码库][sm]
 
-To reach out to the WebAssembly community with questions, comments, contributions or to file issues:
+要向 WebAssembly 社区咨询问题、评论、贡献或提交问题：
 
-- [Bytecode Alliance Zulip](https://bytecodealliance.zulipchat.com) (consider posting in the [#jco channel](https://bytecodealliance.zulipchat.com/#narrow/channel/409526-jco))
-- [Jco repository](https://github.com/bytecodealliance/jco)
-- [componentize-js repository](https://github.com/bytecodealliance/componentize-js)
+- [Bytecode Alliance Zulip](https://bytecodealliance.zulipchat.com)（考虑在 [#jco 频道](https://bytecodealliance.zulipchat.com/#narrow/channel/409526-jco) 中发帖）
+- [Jco 仓库](https://github.com/bytecodealliance/jco)
+- [componentize-js 仓库](https://github.com/bytecodealliance/componentize-js)
 
 [cm-book]: https://component-model.bytecodealliance.org/
 [jco-book]: https://bytecodealliance.github.io/jco/

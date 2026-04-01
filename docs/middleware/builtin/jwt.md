@@ -1,15 +1,15 @@
-# JWT Auth Middleware
+# JWT 认证中间件
 
-The JWT Auth Middleware provides authentication by verifying the token with JWT.
-The middleware will check for an `Authorization` header if the `cookie` option is not set. You can customize the header name using the `headerName` option.
+JWT 认证中间件通过验证 JWT 令牌提供身份认证。
+如果未设置 `cookie` 选项，中间件将检查 `Authorization` 头。你可以使用 `headerName` 选项自定义头名称。
 
 :::info
-The Authorization header sent from the client must have a specified scheme.
+客户端发送的 Authorization 头必须具有指定的方案。
 
-Example: `Bearer my.token.value` or `Basic my.token.value`
+例如：`Bearer my.token.value` 或 `Basic my.token.value`
 :::
 
-## Import
+## 导入
 
 ```ts
 import { Hono } from 'hono'
@@ -17,10 +17,10 @@ import { jwt } from 'hono/jwt'
 import type { JwtVariables } from 'hono/jwt'
 ```
 
-## Usage
+## 用法
 
 ```ts
-// Specify the variable types to infer the `c.get('jwtPayload')`:
+// 指定变量类型以推断 `c.get('jwtPayload')`：
 type Variables = JwtVariables
 
 const app = new Hono<{ Variables: Variables }>()
@@ -38,7 +38,7 @@ app.get('/auth/page', (c) => {
 })
 ```
 
-Get payload:
+获取负载：
 
 ```ts
 const app = new Hono()
@@ -54,13 +54,13 @@ app.use(
 
 app.get('/auth/page', (c) => {
   const payload = c.get('jwtPayload')
-  return c.json(payload) // eg: { "sub": "1234567890", "name": "John Doe", "iat": 1516239022, "iss": "my-trusted-issuer" }
+  return c.json(payload) // 例如：{ "sub": "1234567890", "name": "John Doe", "iat": 1516239022, "iss": "my-trusted-issuer" }
 })
 ```
 
 ::: tip
 
-`jwt()` is just a middleware function. If you want to use an environment variable (eg: `c.env.JWT_SECRET`), you can use it as follows:
+`jwt()` 只是一个中间件函数。如果你想使用环境变量（例如：`c.env.JWT_SECRET`），你可以如下使用：
 
 ```js
 app.use('/auth/*', (c, next) => {
@@ -74,25 +74,25 @@ app.use('/auth/*', (c, next) => {
 
 :::
 
-## Options
+## 选项
 
-### <Badge type="danger" text="required" /> secret: `string`
+### <Badge type="danger" text="必需" /> secret: `string`
 
-A value of your secret key.
+你的密钥的值。
 
-### <Badge type="danger" text="required" /> alg: `string`
+### <Badge type="danger" text="必需" /> alg: `string`
 
-An algorithm type that is used for verifying.
+用于验证的算法类型。
 
-Available types are `HS256` | `HS384` | `HS512` | `RS256` | `RS384` | `RS512` | `PS256` | `PS384` | `PS512` | `ES256` | `ES384` | `ES512` | `EdDSA`.
+可用类型包括 `HS256` | `HS384` | `HS512` | `RS256` | `RS384` | `RS512` | `PS256` | `PS384` | `PS512` | `ES256` | `ES384` | `ES512` | `EdDSA`。
 
-### <Badge type="info" text="optional" /> cookie: `string`
+### <Badge type="info" text="可选" /> cookie: `string`
 
-If this value is set, then the value is retrieved from the cookie header using that value as a key, which is then validated as a token.
+如果设置了此值，则使用该值作为键从 cookie 头中检索值，然后将其作为令牌进行验证。
 
-### <Badge type="info" text="optional" /> headerName: `string`
+### <Badge type="info" text="可选" /> headerName: `string`
 
-The name of the header to look for the JWT token. The default is `Authorization`.
+查找 JWT 令牌的头名称。默认为 `Authorization`。
 
 ```ts
 app.use(
@@ -105,22 +105,22 @@ app.use(
 )
 ```
 
-### <Badge type="info" text="optional" /> verifyOptions: `VerifyOptions`
+### <Badge type="info" text="可选" /> verifyOptions: `VerifyOptions`
 
-Options controlling verification of the token.
+控制令牌验证的选项。
 
-#### <Badge type="info" text="optional" /> verifyOptions.iss: `string | RexExp`
+#### <Badge type="info" text="可选" /> verifyOptions.iss: `string | RexExp`
 
-The expected issuer used for token verification. The `iss` claim will **not** be checked if this isn't set.
+用于令牌验证的预期颁发者。如果未设置此项，则 **不会** 检查 `iss` 声明。
 
-#### <Badge type="info" text="optional" /> verifyOptions.nbf: `boolean`
+#### <Badge type="info" text="可选" /> verifyOptions.nbf: `boolean`
 
-The `nbf` (not before) claim will be verified if present and this is set to `true`. The default is `true`.
+如果存在 `nbf`（not before）声明且此项设置为 `true`，则将对其进行验证。默认为 `true`。
 
-#### <Badge type="info" text="optional" /> verifyOptions.iat: `boolean`
+#### <Badge type="info" text="可选" /> verifyOptions.iat: `boolean`
 
-The `iat` (issued at) claim will be verified if present and this is set to `true`. The default is `true`.
+如果存在 `iat`（issued at）声明且此项设置为 `true`，则将对其进行验证。默认为 `true`。
 
-#### <Badge type="info" text="optional" /> verifyOptions.exp: `boolean`
+#### <Badge type="info" text="可选" /> verifyOptions.exp: `boolean`
 
-The `exp` (expiration time) claim will be verified if present and this is set to `true`. The default is `true`.
+如果存在 `exp`（expiration time）声明且此项设置为 `true`，则将对其进行验证。默认为 `true`。

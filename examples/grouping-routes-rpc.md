@@ -1,8 +1,8 @@
-# Grouping routes for RPC
+# 为 RPC 分组路由
 
-If you want to enable type inference for multiple `app`s correctly, you can use `app.route()` as follows.
+如果你想让多个 `app` 都能正确获得类型推导，可以按如下方式使用 `app.route()`。
 
-Pass the value returned from methods like `app.get()` or `app.post()` to the second argument of `app.route()`.
+将 `app.get()` 或 `app.post()` 等方法返回的值传给 `app.route()` 的第二个参数。
 
 ```ts
 import { Hono } from 'hono'
@@ -25,6 +25,6 @@ const app = new Hono()
 type AppType = typeof app
 ```
 
-## See also
+## 另请参阅
 
 - [Guides - RPC - Client](/docs/guides/rpc#client)
