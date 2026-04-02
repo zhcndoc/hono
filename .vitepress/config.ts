@@ -383,10 +383,10 @@ export default defineConfig({
   },
   themeConfig: {
     logo: '/images/logo.svg',
-    siteTitle: 'Hono',
+    siteTitle: 'Hono 中文文档',
     algolia: {
-      appId: '1GIFSU1REV',
-      apiKey: 'c6a0f86b9a9f8551654600f28317a9e9',
+      appId: '04WSDC4498',
+      apiKey: '0f50800a0259ea0c643adab3e4fbca66',
       indexName: 'hono',
     },
     socialLinks: [
@@ -400,15 +400,16 @@ export default defineConfig({
       text: '在 GitHub 上编辑此页',
     },
     footer: {
-      message: `<a style="text-decoration: none;" target="_blank" href="https://www.zhcndoc.com">简中文档</a>`,
-      copyright: '<a style="text-decoration: none;" rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a>',
+      message: `<a style="text-decoration: none;" target="_blank" href="https://www.zhcndoc.com">简中文档</a> | <a style="text-decoration: none;" rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a>`,
+      copyright:
+        'Copyright © 2022-present Yusuke Wada & Hono contributors. "kawaii" logo is created by SAWARATSUKI.',
     },
     nav: [
       { text: '文档', link: '/docs/' },
       { text: '示例', link: '/examples/' },
       {
-        text: '讨论',
-        link: 'https://github.com/orgs/honojs/discussions',
+        text: '简中文档',
+        link: 'https://www.zhcndoc.com',
       },
     ],
     sidebar: {

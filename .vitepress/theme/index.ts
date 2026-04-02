@@ -11,11 +11,13 @@ export default {
   Layout() {
     return h(DefaultTheme.Layout, null, {
       'aside-outline-before': () => h('div', {
-        'class': 'wwads-cn wwads-vertical w-full mt-0! mb-4',
+        'class': 'wwads-cn wwads-vertical',
+        'style': 'margin-top: 0; margin-bottom: 1rem; max-width:200px;',
         'data-id': '354',
       }),
       'doc-after': () => h('div', {
-        'class': 'wwads-cn wwads-horizontal w-full mt-4',
+        'class': 'wwads-cn wwads-horizontal',
+        'style': 'margin-top: 1rem; margin-bottom: 1rem; max-width:100%;',
         'data-id': '354',
       }),
     })
