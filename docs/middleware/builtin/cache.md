@@ -79,3 +79,29 @@ app.get(
   })
 )
 ```
+
+### <Badge type="info" text="可选" /> onCacheNotAvailable: `(() => void | Promise<void>)` | `false`
+
+当全局作用域中不可用 Cache API 时，用于控制行为的回调函数或 `false`。默认情况下，会使用 `console.log` 记录一条消息。您可以提供自定义函数来定制行为，或将其设置为 `false` 以完全抑制日志输出。
+
+```ts
+// 自定义日志记录
+app.use(
+  cache({
+    cacheName: 'my-app-v1',
+    onCacheNotAvailable: () => {
+      console.log('自定义日志：Cache API 不可用。')
+    },
+  })
+)
+```
+
+```ts
+// 抑制日志记录
+app.use(
+  cache({
+    cacheName: 'my-app-v1',
+    onCacheNotAvailable: false,
+  })
+)
+```

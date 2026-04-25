@@ -25,7 +25,7 @@ import { appendTrailingSlash } from 'hono/trailing-slash'
 const app = new Hono({ strict: true })
 
 app.use(appendTrailingSlash())
-app.get('/about/me/', (c) => c.text('With Trailing Slash'))
+app.get('/about/me/', (c) => c.text('带尾部斜杠'))
 ```
 
 将 `/about/me/` 的 GET 请求重定向到 `/about/me` 的示例。
@@ -37,7 +37,7 @@ import { trimTrailingSlash } from 'hono/trailing-slash'
 const app = new Hono({ strict: true })
 
 app.use(trimTrailingSlash())
-app.get('/about/me', (c) => c.text('Without Trailing Slash'))
+app.get('/about/me', (c) => c.text('不带尾部斜杠'))
 ```
 
 ## 选项
@@ -50,7 +50,21 @@ app.get('/about/me', (c) => c.text('Without Trailing Slash'))
 const app = new Hono()
 
 app.use(trimTrailingSlash({ alwaysRedirect: true }))
-app.get('/my-path/*', (c) => c.text('Wildcard route'))
+app.get('/my-path/*', (c) => c.text('通配符路由'))
+```
+
+此选项适用于 `trimTrailingSlash` 和 `appendTrailingSlash`。
+
+### <Badge type="info" text="可选" /> skip: `(path: string) => boolean`
+
+一个用于根据请求路径判断是否应跳过重定向的函数。如果该函数返回 `true`，则会跳过重定向。当你想要排除某些路径（例如带有文件扩展名的路径）不进行重定向时，这很有用。
+
+```ts
+app.use(
+  appendTrailingSlash({
+    skip: (path) => /\.\w+$/.test(path),
+  })
+)
 ```
 
 此选项适用于 `trimTrailingSlash` 和 `appendTrailingSlash`。

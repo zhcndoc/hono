@@ -1,4 +1,4 @@
-# WebAssembly (w/ WASI)
+# WebAssembly（使用 WASI）
 
 [WebAssembly][wasm-core] 是一个安全、沙箱化、可移植的运行时，可在网页浏览器内部和外部运行。
 
@@ -264,7 +264,7 @@ bun run jco componentize -w wit -o dist/component.wasm dist/component.js
 
 :::
 
-## 3. 运行
+## 5. 运行
 
 要运行你的 Hono WebAssembly HTTP 服务器，你可以使用任何启用 WASI 的 WebAssembly 运行时：
 

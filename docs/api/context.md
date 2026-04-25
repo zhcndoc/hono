@@ -14,7 +14,7 @@ app.get('/hello', (c) => {
   const userAgent = c.req.header('User-Agent')
   // ...
   // ---cut-start---
-  return c.text(`Hello, ${userAgent}`)
+  return c.text(`你好，${userAgent}`)
   // ---cut-end---
 })
 ```
@@ -30,7 +30,7 @@ const app = new Hono()
 app.post('/posts', (c) => {
   // 设置 HTTP 状态码
   c.status(201)
-  return c.text('Your post is created!')
+  return c.text('你的帖子已创建！')
 })
 ```
 
@@ -44,8 +44,8 @@ const app = new Hono()
 // ---cut---
 app.get('/', (c) => {
   // 设置标头
-  c.header('X-Message', 'My custom message')
-  return c.text('Hello!')
+  c.header('X-Message', '我的自定义消息')
+  return c.text('你好！')
 })
 ```
 
@@ -64,7 +64,7 @@ const app = new Hono()
 app.get('/welcome', (c) => {
   c.header('Content-Type', 'text/plain')
   // 返回响应体
-  return c.body('Thank you for coming')
+  return c.body('感谢你的到来')
 })
 ```
 
@@ -75,8 +75,8 @@ import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
 app.get('/welcome', (c) => {
-  return c.body('Thank you for coming', 201, {
-    'X-Message': 'Hello!',
+  return c.body('感谢你的到来', 201, {
+    'X-Message': '你好！',
     'Content-Type': 'text/plain',
   })
 })
@@ -85,10 +85,10 @@ app.get('/welcome', (c) => {
 响应与下面的 `Response` 对象相同。
 
 ```ts twoslash
-new Response('Thank you for coming', {
+new Response('感谢你的到来', {
   status: 201,
   headers: {
-    'X-Message': 'Hello!',
+    'X-Message': '你好！',
     'Content-Type': 'text/plain',
   },
 })
@@ -103,7 +103,7 @@ import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
 app.get('/say', (c) => {
-  return c.text('Hello!')
+  return c.text('你好！')
 })
 ```
 
@@ -116,7 +116,7 @@ import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
 app.get('/api', (c) => {
-  return c.json({ message: 'Hello!' })
+  return c.json({ message: '你好！' })
 })
 ```
 
@@ -129,7 +129,7 @@ import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
 app.get('/', (c) => {
-  return c.html('<h1>Hello! Hono!</h1>')
+  return c.html('<h1>你好！Hono！</h1>')
 })
 ```
 
@@ -173,7 +173,7 @@ const app = new Hono()
 // Response 对象
 app.use('/', async (c, next) => {
   await next()
-  c.res.headers.append('X-Debug', 'Debug message')
+  c.res.headers.append('X-Debug', '调试消息')
 })
 ```
 
@@ -188,13 +188,13 @@ import { Hono } from 'hono'
 const app = new Hono<{ Variables: { message: string } }>()
 // ---cut---
 app.use(async (c, next) => {
-  c.set('message', 'Hono is cool!!')
+  c.set('message', 'Hono 很酷！！')
   await next()
 })
 
 app.get('/', (c) => {
   const message = c.get('message')
-  return c.text(`The message is "${message}"`)
+  return c.text(`消息是 "${message}"`)
 })
 ```
 
@@ -244,7 +244,7 @@ const echoMiddleware = createMiddleware<Env>(async (c, next) => {
 })
 
 app.get('/echo', echoMiddleware, (c) => {
-  return c.text(c.var.echo('Hello!'))
+  return c.text(c.var.echo('你好！'))
 })
 ```
 
@@ -266,7 +266,7 @@ const app = new Hono<Env>()
 app.use(echoMiddleware)
 
 app.get('/echo', (c) => {
-  return c.text(c.var.echo('Hello!'))
+  return c.text(c.var.echo('你好！'))
 })
 ```
 
@@ -301,7 +301,7 @@ import { Hono } from 'hono'
 const app = new Hono()
 // ---cut---
 app.get('/', (c) => {
-  return c.render('Hello!')
+  return c.render('你好！')
 })
 ```
 
@@ -310,7 +310,7 @@ app.get('/', (c) => {
 ```html
 <html>
   <body>
-    <p>Hello!</p>
+    <p>你好！</p>
   </body>
 </html>
 ```
@@ -350,14 +350,14 @@ app.use('/pages/*', async (c, next) => {
 })
 
 app.get('/pages/my-favorite', (c) => {
-  return c.render(<p>Ramen and Sushi</p>, {
-    title: 'My favorite',
+  return c.render(<p>拉面和寿司</p>, {
+    title: '我的最爱',
   })
 })
 
 app.get('/pages/my-hobbies', (c) => {
-  return c.render(<p>Watching baseball</p>, {
-    title: 'My hobbies',
+  return c.render(<p>看棒球</p>, {
+    title: '我的爱好',
   })
 })
 ```
@@ -461,7 +461,41 @@ app.use(async (c, next) => {
 
 ## ContextVariableMap
 
-例如，如果你希望在特定中间件使用时为变量添加类型定义，你可以扩展 `ContextVariableMap`。例如：
+::: warning
+`ContextVariableMap` 会**全局**将类型添加到所有上下文中，而不管设置该变量的中间件是否 वास्तव际运行过。这意味着即使在从未注册该中间件的处理器中，`c.get('result')` 也会表现为类型安全，从而可能在运行时掩盖 `undefined` 错误。
+
+请看下面的示例：
+
+```ts
+declare module 'hono' {
+  interface ContextVariableMap {
+    result: string
+  }
+}
+
+const mw = createMiddleware(async (c, next) => {
+  c.set('result', 'some values')
+  await next()
+})
+
+const app = new Hono()
+
+// handler uses the middleware
+app.get('/foo', mw, (c) => {
+  const val = c.get('result') // ✅ val 是一个字符串，并且如预期那样被类型标注为字符串
+})
+
+// handler doesn't use the middleware
+app.get('/bar', (c) => {
+  const val = c.get('result') // ❌ val 实际上是 undefined，但被类型标注为字符串，这可能导致运行时错误
+})
+```
+
+:::
+
+你可以扩展 `ContextVariableMap` 接口，为整个应用中的上下文变量全局定义类型。当变量由应用范围内应用的中间件设置，并且保证在上下文中存在时，这样做是合适的。
+
+例如：
 
 ```ts
 declare module 'hono' {

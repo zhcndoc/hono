@@ -8,7 +8,7 @@ CSS 辅助函数 - `hono/css` - 是 Hono 内置的 CSS in JS(X)。
 
 ```ts
 import { Hono } from 'hono'
-import { css, cx, keyframes, Style } from 'hono/css'
+import { css, cx, keyframes, Style, createCssContext } from 'hono/css'
 ```
 
 ## `css` <Badge style="vertical-align: middle;" type="warning" text="实验性" />
@@ -28,7 +28,7 @@ app.get('/', (c) => {
         <Style />
       </head>
       <body>
-        <h1 class={headerClass}>Hello!</h1>
+        <h1 class={headerClass}>你好！</h1>
       </body>
     </html>
   )
@@ -84,7 +84,7 @@ const containerClass = css`
 return c.render(
   <div class={containerClass}>
     <header class={headerClass}>
-      <h1>Hello!</h1>
+      <h1>你好！</h1>
     </header>
   </div>
 )
@@ -105,8 +105,8 @@ const globalClass = css`
 
 return c.render(
   <div class={globalClass}>
-    <h1>Hello!</h1>
-    <p>Today is a good day.</p>
+    <h1>你好！</h1>
+    <p>今天是美好的一天。</p>
   </div>
 )
 ```
@@ -150,7 +150,7 @@ const headerClass = css`
   animation-name: ${fadeInAnimation};
   animation-duration: 2s;
 `
-const Header = () => <a class={headerClass}>Hello!</a>
+const Header = () => <a class={headerClass}>你好！</a>
 ```
 
 ## `cx` <Badge style="vertical-align: middle;" type="warning" text="实验性" />
@@ -165,14 +165,14 @@ const primaryClass = css`
   background: orange;
 `
 const Button = () => (
-  <a class={cx(buttonClass, primaryClass)}>Click!</a>
+  <a class={cx(buttonClass, primaryClass)}>点击！</a>
 )
 ```
 
 它也可以组合简单的字符串。
 
 ```tsx
-const Header = () => <a class={cx('h1', primaryClass)}>Hi</a>
+const Header = () => <a class={cx('h1', primaryClass)}>你好</a>
 ```
 
 ## 与 [Secure Headers](/docs/middleware/builtin/secure-headers) 中间件结合使用
@@ -205,10 +205,59 @@ app.get('/', (c) => {
         <Style nonce={c.get('secureHeadersNonce')} />
       </head>
       <body>
-        <h1 class={headerClass}>Hello!</h1>
+        <h1 class={headerClass}>你好！</h1>
       </body>
     </html>
   )
+})
+```
+
+## `createCssContext` <Badge style="vertical-align: middle;" type="warning" text="实验性" />
+
+`createCssContext` 使用自定义上下文创建 CSS 辅助函数（`css`、`cx`、`keyframes`、`viewTransition`、`Style`）。你可以用它来自定义样式元素的 ID 和生成的类名。
+
+```ts
+import { createCssContext } from 'hono/css'
+
+const { css, cx, keyframes, Style } = createCssContext({
+  id: 'my-app',
+})
+```
+
+### `classNameSlug`
+
+默认情况下，CSS 类名会以 `css-1234567890` 的格式生成。你可以通过传入 `classNameSlug` 函数来自定义这一点。
+
+该函数接收三个参数：
+
+- `hash` - 默认生成的类名（例如 `css-1234567890`）
+- `label` - 从 CSS 模板开头的 `/* comment */` 中提取的内容（如果没有则为空字符串）
+- `css` - 压缩后的 CSS 字符串
+
+```ts
+const { css, Style } = createCssContext({
+  id: 'my-styles',
+  classNameSlug: (hash, label) => (label ? `h-${label}` : hash),
+})
+
+const heroClass = css`
+  /* hero-section */
+  background: blue;
+`
+// 生成的类名："h-hero-section"
+```
+
+### `onInvalidSlug`
+
+如果 `classNameSlug` 函数返回了无效的 CSS 类名，默认会记录一个警告。你可以使用 `onInvalidSlug` 自定义此行为。
+
+```ts
+const { css, Style } = createCssContext({
+  id: 'my-styles',
+  classNameSlug: (hash, label) => label || hash,
+  onInvalidSlug: (slug) => {
+    throw new Error(`无效的 CSS 类名：${slug}`)
+  },
 })
 ```
 
