@@ -11,7 +11,7 @@ Hono 非常灵活。你可以按照自己喜欢的方式编写应用。
 // 🙁
 // 一个类似 RoR 的控制器
 const booksList = (c: Context) => {
-  return c.json('list books')
+  return c.json('列出图书')
 }
 
 app.get('/books', booksList)
@@ -24,7 +24,7 @@ app.get('/books', booksList)
 // 一个类似 RoR 的控制器
 const bookPermalink = (c: Context) => {
   const id = c.req.param('id') // 无法推断路径参数
-  return c.json(`get ${id}`)
+  return c.json(`获取 ${id}`)
 }
 ```
 
@@ -34,7 +34,7 @@ const bookPermalink = (c: Context) => {
 // 😃
 app.get('/books/:id', (c) => {
   const id = c.req.param('id') // 可以推断路径参数
-  return c.json(`get ${id}`)
+  return c.json(`获取 ${id}`)
 })
 ```
 
@@ -75,9 +75,9 @@ import { Hono } from 'hono'
 
 const app = new Hono()
 
-app.get('/', (c) => c.json('list authors'))
-app.post('/', (c) => c.json('create an author', 201))
-app.get('/:id', (c) => c.json(`get ${c.req.param('id')}`))
+app.get('/', (c) => c.json('列出作者'))
+app.post('/', (c) => c.json('创建作者', 201))
+app.get('/:id', (c) => c.json(`获取 ${c.req.param('id')}`))
 
 export default app
 ```
@@ -88,9 +88,9 @@ import { Hono } from 'hono'
 
 const app = new Hono()
 
-app.get('/', (c) => c.json('list books'))
-app.post('/', (c) => c.json('create a book', 201))
-app.get('/:id', (c) => c.json(`get ${c.req.param('id')}`))
+app.get('/', (c) => c.json('列出图书'))
+app.post('/', (c) => c.json('创建图书', 201))
+app.get('/:id', (c) => c.json(`获取 ${c.req.param('id')}`))
 
 export default app
 ```
@@ -122,9 +122,9 @@ export default app
 import { Hono } from 'hono'
 
 const app = new Hono()
-  .get('/', (c) => c.json('list authors'))
-  .post('/', (c) => c.json('create an author', 201))
-  .get('/:id', (c) => c.json(`get ${c.req.param('id')}`))
+  .get('/', (c) => c.json('列出作者'))
+  .post('/', (c) => c.json('创建作者', 201))
+  .get('/:id', (c) => c.json(`获取 ${c.req.param('id')}`))
 
 export default app
 export type AppType = typeof app
@@ -141,3 +141,85 @@ const client = hc<AppType>('http://localhost') // 类型正确
 ```
 
 有关更详细的信息，请参阅 [RPC 页面](/docs/guides/rpc#using-rpc-with-larger-applications)。
+
+## HEAD 请求最佳实践
+
+### 理解 Hono 的 HEAD 处理方式
+
+Hono 会自动将 HEAD 请求转换为 GET 请求，并去除响应正文。此行为内置于框架的分发层中，并且发生在路由匹配之前。
+
+### ✅ 应当：将 GET 路由用于 HEAD 请求
+
+```typescript
+// GOOD: This GET route automatically handles HEAD requests
+app.get('/api/users', async (c) => {
+  const users = await getUsers()
+  c.header('X-Total-Count', users.length.toString())
+  return c.json(users)
+})
+
+// HEAD /api/users will return:
+// - Same headers as GET (including X-Total-Count)
+// - Status 200
+// - No body (null)
+```
+
+### ✅ 应当：为 HEAD 特定逻辑使用中间件
+
+```typescript
+// GOOD: Use middleware when HEAD needs different behavior
+app.use('/api/resource', async (c, next) => {
+  await next()
+
+  // 在处理程序之后添加 HEAD 特定的头部
+  if (c.req.method === 'HEAD') {
+    c.header('X-HEAD-Processed', 'true')
+    // 不要为 HEAD 计算昂贵的正文内容
+    c.res = new Response(null, c.res)
+  }
+})
+```
+
+### ❌ 不要：尝试创建专用的 HEAD 处理程序
+
+```typescript
+// BAD: This won't work as expected
+app.head('/api/users', (c) => {
+  // 这个处理程序永远不会被调用
+  c.header('X-Custom', 'value')
+  return c.text('ignored')
+})
+
+// BAD: Using on() also won't work
+app.on('HEAD', '/api/users', (c) => {
+  // 在路由匹配之前仍然会被转换为 GET
+})
+```
+
+### 性能考虑
+
+- **如果你预计会有很多 HEAD 请求，避免在 GET 处理程序中进行昂贵操作**：使用中间件检测 HEAD 并跳过正文生成
+- **缓存头的工作方式完全相同**：HEAD 响应遵循与 GET 相同的缓存规则
+- **中间件兼容性**：大多数中间件都能与 HEAD 协同工作，但正文处理型中间件（如压缩）会自动跳过 HEAD 请求
+
+### 测试 HEAD 请求
+
+```typescript
+// 始终同时测试 GET 和 HEAD 响应
+it('正确处理 HEAD 请求', async () => {
+  const getRes = await app.request('/api/users')
+  const headRes = await app.request('/api/users', { method: 'HEAD' })
+
+  expect(headRes.status).toBe(getRes.status)
+  expect(headRes.headers.get('X-Total-Count')).toBe(
+    getRes.headers.get('X-Total-Count')
+  )
+  expect(headRes.body).toBe(null)
+})
+```
+
+### 注意事项
+
+- 自动的 HEAD 转换可确保 GET 和 HEAD 响应之间的头部一致
+- 此行为在所有 Hono 运行时（Cloudflare Workers、Deno、Bun、Node.js）中保持一致
+- 如果你需要 HEAD 与 GET 完全不同的逻辑，考虑使用不同的端点，而不是尝试覆盖框架的 HEAD 处理方式

@@ -1,7 +1,7 @@
 # WebSocket Helper
 
-WebSocket Helper 是 Hono 应用中用于服务器端 WebSocket 的辅助工具。
-目前支持 Cloudflare Workers / Pages、Deno 和 Bun 适配器。
+WebSocket Helper 是 Hono 应用中用于服务端 WebSocket 的助手。
+目前支持 Cloudflare Workers / Pages、Deno、Bun 和 Node.js 适配器。
 
 ## 导入
 
@@ -29,9 +29,17 @@ export default {
 }
 ```
 
+```ts [Node.js]
+import { serve, upgradeWebSocket } from '@hono/node-server'
+import { Hono } from 'hono'
+import { WebSocketServer } from 'ws'
+```
+
 :::
 
-如果您使用 Node.js，可以使用 [@hono/node-ws](https://github.com/honojs/middleware/tree/main/packages/node-ws)。
+在 Node.js 中，WebSocket 支持内置于 `@hono/node-server`。要启用它，请安装 `ws`，如果你使用 TypeScript，还需要安装 `@types/ws`。然后使用 `{ noServer: true }` 创建一个 `WebSocketServer`，并通过 `websocket` 选项将其传递给 `serve()`。
+
+`@hono/node-ws` 已弃用。
 
 ## `upgradeWebSocket()`
 
@@ -45,11 +53,11 @@ app.get(
   upgradeWebSocket((c) => {
     return {
       onMessage(event, ws) {
-        console.log(`Message from client: ${event.data}`)
-        ws.send('Hello from server!')
+        console.log(`来自客户端的消息：${event.data}`)
+        ws.send('来自服务器的你好！')
       },
       onClose: () => {
-        console.log('Connection closed')
+        console.log('连接已关闭')
       },
     }
   })
@@ -183,4 +191,30 @@ export default {
   fetch: app.fetch,
   websocket,
 }
+```
+
+### Node.js
+
+```ts
+import { serve, upgradeWebSocket } from '@hono/node-server'
+import { Hono } from 'hono'
+import { WebSocketServer } from 'ws'
+
+const app = new Hono()
+
+app.get(
+  '/ws',
+  upgradeWebSocket(() => ({
+    onMessage(event, ws) {
+      ws.send(event.data)
+    },
+  }))
+)
+
+const wss = new WebSocketServer({ noServer: true })
+
+serve({
+  fetch: app.fetch,
+  websocket: { server: wss },
+})
 ```

@@ -55,9 +55,8 @@
 
 ### 服务器 / 适配器
 
-- [GraphQL 服务器](https://github.com/honojs/middleware/tree/main/packages/graphql-server)
-- [Node WebSocket 助手](https://github.com/honojs/middleware/tree/main/packages/node-ws)
-- [tRPC 服务器](https://github.com/honojs/middleware/tree/main/packages/trpc-server)
+- [GraphQL Server](https://github.com/honojs/middleware/tree/main/packages/graphql-server)
+- [tRPC Server](https://github.com/honojs/middleware/tree/main/packages/trpc-server)
 
 ### 转译器
 

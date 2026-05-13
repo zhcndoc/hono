@@ -100,7 +100,7 @@ export type AppType = typeof route
 ![](/images/sc03.gif)
 
 ```ts
-import { AppType } from './server'
+import type { AppType } from './server'
 import { hc } from 'hono/client'
 
 const client = hc<AppType>('/api')
@@ -153,7 +153,7 @@ const route = app
     const todo = c.req.valid('form')
     todos.push(todo)
     return c.json({
-      message: 'created!',
+      message: '已创建！',
     })
   })
   .get((c) => {
@@ -177,7 +177,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { AppType } from '../functions/api/[[route]]'
+import type { AppType } from '../functions/api/[[route]]'
 import { hc, InferResponseType, InferRequestType } from 'hono/client'
 
 const queryClient = new QueryClient()
@@ -231,7 +231,7 @@ const Todos = () => {
           })
         }}
       >
-        Add Todo
+        添加待办事项
       </button>
 
       <ul>

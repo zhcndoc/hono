@@ -73,7 +73,7 @@ const app = new Hono().basePath('/api')
 
 app.get('/hello', (c) => {
   return c.json({
-    message: 'Hello Next.js!',
+    message: '你好，Next.js！',
   })
 })
 
@@ -135,11 +135,11 @@ bun add @hono/node-server
 
 :::
 
-然后，您可以在 `pages/api/[[...route]].ts` 中使用从 `@hono/node-server/vercel` 导入的 `handle` 函数。
+然后，您可以在 `pages/api/[[...route]].ts` 中使用从 `@hono/node-server` 导入的 `getRequestListener` 函数。
 
 ```ts
+import { getRequestListener } from '@hono/node-server'
 import { Hono } from 'hono'
-import { handle } from '@hono/node-server/vercel'
 import type { PageConfig } from 'next'
 
 export const config: PageConfig = {
@@ -152,11 +152,11 @@ const app = new Hono().basePath('/api')
 
 app.get('/hello', (c) => {
   return c.json({
-    message: 'Hello Next.js!',
+    message: '你好，Next.js！',
   })
 })
 
-export default handle(app)
+export default getRequestListener(app.fetch)
 ```
 
 为了使其与 Pages Router 配合工作，重要的是通过在项目仪表板或 `.env` 文件中设置环境变量来禁用 Vercel Node.js 助手。

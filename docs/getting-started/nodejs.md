@@ -135,7 +135,37 @@ serve({
 })
 ```
 
-## 访问原生 Node.js API
+## WebSocket
+
+WebSocket 支持内置于 `@hono/node-server` 中。安装 `ws`，如果你使用 TypeScript，再安装 `@types/ws`。然后使用 `{ noServer: true }` 创建一个 `WebSocketServer`，并通过 `websocket` 选项将其传递给 `serve()`。
+
+`@hono/node-ws` 已弃用。
+
+```ts
+import { serve, upgradeWebSocket } from '@hono/node-server'
+import { Hono } from 'hono'
+import { WebSocketServer } from 'ws'
+
+const app = new Hono()
+
+app.get(
+  '/ws',
+  upgradeWebSocket(() => ({
+    onMessage(event, ws) {
+      ws.send(event.data)
+    },
+  }))
+)
+
+const wss = new WebSocketServer({ noServer: true })
+
+serve({
+  fetch: app.fetch,
+  websocket: { server: wss },
+})
+```
+
+## Access the raw Node.js APIs
 
 你可以通过 `c.env.incoming` 和 `c.env.outgoing` 访问 Node.js API。
 
