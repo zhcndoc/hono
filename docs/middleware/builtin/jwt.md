@@ -34,7 +34,7 @@ app.use(
 )
 
 app.get('/auth/page', (c) => {
-  return c.text('You are authorized')
+  return c.text('你已获得授权')
 })
 ```
 
@@ -48,7 +48,10 @@ app.use(
   jwt({
     secret: 'it-is-very-secret',
     alg: 'HS256',
-    issuer: 'my-trusted-issuer',
+    verification: {
+      iss: 'my-trusted-issuer',
+      aud: 'my-api',
+    },
   })
 )
 
@@ -105,22 +108,28 @@ app.use(
 )
 ```
 
-### <Badge type="info" text="可选" /> verifyOptions: `VerifyOptions`
+### <Badge type="info" text="optional" /> verification: `VerifyOptions`
 
 控制令牌验证的选项。
 
-#### <Badge type="info" text="可选" /> verifyOptions.iss: `string | RexExp`
+[Keep in sync with jwk.md]: #
+
+#### <Badge type="info" text="optional" /> VerifyOptions.iss: `string | RegExp`
 
 用于令牌验证的预期颁发者。如果未设置此项，则 **不会** 检查 `iss` 声明。
 
-#### <Badge type="info" text="可选" /> verifyOptions.nbf: `boolean`
+#### <Badge type="info" text="optional" /> VerifyOptions.aud: `string | string[] | RegExp`
+
+用于令牌验证的预期受众。如果设置了此项，令牌必须包含 `aud` 声明，并且至少有一个受众值必须匹配。
+
+#### <Badge type="info" text="optional" /> VerifyOptions.nbf: `boolean`
 
 如果存在 `nbf`（not before）声明且此项设置为 `true`，则将对其进行验证。默认为 `true`。
 
-#### <Badge type="info" text="可选" /> verifyOptions.iat: `boolean`
+#### <Badge type="info" text="optional" /> VerifyOptions.iat: `boolean`
 
 如果存在 `iat`（issued at）声明且此项设置为 `true`，则将对其进行验证。默认为 `true`。
 
-#### <Badge type="info" text="可选" /> verifyOptions.exp: `boolean`
+#### <Badge type="info" text="optional" /> VerifyOptions.exp: `boolean`
 
 如果存在 `exp`（expiration time）声明且此项设置为 `true`，则将对其进行验证。默认为 `true`。

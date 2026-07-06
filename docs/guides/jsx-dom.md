@@ -18,8 +18,8 @@ function Counter() {
   const [count, setCount] = useState(0)
   return (
     <div>
-      <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <p>计数：{count}</p>
+      <button onClick={() => setCount(count + 1)}>增加</button>
     </div>
   )
 }
@@ -40,13 +40,13 @@ render(<App />, root)
 
 ## `render()`
 
-你可以使用 `render()` 将 JSX 组件插入到指定的 HTML 元素中。
+You can use `render()` to insert JSX components into a specified HTML element.
 
 ```tsx
 render(<Component />, container)
 ```
 
-你可以在此处查看完整的示例代码：[计数器示例](https://github.com/honojs/examples/tree/main/hono-vite-jsx)。
+You can view the complete example code here: [Counter example](https://github.com/honojs/examples/tree/main/hono-vite-jsx).
 
 ## 与 React 兼容的 Hooks
 
@@ -79,9 +79,9 @@ hono/jsx/dom 拥有与 React 兼容或部分兼容的 Hooks。你可以通过查
 
 ## `startViewTransition()` 系列
 
-`startViewTransition()` 系列包含原始的 hooks 和函数，用于轻松处理 [View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API)。以下是如何使用它们的示例。
+`startViewTransition()` 家族包含原始的 hooks 和函数，可用于轻松处理 [View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API)。下面的示例演示了如何使用它们。
 
-### 1. 最简单的示例
+### 1. 一个非常简单的示例
 
 借助 `startViewTransition()`，你可以简便地编写使用 `document.startViewTransition` 的过渡效果。
 
@@ -101,7 +101,7 @@ export default function App() {
           )
         }
       >
-        Click!
+        点击！
       </button>
       <div>
         {!showLargeImage ? (
@@ -166,7 +166,7 @@ export default function App() {
           )
         }
       >
-        Click!
+        点击！
       </button>
       <div>
         {!showLargeImage ? (
@@ -236,7 +236,7 @@ export default function App() {
           )
         }
       >
-        Click!
+        点击！
       </button>
       <div>
         {!showLargeImage ? (
@@ -255,7 +255,7 @@ export default function App() {
               ${isUpdating &&
               css`
                 &:before {
-                  content: 'Loading...';
+                  content: '加载中...';
                   position: absolute;
                   top: 50%;
                   left: 50%;
@@ -272,7 +272,7 @@ export default function App() {
 
 ## `hono/jsx/dom` 运行时
 
-有一个用于客户端组件的小型 JSX Runtime。使用这将比使用 `hono/jsx` 产生更小的打包结果。在 `tsconfig.json` 中指定 `hono/jsx/dom`。对于 Deno，请修改 deno.json。
+有一个用于客户端组件的小型 JSX 运行时。使用它会比使用 `hono/jsx` 产生更小的打包结果。在 `tsconfig.json` 中指定 `hono/jsx/dom`。对于 Deno，请修改 deno.json。
 
 ```json
 {

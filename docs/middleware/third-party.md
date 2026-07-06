@@ -56,6 +56,7 @@
 ### 服务器 / 适配器
 
 - [GraphQL Server](https://github.com/honojs/middleware/tree/main/packages/graphql-server)
+- [oRPC](https://orpc.dev/docs/adapters/hono)
 - [tRPC Server](https://github.com/honojs/middleware/tree/main/packages/trpc-server)
 
 ### 转译器
@@ -86,11 +87,13 @@
 - [Hono Rate Limiter](https://github.com/rhinobase/hono-rate-limiter)
 - [Hono Problem Details (RFC 9457)](https://github.com/paveg/hono-problem-details)
 - [Hono Simple DI](https://github.com/maou-shonen/hono-simple-DI)
+- [InferDI](https://github.com/inferdi/inferdi/tree/main/packages/hono)
 - [Idempotency (Stripe-style idempotency keys)](https://github.com/paveg/hono-idempotency)
 - [idempot-js](https://js.idempot.dev) - 符合规范的中间件，支持多种存储后端（redis、postgres、mysql、sqlite）
 - [jsonv-ts (Validator, OpenAPI, MCP)](https://github.com/dswbx/jsonv-ts)
 - [MCP](https://github.com/honojs/middleware/tree/main/packages/mcp)
-- [RONIN (数据库)](https://github.com/ronin-co/hono-client)
-- [会话](https://github.com/honojs/middleware/tree/main/packages/session)
+- [RONIN (Database)](https://github.com/ronin-co/hono-client)
+- [Session](https://github.com/honojs/middleware/tree/main/packages/session)
+- [StitchAPI (Typed, resilient API calls + SSE)](https://github.com/rejifald/StitchAPI/tree/main/packages/hono)
 - [tsyringe](https://github.com/honojs/middleware/tree/main/packages/tsyringe)
 - [基于 User Agent 的拦截器](https://github.com/honojs/middleware/tree/main/packages/ua-blocker)

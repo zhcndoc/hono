@@ -29,4 +29,33 @@ app.use(compress())
 
 ### <Badge type="info" text="可选" /> threshold: `number`
 
-要压缩的最小字节大小。默认为 1024 字节。
+压缩所需的最小字节大小。默认值为 1024 字节。
+
+### <Badge type="info" text="可选" /> contentTypeFilter: `RegExp` | `(contentType: string) => boolean`
+
+一个 `RegExp` 或函数，用于根据响应的 `Content-Type` 判断是否应进行压缩。默认情况下，会使用内置的可压缩 `Content-Type` 列表。
+
+你可以传入一个 `RegExp`，只压缩匹配的 `Content-Type`：
+
+```ts
+// 仅压缩 JSON 响应
+app.use(compress({ contentTypeFilter: /^application\/json/ }))
+```
+
+或者传入一个函数来实现自定义逻辑。内置的 `COMPRESSIBLE_CONTENT_TYPE_REGEX` 也会导出，因此你可以扩展默认行为：
+
+```ts
+import {
+  compress,
+  COMPRESSIBLE_CONTENT_TYPE_REGEX,
+} from 'hono/compress'
+
+// 在默认 Content-Type 的基础上再压缩一个自定义类型
+app.use(
+  compress({
+    contentTypeFilter: (type) =>
+      COMPRESSIBLE_CONTENT_TYPE_REGEX.test(type) ||
+      type === 'application/x-myformat',
+  })
+)
+```

@@ -16,7 +16,7 @@ JWK 认证中间件通过使用 JWK (JSON Web Key) 验证令牌来认证请求�
 
 可选的声明验证可以通过 `verification` 选项配置：
 
-- `iss`：提供时验证颁发者。
+- `iss`：提供时验证发行方。
 - `aud`：提供时验证受众。
 
 如果您需要上述之外的额外令牌检查（例如，自定义应用程序级授权规则），请在 `jwk()` 之后的自有中间件中添加它们。
@@ -49,7 +49,7 @@ app.use(
 )
 
 app.get('/auth/page', (c) => {
-  return c.text('You are authorized')
+  return c.text('您已授权')
 })
 ```
 
@@ -167,6 +167,24 @@ app.use(
 
 配置除签名验证之外的声明验证行为：
 
-- `iss`：预期的颁发者。
-- `aud`：预期的受众。
-- `exp`, `nbf`, `iat`：默认启用，如有需要可禁用。
+[Keep in sync with jwt.md]: #
+
+#### <Badge type="info" text="可选" /> VerifyOptions.iss: `string | RegExp`
+
+用于令牌验证的预期签发者。如果未设置此项，则不会检查 `iss` 声明。
+
+#### <Badge type="info" text="可选" /> VerifyOptions.aud: `string | string[] | RegExp`
+
+用于令牌验证的预期受众。如果设置了此项，则令牌必须包含 `aud` 声明，并且至少有一个受众值必须匹配。
+
+#### <Badge type="info" text="可选" /> VerifyOptions.nbf: `boolean`
+
+如果存在 `nbf`（not before）声明并且此项设置为 `true`，则会验证该声明。默认值为 `true`。
+
+#### <Badge type="info" text="可选" /> VerifyOptions.iat: `boolean`
+
+如果存在 `iat`（issued at）声明并且此项设置为 `true`，则会验证该声明。默认值为 `true`。
+
+#### <Badge type="info" text="可选" /> VerifyOptions.exp: `boolean`
+
+如果存在 `exp`（expiration time）声明并且此项设置为 `true`，则会验证该声明。默认值为 `true`。

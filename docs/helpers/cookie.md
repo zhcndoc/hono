@@ -168,7 +168,7 @@ const deletedCookie = deleteCookie(c, 'delicious_cookie')
 
 ## `__Secure-` 和 `__Host-` 前缀
 
-Cookie 助手支持 Cookie 名称的 `__Secure-` 和 `__Host-` 前缀。
+Cookie 帮助器支持 Cookie 名称使用 `__Secure-` 和 `__Host-` 前缀。
 
 如果你想验证 Cookie 名称是否有前缀，请指定 prefix 选项。
 

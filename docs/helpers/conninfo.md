@@ -31,11 +31,6 @@ import { Hono } from 'hono'
 import { getConnInfo } from 'hono/aws-lambda'
 ```
 
-```ts [Cloudflare Pages]
-import { Hono } from 'hono'
-import { getConnInfo } from 'hono/cloudflare-pages'
-```
-
 ```ts [Netlify]
 import { Hono } from 'hono'
 import { getConnInfo } from 'hono/netlify'
@@ -73,11 +68,11 @@ type AddressType = 'IPv6' | 'IPv4' | undefined
 
 type NetAddrInfo = {
   /**
-   * 传输协议类型
+   * Transmission protocol type
    */
   transport?: 'tcp' | 'udp'
   /**
-   * 传输端口号
+   * Transmission port number
    */
   port?: number
 
@@ -86,12 +81,12 @@ type NetAddrInfo = {
 } & (
   | {
       /**
-       * 主机名，例如 IP 地址
+       * Hostname, such as an IP address
        */
       address: string
 
       /**
-       * 主机名类型
+       * Hostname type
        */
       addressType: AddressType
     }
@@ -99,11 +94,11 @@ type NetAddrInfo = {
 )
 
 /**
- * HTTP 连接信息
+ * HTTP connection information
  */
 interface ConnInfo {
   /**
-   * 远程信息
+   * Remote information
    */
   remote: NetAddrInfo
 }

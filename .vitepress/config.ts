@@ -34,8 +34,8 @@ const sidebars = (): DefaultTheme.SidebarItem[] => [
         link: '/docs/getting-started/cloudflare-workers',
       },
       {
-        text: 'Cloudflare Pages',
-        link: '/docs/getting-started/cloudflare-pages',
+        text: 'Cloudflare Workers + Vite',
+        link: '/docs/getting-started/cloudflare-workers-vite',
       },
       { text: 'Deno', link: '/docs/getting-started/deno' },
       { text: 'Bun', link: '/docs/getting-started/bun' },
@@ -298,6 +298,10 @@ export const sidebarsExamples = (): DefaultTheme.SidebarItem[] => [
         text: 'Hono Docs Generator',
         link: '/examples/hono-docs',
       },
+      {
+        text: 'InferDI (Dependency Injection)',
+        link: '/examples/inferdi',
+      },
     ],
   },
   {
@@ -358,6 +362,40 @@ export const sidebarsExamples = (): DefaultTheme.SidebarItem[] => [
     ],
   },
 ]
+
+const kawaiiModeScript = `;(() => {
+  const getQueryMode = () =>
+    new URLSearchParams(window.location.search).get('kawaii')
+
+  const getStoredMode = () => {
+    try {
+      return localStorage.getItem('kawaii') === 'true'
+    } catch (err) {
+      return false
+    }
+  }
+
+  const persistQueryMode = (mode) => {
+    try {
+      if (mode === 'true') {
+        localStorage.setItem('kawaii', 'true')
+      } else if (mode === 'false') {
+        localStorage.removeItem('kawaii')
+      }
+    } catch (err) {}
+  }
+
+  const isKawaiiMode = () => {
+    const mode = getQueryMode()
+    persistQueryMode(mode)
+    return mode === 'true' || (mode !== 'false' && getStoredMode())
+  }
+
+  // Toggle the class before paint; the hero swap itself is handled in CSS.
+  try {
+    document.documentElement.classList.toggle('kawaii-mode', isKawaiiMode())
+  } catch (err) {}
+})()`
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -440,6 +478,7 @@ export default defineConfig({
       { property: 'twitter:card', content: 'summary_large_image' },
     ],
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
+    ['script', {}, kawaiiModeScript],
   ],
   transformHead(context) {
     const relativePath = context.pageData.relativePath

@@ -261,8 +261,25 @@ const { css, Style } = createCssContext({
 })
 ```
 
+## 安全性
+
+CSS helpers 是用于编写 CSS 的 API：与其他 CSS-in-JS 库一样，插值后的值会作为**原始 CSS**插入。它们会阻止逃逸到 HTML 中（引号、反斜杠和 `</`），但 `{`、`}` 和 `;` 会被直接保留，因为它们是合法的 CSS。
+
+::: warning
+请将 CSS helpers 视为其他原始输出点（`html`、`raw`、`rawCssString`）：**不要直接将不受信任的输入传入其中。** 这样会导致 CSS 注入。应先使用允许列表进行校验。
+
+```tsx
+const ALLOWED_COLORS = ['red', 'green', 'blue']
+const color = ALLOWED_COLORS.includes(input) ? input : 'black'
+const headerClass = css`
+  color: ${color};
+`
+```
+
+:::
+
 ## 提示
 
-如果你使用 VS Code，可以使用 [vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components) 来为 CSS 标签字面量提供语法高亮和智能感知。
+如果你使用 VS Code，可以使用 [vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components) 为 CSS 标签模板字符串提供语法高亮和智能感知。
 
 ![](/images/css-ss.png)

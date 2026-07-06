@@ -30,7 +30,7 @@ app.get('/stream', (c) => {
 
 ## `streamText()`
 
-它返回一个带有 `Content-Type:text/plain`、`Transfer-Encoding:chunked` 和 `X-Content-Type-Options:nosniff` 头部的流式响应。
+它返回一个流式响应，带有 `Content-Type: text/plain`、`Transfer-Encoding: chunked` 和 `X-Content-Type-Options: nosniff` 头。
 
 ```ts
 app.get('/streamText', (c) => {
@@ -47,7 +47,7 @@ app.get('/streamText', (c) => {
 
 ::: warning
 
-如果您正在为 Cloudflare Workers 开发应用程序，流式传输在 Wrangler 上可能无法正常工作。如果是这样，请为 `Content-Encoding` 头部添加 `Identity`。
+如果你正在为 Cloudflare Workers 开发应用，流式传输在 Wrangler 上可能无法正常工作。如果是这样，请为 `Content-Encoding` 头添加 `Identity`。
 
 ```ts
 app.get('/streamText', (c) => {
@@ -70,8 +70,8 @@ let id = 0
 
 app.get('/sse', async (c) => {
   return streamSSE(c, async (stream) => {
-    while (true) {
-      const message = `It is ${new Date().toISOString()}`
+    while (!stream.aborted) {
+      const message = `现在是 ${new Date().toISOString()}`
       await stream.writeSSE({
         data: message,
         event: 'time-update',
@@ -105,7 +105,7 @@ app.get('/stream', (c) => {
       await stream.pipe(anotherReadableStream)
     },
     (err, stream) => {
-      stream.writeln('An error occurred!')
+      stream.writeln('发生了错误！')
       console.error(err)
     }
   )

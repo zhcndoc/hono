@@ -11,7 +11,7 @@ import { env, getRuntimeKey } from 'hono/adapter'
 
 ## `env()`
 
-`env()` 函数有助于在不同的运行时中检索环境变量，不仅仅局限于 Cloudflare Workers 的 Bindings。通过 `env(c)` 检索到的值对于每个运行时可能不同。
+`env()` 函数用于跨不同运行时获取环境变量，不仅限于 Cloudflare Workers 的 Bindings。通过 `env(c)` 能获取到的值，可能会因运行时不同而不同。
 
 ```ts
 import { env } from 'hono/adapter'
@@ -42,7 +42,7 @@ app.get('/env', (c) => {
 - AWS Lambda
   - [AWS Lambda 上的环境变量](https://docs.aws.amazon.com/lambda/latest/dg/samples-blank.html#samples-blank-architecture)
 - Lambda@Edge\
-  Lambda 上的环境变量不被 Lambda@Edge [支持](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html)，你需要使用 [Lambda@Edge 事件](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html) 作为替代。
+  Lambda@Edge 不支持 Lambda 上的环境变量，你需要改用 [Lambda@Edge event](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html)。
 - Fastly Compute\
   在 Fastly Compute 上，你可以使用 ConfigStore 来管理用户定义的数据。
 - Netlify\
@@ -66,9 +66,9 @@ app.get('/env', (c) => {
 ```ts
 app.get('/', (c) => {
   if (getRuntimeKey() === 'workerd') {
-    return c.text('You are on Cloudflare')
+    return c.text('你正在使用 Cloudflare')
   } else if (getRuntimeKey() === 'bun') {
-    return c.text('You are on Bun')
+    return c.text('你正在使用 Bun')
   }
   ...
 })
@@ -76,7 +76,7 @@ app.get('/', (c) => {
 
 ### 可用的运行时键
 
-以下是可用的运行时键，不可用的运行时键所对应的运行时可能会被支持并标记为 `other`，其中一些灵感来自 [WinterCG 的 Runtime Keys](https://runtime-keys.proposal.wintercg.org/)：
+以下是可用的运行时键，不可用的运行时键所对应的运行时可能会被支持并标记为 `other`，其中一些灵感来自 [WinterCG 的运行时键](https://runtime-keys.proposal.wintercg.org/)：
 
 - `workerd` - Cloudflare Workers
 - `deno`

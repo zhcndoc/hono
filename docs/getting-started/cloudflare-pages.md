@@ -1,7 +1,11 @@
 # Cloudflare Pages
 
-[Cloudflare Pages](https://pages.cloudflare.com) 是一个用于全栈 Web 应用的边缘平台。
-它提供由 Cloudflare Workers 支持的静态文件和动态内容。
+::: warning
+对于新项目，Cloudflare 现在建议使用 [Cloudflare Workers](/docs/getting-started/cloudflare-workers) 代替 Cloudflare Pages。Workers 支持静态资源，并提供更广泛的功能集。如果你要开始一个新的全栈应用，请查看 [Cloudflare Workers + Vite](/docs/getting-started/cloudflare-workers-vite)，这是此 Pages 设置的后继方案。
+:::
+
+[Cloudflare Pages](https://pages.cloudflare.com) 是一个面向全栈 Web 应用的边缘平台。
+它提供静态文件和由 Cloudflare Workers 提供的动态内容。
 
 Hono 完全支持 Cloudflare Pages。
 它带来了愉快的开发者体验。Vite 的开发服务器很快，使用 Wrangler 部署超级快速。
@@ -77,7 +81,7 @@ bun i
 └── vite.config.ts
 ```
 
-## 2. Hello World
+## 2. 你好，世界
 
 编辑 `src/index.tsx` 如下：
 
@@ -90,7 +94,7 @@ const app = new Hono()
 app.get('*', renderer)
 
 app.get('/', (c) => {
-  return c.render(<h1>Hello, Cloudflare Pages!</h1>)
+  return c.render(<h1>你好，Cloudflare Pages！</h1>)
 })
 
 export default app
@@ -316,7 +320,7 @@ Cloudflare Pages 使用其自己的 [中间件](https://developers.cloudflare.co
 ```ts
 // functions/_middleware.ts
 export async function onRequest(pagesContext) {
-  console.log(`You are accessing ${pagesContext.request.url}`)
+  console.log(`你正在访问 ${pagesContext.request.url}`)
   return await pagesContext.next()
 }
 ```
@@ -328,7 +332,7 @@ export async function onRequest(pagesContext) {
 import { handleMiddleware } from 'hono/cloudflare-pages'
 
 export const onRequest = handleMiddleware(async (c, next) => {
-  console.log(`You are accessing ${c.req.url}`)
+  console.log(`你正在访问 ${c.req.url}`)
   await next()
 })
 ```
@@ -397,7 +401,7 @@ const app = new Hono<Env>().basePath('/api')
 
 app.get('/hello', (c) => {
   return c.json({
-    message: `Hello, ${c.env.eventContext.data.user}!`, // 'Joe'
+    message: `你好，${c.env.eventContext.data.user}!`, // 'Joe'
   })
 })
 

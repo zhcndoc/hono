@@ -138,7 +138,6 @@ Total Upload: 11.47 KiB / gzip: 4.34 KiB
 得益于使用 **Web 标准**，Hono 可在许多平台上运行。
 
 - Cloudflare Workers
-- Cloudflare Pages
 - Fastly Compute
 - Deno
 - Bun

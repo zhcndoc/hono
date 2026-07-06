@@ -1,18 +1,18 @@
 # Bun
 
-[Bun](https://bun.com) 是另一个 JavaScript 运行时。它不是 Node.js 或 Deno。Bun 包含一个转译器，我们可以用 TypeScript 编写代码。
+[Bun](https://bun.com) 是另一个 JavaScript 运行时。它不是 Node.js 也不是 Deno。Bun 包含一个转译器，因此我们可以使用 TypeScript 或普通 JavaScript 编写代码。
 Hono 也可以在 Bun 上运行。
 
 ## 1. 安装 Bun
 
 要安装 `bun` 命令，请遵循 [官方网站](https://bun.com) 中的说明。
 
-## 2. 设置
+## 2. 配置
 
-### 2.1. 设置新项目
+### 2.1. 配置新项目
 
-Bun 有一个启动模板可用。使用 "bun create" 命令开始你的项目。
-本例中选择 `bun` 模板。
+Bun 有一个可用的启动模板。使用 "bun create" 命令开始你的项目。
+在本例中选择 `bun` 模板。
 
 ```sh
 bun create hono@latest my-app
@@ -25,9 +25,9 @@ cd my-app
 bun install
 ```
 
-### 2.2. 设置现有项目
+### 2.2. 配置现有项目
 
-在现有的 Bun 项目上，我们只需要通过以下命令在项目根目录安装 `hono` 依赖
+对于现有的 Bun 项目，我们只需要在项目根目录通过以下命令安装 `hono` 依赖
 
 ```sh
 bun add hono
@@ -47,7 +47,7 @@ bun add hono
 
 ## 3. 你好世界
 
-"Hello World" 脚本如下。几乎与在其他平台上编写的一样。
+“Hello World” 脚本如下。几乎与在其他平台上编写的一样。
 
 ```ts
 import { Hono } from 'hono'
@@ -58,7 +58,7 @@ app.get('/', (c) => c.text('Hello Bun!'))
 export default app
 ```
 
-如果你在现有项目上设置 Hono，`bun run dev` 命令期望 "Hello World" 脚本放置在 `src/index.tx` 中
+如果你是在现有项目中设置 Hono，`bun run dev` 命令期望将 “Hello World” 脚本放在 `src/index.ts` 中
 
 ## 4. 运行
 
@@ -99,7 +99,7 @@ const app = new Hono()
 
 app.use('/static/*', serveStatic({ root: './' }))
 app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
-app.get('/', (c) => c.text('You can access: /static/hello.txt'))
+app.get('/', (c) => c.text('你可以访问：/static/hello.txt'))
 app.get('*', serveStatic({ path: './static/fallback.txt' }))
 ```
 
@@ -174,7 +174,7 @@ app.get(
   '/static/*',
   serveStatic({
     onNotFound: (path, c) => {
-      console.log(`${path} is not found, you access ${c.req.path}`)
+      console.log(`${path} 未找到，你访问的是 ${c.req.path}`)
     },
   })
 )
@@ -201,8 +201,8 @@ app.get(
 import { describe, expect, it } from 'bun:test'
 import app from '.'
 
-describe('My first test', () => {
-  it('Should return 200 Response', async () => {
+describe('我的第一个测试', () => {
+  it('应返回 200 响应', async () => {
     const req = new Request('http://localhost/')
     const res = await app.fetch(req)
     expect(res.status).toBe(200)

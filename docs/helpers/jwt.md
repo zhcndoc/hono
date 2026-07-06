@@ -2,16 +2,16 @@
 
 此助手提供用于编码、解码、签名和验证 JSON Web Tokens (JWT) 的函数。JWT 通常用于 Web 应用程序中的认证和授权目的。此助手提供强大的 JWT 功能，支持各种加密算法。
 
-## 导入
+## Importing
 
-要使用此助手，你可以按以下方式导入它：
+To use this helper, you can import it as follows:
 
 ```ts
 import { decode, sign, verify } from 'hono/jwt'
 ```
 
 ::: info
-[JWT 中间件](/docs/middleware/builtin/jwt) 也从 `hono/jwt` 导入 `jwt` 函数。
+[JWT middleware](/docs/middleware/builtin/jwt) also imports the `jwt` function from `hono/jwt`.
 :::
 
 ## `sign()`
@@ -67,6 +67,7 @@ verify(
   secret: string,
   alg: 'HS256';
   issuer?: string | RegExp;
+  aud?: string | string[] | RegExp;
 ): Promise<any>;
 
 ```
@@ -103,20 +104,24 @@ console.log(decodedPayload)
 
 用于 JWT 验证的预期发行者。
 
+#### <Badge type="info" text="可选" /> aud: `string | string[] | RegExp`
+
+用于 JWT 验证的预期受众。如果设置了此项，令牌必须包含 `aud` 声明，并且至少一个受众值必须匹配。
+
 ## `decode()`
 
-此函数解码 JWT 令牌而不执行签名验证。它从令牌中提取并返回 header 和 payload。
+This function decodes a JWT token without performing signature verification. It extracts and returns the header and payload from the token.
 
 ```ts
 decode(token: string): { header: any; payload: any };
 ```
 
-### 示例
+### Example
 
 ```ts
 import { decode } from 'hono/jwt'
 
-// 解码 JWT 令牌
+// Decode JWT token
 const tokenToDecode =
   'eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAidXNlcjEyMyIsICJyb2xlIjogImFkbWluIn0.JxUwx6Ua1B0D1B0FtCrj72ok5cm1Pkmr_hL82sd7ELA'
 
@@ -126,38 +131,41 @@ console.log('Decoded Header:', header)
 console.log('Decoded Payload:', payload)
 ```
 
-### 选项
+### Options
 
 <br/>
 
-#### <Badge type="danger" text="必需" /> token: `string`
+#### <Badge type="danger" text="Required" /> token: `string`
 
-要解码的 JWT 令牌。
+The JWT token to decode.
 
-> `decode` 函数允许你检查 JWT 令牌的 header 和 payload 而_**不**_执行验证。这对于调试或从 JWT 令牌中提取信息可能很有用。
+> The `decode` function allows you to inspect the header and payload of a JWT token _**without**_ verification. This can be useful for debugging or extracting information from JWT tokens.
 
 ## Payload 验证
 
 验证 JWT 令牌时，会执行以下 payload 验证：
 
-- `exp`: 检查令牌以确保其未过期。
-- `nbf`: 检查令牌以确保其在指定时间之前未被使用。
-- `iat`: 检查令牌以确保其不是在将来签发的。
-- `iss`: 检查令牌以确保其由受信任的发行者签发。
+- `exp`: 检查令牌是否尚未过期。
+- `nbf`: 检查令牌是否未在指定时间之前使用。
+- `iat`: 检查令牌是否未在未来签发。
+- `iss`: 检查令牌是否由受信任的签发者签发。
+- `aud`: 当设置了 `aud` 验证参数时，检查令牌是否旨在用于可接受的受众。
 
 如果你打算在验证期间执行这些检查，请确保你的 JWT payload 包含这些字段（作为对象）。
 
 ## 自定义错误类型
 
-该模块还定义了自定义错误类型以处理 JWT 相关错误。
+该模块还定义了用于处理 JWT 相关错误的自定义错误类型。
 
-- `JwtAlgorithmNotImplemented`: 表示请求的 JWT 算法未实现。
-- `JwtTokenInvalid`: 表示 JWT 令牌无效。
-- `JwtTokenNotBefore`: 表示令牌在其有效日期之前被使用。
-- `JwtTokenExpired`: 表示令牌已过期。
-- `JwtTokenIssuedAt`: 表示令牌中的 "iat" claim 不正确。
-- `JwtTokenIssuer`: 表示令牌中的 "iss" claim 不正确。
-- `JwtTokenSignatureMismatched`: 表示令牌中的签名不匹配。
+- `JwtAlgorithmNotImplemented`：表示请求的 JWT 算法未实现。
+- `JwtTokenInvalid`：表示 JWT 令牌无效。
+- `JwtTokenNotBefore`：表示令牌在其有效日期之前被使用。
+- `JwtTokenExpired`：表示令牌已过期。
+- `JwtTokenIssuedAt`：表示令牌中的 "iat" 声明不正确。
+- `JwtTokenIssuer`：表示令牌中的 "iss" 声明不正确。
+- `JwtPayloadRequiresAud`：表示在配置了 `aud` 验证时，需要提供 `aud` 声明。
+- `JwtTokenAudience`：表示令牌的 `aud` 声明与期望的受众不匹配。
+- `JwtTokenSignatureMismatched`：表示令牌中的签名不匹配。
 
 ## 支持的算法类型
 

@@ -7,13 +7,13 @@
 - 语言（如 JavaScript）_编译为_ WebAssembly（`.wasm` 文件）
 - WebAssembly 运行时（如 [`wasmtime`][wasmtime] 或 [`jco`][jco]）支持_运行_ WebAssembly 二进制文件
 
-虽然核心 WebAssembly _无法_ 访问本地文件系统或套接字等内容，但 [WebAssembly 系统接口][wasi]
-介入以支持在 WebAssembly 工作负载下定义平台。
+虽然核心 WebAssembly _无法_ 访问本地文件系统或套接字等资源，但 [WebAssembly 系统接口][wasi]
+则介入以支持在 WebAssembly 工作负载下定义平台。
 
 这意味着_借助_ WASI，WebAssembly 可以操作文件、套接字以及更多内容。
 
 ::: info
-想亲自看看 WASI 接口吗？查看 [`wasi:http`][wasi-http]
+想自己看看 WASI 接口吗？请查看 [`wasi:http`][wasi-http]
 :::
 
 JS 中对 WebAssembly w/ WASI 的支持由 [StarlingMonkey][sm] 驱动，得益于
@@ -52,14 +52,14 @@ npm i -D @bytecodealliance/jco @bytecodealliance/componentize-js @bytecodeallian
 npm i -D rolldown
 ```
 
-````sh [yarn]
+```sh [yarn]
 mkdir my-app
 cd my-app
 npm init
 yarn add hono
 yarn add -D @bytecodealliance/jco @bytecodealliance/componentize-js @bytecodealliance/jco-std
 yarn add -D rolldown
-````
+```
 
 ```sh [pnpm]
 mkdir my-app
@@ -68,7 +68,7 @@ pnpm init --init-type module
 pnpm add hono
 pnpm add -D @bytecodealliance/jco @bytecodealliance/componentize-js @bytecodealliance/jco-std
 pnpm add -D rolldown
-````
+```
 
 ```sh [bun]
 mkdir my-app
@@ -100,7 +100,7 @@ yarn tsc --init
 
 ```sh [pnpm]
 pnpm i
-pnpm exec --init
+pnpm exec tsc --init
 ```
 
 ```sh [bun]
@@ -142,9 +142,9 @@ export default defineConfig({
 
 ## 2. 设置 WIT 接口和依赖
 
-[WebAssembly 接口类型 (WIT)][wit] 是一种接口定义语言（"IDL"），它管理 WebAssembly 组件使用的功能（"imports"）以及它提供的功能（"exports"）。
+[WebAssembly Interface Types (WIT)][wit] 是一种接口定义语言（“IDL”），用于规定 WebAssembly 组件会使用哪些功能（“imports”，导入），以及它提供哪些功能（“exports”，导出）。
 
-在标准化的 WIT 接口中，[`wasi:http`][wasi-http] 用于处理 HTTP 请求（无论是接收还是发送），由于我们打算制作一个 Web 服务器，我们的组件必须在其 [WIT 世界][wit-world] 中声明使用 `wasi:http/incoming-handler`：
+在标准化的 WIT 接口中，[`wasi:http`][wasi-http] 用于处理 HTTP 请求（无论是接收还是发送），而由于我们打算制作一个 Web 服务器，我们的组件必须在其 [WIT world][wit-world] 中声明使用 `wasi:http/incoming-handler`：
 
 首先，让我们在名为 `wit/component.wit` 的文件中设置组件的 WIT 世界：
 
@@ -156,11 +156,11 @@ world component {
 }
 ```
 
-简单来说，上面的 WIT 文件意味着我们的组件“提供”“接收”/“处理传入”HTTP 请求的功能。
+简单来说，上面的 WIT 文件表示我们的组件“提供”了“接收”/“处理传入” HTTP 请求的功能。
 
 `wasi:http/incoming-handler` 接口依赖于上游标准化的 WIT 接口（关于请求结构等的规范）。
 
-为了拉取那些第三方（由 Bytecode Alliance 维护）的 WIT 接口，我们可以使用的一个工具是 [`wkg`][wkg]：
+要拉取这些第三方（由 Bytecode Alliance 维护的）WIT 接口，我们可以使用的一个工具是 [`wkg`][wkg]：
 
 ```sh
 wkg wit fetch
@@ -190,7 +190,7 @@ wit
 
 ## 3. Hello Wasm
 
-为了在 WebAssembly 中构建 HTTP 服务器，我们可以利用 [`jco-std`][jco-std] 项目，其中包含的辅助工具使体验与标准 Hono 体验非常相似。
+为了在 WebAssembly 中构建一个 HTTP 服务器，我们可以使用 [`jco-std`][jco-std] 项目，其中包含一些辅助工具，使体验与标准的 Hono 体验非常相似。
 
 让我们在名为 `src/component.ts` 的文件中用一个基本的 Hono 应用程序作为 WebAssembly 组件来实现我们的 `component` 世界：
 
@@ -237,9 +237,9 @@ bun build --target=bun --outfile=dist/component.js ./src/component.ts
 :::
 
 ::: info
-捆绑步骤是必要的，因为 WebAssembly JS 生态系统工具目前仅支持单个 JS 文件，而我们希望包含 Hono 以及相关库。
+打包步骤是必要的，因为 WebAssembly JS 生态系统工具目前仅支持单个 JS 文件，而我们希望包含 Hono 以及相关库。
 
-对于需求更简单的组件，捆绑器不是必须的。
+对于需求更简单的组件，打包器不是必须的。
 :::
 
 要构建你的 WebAssembly 组件，请使用 `jco`（并间接使用 `componentize-js`）：
@@ -317,7 +317,7 @@ Server listening @ localhost:8000...
 ::: info
 `jco serve` 的工作原理是将 WebAssembly 组件转换为基本的 WebAssembly 核心模块，以便它可以在 Node.js 和浏览器等运行时中运行。
 
-此过程通常通过 `jco transpile` 运行，这也是我们可以使用 JS 引擎（如 Node.js 和浏览器（可能使用 V8 或其他 Javascript 引擎））作为 WebAssembly 组件运行时的方式。
+This process is normally run via `jco transpile`, and is the way we can use JS engines like Node.js and the browser (which may use V8 or other JavaScript engines) as WebAssembly Component runtimes.
 
 `jco transpile` 的工作原理不在本指南范围内，你可以在 [Jco book][jco-book] 中阅读更多相关内容
 :::
@@ -326,10 +326,10 @@ Server listening @ localhost:8000...
 
 要了解有关 WASI、WebAssembly 组件等的更多信息，请参阅以下资源：
 
-- [BytecodeAlliance Component Model book][cm-book]
+- [BytecodeAlliance Component Model 书籍][cm-book]
 - [`jco` 代码库][jco]
   - [`jco` 示例组件][jco-example-components]（特别是 [Hono 示例][jco-example-component-hono]）
-- [Jco book][jco-book]
+- [Jco 书籍][jco-book]
 - [`componentize-js` 代码库][componentize-js]
 - [StarlingMonkey 代码库][sm]
 

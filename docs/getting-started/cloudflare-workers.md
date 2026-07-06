@@ -136,7 +136,7 @@ bun run deploy
 
 ## 将 Hono 与其他事件处理程序一起使用
 
-您可以在 _Module Worker 模式_ 中将 Hono 与其他事件处理程序（例如 `scheduled`）集成。
+您可以在 _模块 Worker 模式_ 中将 Hono 与其他事件处理程序（例如 `scheduled`）集成。
 
 为此，将 `app.fetch` 导出为模块的 `fetch` 处理程序，然后根据需要实现其他处理程序：
 
@@ -151,10 +151,10 @@ export default {
 
 ## 提供静态文件
 
-如果您想提供静态文件，可以使用 Cloudflare Workers 的 [静态资产功能](https://developers.cloudflare.com/workers/static-assets/)。在 `wrangler.toml` 中指定文件目录：
+如果你想提供静态文件，可以使用 Cloudflare Workers 的 [静态资源功能](https://developers.cloudflare.com/workers/static-assets/)。在 `wrangler.jsonc` 中为这些文件指定目录：
 
-```toml
-assets = { directory = "public" }
+```jsonc
+"assets": { "directory": "public" }
 ```
 
 然后创建 `public` 目录并将文件放在那里。例如，`./public/static/hello.txt` 将作为 `/static/hello.txt` 提供。
@@ -167,8 +167,8 @@ assets = { directory = "public" }
 │   └── static
 │       └── hello.txt
 ├── src
-│   └── index.ts
-└── wrangler.toml
+│   └── index.ts
+└── wrangler.jsonc
 ```
 
 ## 类型
@@ -206,14 +206,14 @@ bun add --dev @cloudflare/workers-types
 import { Hono } from 'hono'
 
 const app = new Hono()
-app.get('/', (c) => c.text('Please test me!'))
+app.get('/', (c) => c.text('请测试我！'))
 ```
 
 我们可以用这段代码测试它是否返回 "_200 OK_" 响应。
 
 ```ts
-describe('Test the application', () => {
-  it('Should return 200 response', async () => {
+describe('测试应用程序', () => {
+  it('应该返回 200 响应', async () => {
     const res = await app.request('http://localhost/')
     expect(res.status).toBe(200)
   })
@@ -237,7 +237,27 @@ const app = new Hono<{ Bindings: Bindings }>()
 app.put('/upload/:key', async (c, next) => {
   const key = c.req.param('key')
   await c.env.MY_BUCKET.put(key, c.req.body)
-  return c.text(`Put ${key} successfully!`)
+  return c.text(`成功上传 ${key}！`)
+})
+```
+
+### 自动生成绑定类型
+
+与其手动定义绑定类型，不如使用 `wrangler types` 命令从 `wrangler.toml` 自动生成。使用 `--env-interface` 标志可避免与 Hono 内置的 `Env` 类型发生命名冲突：
+
+```sh
+wrangler types --env-interface CloudflareBindings
+```
+
+这会生成一个名为 `worker-configuration.d.ts` 的文件，其中包含你指定的接口名称。然后将其传递给 Hono：
+
+```ts
+const app = new Hono<{ Bindings: CloudflareBindings }>()
+
+app.put('/upload/:key', async (c, next) => {
+  const key = c.req.param('key')
+  await c.env.MY_BUCKET.put(key, c.req.body)
+  return c.text(`成功上传 ${key}！`)
 })
 ```
 
@@ -273,7 +293,7 @@ app.use('/auth/*', async (c, next) => {
 
 在通过 CI 将代码部署到 Cloudflare 之前，您需要一个 Cloudflare 令牌。您可以从 [用户 API 令牌](https://dash.cloudflare.com/profile/api-tokens) 管理它。
 
-如果是新创建的令牌，选择 **编辑 Cloudflare Workers** 模板。如果您已经有另一个令牌，请确保该令牌具有相应的权限。（注意：令牌权限在 Cloudflare Pages 和 Cloudflare Workers 之间不共享）。
+如果这是一个新创建的令牌，请选择 **Edit Cloudflare Workers** 模板。如果您已经有其他令牌，请确保该令牌具有相应的权限。
 
 然后转到您的 GitHub 仓库设置仪表板：`Settings->Secrets and variables->Actions->Repository secrets`，并添加一个名为 `CLOUDFLARE_API_TOKEN` 的新秘密。
 
@@ -299,11 +319,11 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 ```
 
-然后编辑 `wrangler.toml`，并在 `compatibility_date` 行后添加此代码。
+然后编辑 `wrangler.jsonc`，并在 `compatibility_date` 行之后添加以下代码。
 
-```toml
-main = "src/index.ts"
-minify = true
+```jsonc
+"main": "src/index.ts",
+"minify": true
 ```
 
 一切都准备好了！现在推送代码并享受它。

@@ -6,7 +6,7 @@ Hono 让简单的事情变得简单，让困难的事情也变得简单。
 ## RPC
 
 Hono 的 RPC 功能允许你只需少量代码更改即可共享 API 规范。
-由 `hc` 生成的客户端将读取规范并类型安全地访问端点。
+由 `hc` 生成的客户端将读取规范并以类型安全的方式访问端点。
 
 以下库使其成为可能。
 
@@ -29,7 +29,7 @@ const app = new Hono()
 
 app.get('/hello', (c) => {
   return c.json({
-    message: `Hello!`,
+    message: `你好！`,
   })
 })
 ```
@@ -55,7 +55,7 @@ app.get(
   (c) => {
     const { name } = c.req.valid('query')
     return c.json({
-      message: `Hello! ${name}`,
+      message: `你好！${name}`,
     })
   }
 )
@@ -83,7 +83,7 @@ const route = app.get(
   (c) => {
     const { name } = c.req.valid('query')
     return c.json({
-      message: `Hello! ${name}`,
+      message: `你好！${name}`,
     })
   }
 )
@@ -126,18 +126,15 @@ console.log(`${data.message}`)
 
 ## 结合 React
 
-你可以使用 React 在 Cloudflare Pages 上创建应用程序。
+你可以使用 React 在 Cloudflare Workers 上创建应用。
 
 API 服务器。
 
 ```ts
-// functions/api/[[route]].ts
+// src/index.ts
 import { Hono } from 'hono'
-import { handle } from 'hono/cloudflare-pages'
 import * as z from 'zod'
 import { zValidator } from '@hono/zod-validator'
-
-const app = new Hono()
 
 const schema = z.object({
   id: z.string(),
@@ -148,7 +145,7 @@ type Todo = z.infer<typeof schema>
 
 const todos: Todo[] = []
 
-const route = app
+const api = new Hono()
   .post('/todo', zValidator('form', schema), (c) => {
     const todo = c.req.valid('form')
     todos.push(todo)
@@ -156,15 +153,18 @@ const route = app
       message: '已创建！',
     })
   })
-  .get((c) => {
+  .get('/todo', (c) => {
     return c.json({
       todos,
     })
   })
 
-export type AppType = typeof route
+export type AppType = typeof api
 
-export const onRequest = handle(app, '/api')
+const app = new Hono()
+app.route('/api', api)
+
+export default app
 ```
 
 使用 React 和 React Query 的客户端。
@@ -227,7 +227,7 @@ const Todos = () => {
         onClick={() => {
           mutation.mutate({
             id: Date.now().toString(),
-            title: 'Write code',
+            title: '编写代码',
           })
         }}
       >
